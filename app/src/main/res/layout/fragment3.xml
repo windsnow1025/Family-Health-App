@@ -33,6 +33,7 @@
                 android:id="@+id/textViewLoginSignup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="10dp"
                 android:text="登录/注册"
                 android:textAlignment="center"
                 android:textSize="34sp" />
@@ -47,18 +48,13 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <View
-                    android:id="@+id/view2"
-                    android:layout_width="5dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
-
 
                 <TextView
                     android:id="@+id/textViewPersonalCenter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:padding="10dp"
                     android:text="个人中心"
                     android:textSize="24sp" />
 
