@@ -18,6 +18,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
     public static final String CREATE_USER = "create table user ("
             + "phone_number text primary key,"
             + "username text,"
+            + "password text,"
             + "email text,"
             + "birthday text,"
             + "sex text,"

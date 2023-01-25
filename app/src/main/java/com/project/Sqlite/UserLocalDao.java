@@ -69,6 +69,7 @@ public class UserLocalDao {
     public void addUser(Account account, UserInfo userInfo){
         ContentValues values = new ContentValues();
         values.put("phoneNumber", account.getPhoneNumber());
+        values.put("password", account.getPassword());
         values.put("username", userInfo.getUsername());
         values.put("birthday", userInfo.getBirthday());
         values.put("email", userInfo.getEmail());
@@ -81,6 +82,7 @@ public class UserLocalDao {
     public void updateUser(Account account, UserInfo userInfo) {
         ContentValues values = new ContentValues();
         values.put("username", userInfo.getUsername());
+        values.put("password", account.getPassword());
         values.put("birthday", userInfo.getBirthday());
         values.put("email", userInfo.getEmail());
         values.put("sex", userInfo.getSex());
