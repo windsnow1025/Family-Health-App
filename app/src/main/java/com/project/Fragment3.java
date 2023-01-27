@@ -17,7 +17,7 @@ public class Fragment3 extends Fragment {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), login.class);
+                Intent intent = new Intent(getActivity(),Login_1.class);
                 startActivity(intent);
             }
         });
