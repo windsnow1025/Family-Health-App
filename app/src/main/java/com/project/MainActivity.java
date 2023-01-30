@@ -51,5 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 transaction.commit();
             }
         });
+        
+        button1.performClick();
     }
 }
