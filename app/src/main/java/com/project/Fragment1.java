@@ -18,6 +18,7 @@ public class Fragment1 extends Fragment {
         view = inflater.inflate(R.layout.fragment1, container, false);
 
         WebView webView = view.findViewById(R.id.WebView);
+        webView.setLayerType(WebView.LAYER_TYPE_HARDWARE, null);
 
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
