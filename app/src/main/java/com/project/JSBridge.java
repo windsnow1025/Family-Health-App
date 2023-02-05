@@ -9,8 +9,8 @@ public class JSBridge {
     public JSBridge(Fragment fragment) {
         this.fragment = fragment;
     }
-    @JavascriptInterface
-    public void showMessageInNative(String message) {
-        ((Fragment1) fragment).getMessage(message);
-    }
+//    @JavascriptInterface
+//    public void showMessageInNative(String message) {
+//        ((Fragment1_3d) fragment).getMessage(message);
+//    }
 }
