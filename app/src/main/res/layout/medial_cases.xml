@@ -12,13 +12,12 @@
         tools:layout_editor_absoluteY="1dp">
 
         <ImageView
-            android:id="@+id/AnatomyPart"
+            android:id="@+id/imageOrgan"
             android:layout_width="190dp"
             android:layout_height="308dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/head" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
@@ -30,7 +29,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/AnatomyPart">
+            app:layout_constraintTop_toBottomOf="@+id/imageOrgan">
 
             <TextView
                 android:id="@+id/Report"
@@ -53,7 +52,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/AnatomyPart"
+            app:layout_constraintTop_toBottomOf="@+id/imageOrgan"
             app:layout_constraintVertical_bias="1.0">
 
             <TextView

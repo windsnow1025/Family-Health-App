@@ -19,16 +19,77 @@ public class Fragment1 extends Fragment {
         view = inflater.inflate(R.layout.fragment1, container, false);
 
         Button buttonBrain = view.findViewById(R.id.buttonBrain);
+        Button buttonHeart = view.findViewById(R.id.buttonHeart);
+        Button buttonLung = view.findViewById(R.id.buttonLung);
+        Button buttonLiver = view.findViewById(R.id.buttonLiver);
+        Button buttonKidney = view.findViewById(R.id.buttonKidney);
+        Button buttonStomach = view.findViewById(R.id.buttonStomach);
+        Button buttonIntestine = view.findViewById(R.id.buttonIntestine);
+
         buttonBrain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new MedicalCases());
+                transaction.replace(R.id.fragment_container, new MedicalCases("brain"));
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
         });
 
+        buttonHeart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, new MedicalCases("heart"));
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
+        buttonLung.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, new MedicalCases("lung"));
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
+        buttonLiver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, new MedicalCases("liver"));
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
+        buttonKidney.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, new MedicalCases("kidney"));
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
+        buttonStomach.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, new MedicalCases("stomach"));
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
+        buttonIntestine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, new MedicalCases("intestine"));
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
 
         return view;
     }
