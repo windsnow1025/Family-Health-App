@@ -33,6 +33,9 @@ dependencies {
 
     // Java language implementation
     implementation "androidx.fragment:fragment:$fragment_version"
+    // https://mvnrepository.com/artifact/mysql/mysql-connector-java
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.32'
+
     // Kotlin
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
 
