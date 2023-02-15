@@ -2,9 +2,11 @@ package com.project;
 
 import com.project.Exception.updateInfoException;
 import com.project.JDBC.AccountDao;
+import com.project.Pojo.History;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class JDBC_Test {
@@ -88,6 +90,69 @@ public class JDBC_Test {
             accountDao.updateUserInformation("18001718981",update_test);
         } catch (updateInfoException e) {
             System.out.println(e.getMessage());
+        }
+    }
+    @Test
+    public void getHistory_Test(){
+        ArrayList<History> historyArrayList=accountDao.getHistory_Remote("1111");
+        System.out.println(historyArrayList.get(0).getContent()+"\t"+historyArrayList.get(1).getContent());
+    }
+    @Test
+    public void updateHistory_Test(){
+        History history=new History();
+        history.setContent("test");
+        history.setNo(2);
+        history.setRemind("false");
+        accountDao.updateHistory_Remote("1111",history);
+        getHistory_Test();
+    }
+    @Test
+    public void deleteHistory_Test(){
+        System.out.println(accountDao.deleteHistroy_Remote("1111",3));
+        System.out.println(accountDao.deleteHistroy_Remote("1111",4));
+        System.out.println(accountDao.deleteHistroy_Remote("1111",null));
+        System.out.println(accountDao.deleteHistroy_Remote(null,4));
+        System.out.println(accountDao.deleteHistroy_Remote("",4));
+    }
+    @Test
+    public void insertHistory_Test()
+    {
+        History history=new History();
+        history.setRemind("false");
+        history.setContent("testtttttt");
+        System.out.println(accountDao.insertHistory_Remote("1111",history));
+    }
+    @Test
+    public void Report_Test(){
+        ArrayList<History> historyArrayList=new ArrayList<>();
+        History history=new History();
+        history.setNo(2);
+        history.setContent("1134");
+        historyArrayList=accountDao.getReport_Remote("1111");
+        for(int i=0;i<historyArrayList.size();i++)
+        {
+            System.out.println(historyArrayList.get(i).getID()+"\t"+historyArrayList.get(i).getNo()+"\t"+historyArrayList.get(i).getContent());
+        }
+        accountDao.updateReport_Remote("1111",history);
+        System.out.println();
+        historyArrayList=accountDao.getReport_Remote("1111");
+        for(int i=0;i<historyArrayList.size();i++)
+        {
+            System.out.println(historyArrayList.get(i).getID()+"\t"+historyArrayList.get(i).getNo()+"\t"+historyArrayList.get(i).getContent());
+        }
+        accountDao.insertReport_Remote("1111",history);
+        System.out.println();
+        historyArrayList=accountDao.getReport_Remote("1111");
+        for(int i=0;i<historyArrayList.size();i++)
+        {
+            System.out.println(historyArrayList.get(i).getID()+"\t"+historyArrayList.get(i).getNo()+"\t"+historyArrayList.get(i).getContent());
+        }
+        accountDao.deleteReport_Remote("1111",historyArrayList.size());
+        System.out.println();
+        historyArrayList=accountDao.getReport_Remote("1111");
+        for(int i=0;i<historyArrayList.size();i++)
+        {
+            System.out.println(historyArrayList.get(i).getID()+"\t"+historyArrayList.get(i).getNo()+"\t"+historyArrayList.get(i).getContent());
         }
     }
 }

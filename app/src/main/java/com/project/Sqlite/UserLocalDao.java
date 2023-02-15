@@ -7,8 +7,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
-import com.project.Pojo.Account;
-import com.project.Pojo.UserInfo;
+
+import com.project.JDBC.AccountDao;
+import com.project.Pojo.History;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +18,12 @@ public class UserLocalDao {
     private Context context;         //上下文
     private SqliteHelper dbHelper; //数据库访问对象
     private SQLiteDatabase db;       //可对数据库进行读写的操作对象
+
+    private AccountDao accountDao=new AccountDao(); //用于数据同步
     public UserLocalDao(Context context) {
         this.context = context;
     }
+    public UserLocalDao(){}
     // 创建并打开数据库（如果数据库已存在直接打开）
     public void open() throws SQLiteException{
         dbHelper = new SqliteHelper(context);
@@ -38,105 +42,178 @@ public class UserLocalDao {
         }
     }
 
-    // 查询账号的信息
+
+    //获取当前登录账号
     @SuppressLint("Range")
-    public UserInfo findUser(Account account) {
-        Cursor cursor = db.query("user", null, "phone_number = ?", new String[]{account.getPhoneNumber()}, null, null, null);
-        UserInfo userInfo=new UserInfo();
+    public String getUser(){
+        String stringReturn = null;
+        Cursor cursor = db.query("user", null, "is_login = ?", new String[]{"true"}, null, null, null);
         if(cursor.moveToFirst()){
             do {
                 {
-                    userInfo.setUsername(cursor.getString(cursor.getColumnIndex("username")));
-                    userInfo.setEmail(cursor.getString(cursor.getColumnIndex("email")));
-                    userInfo.setBirthday(cursor.getString(cursor.getColumnIndex("birthday")));
-                    userInfo.setSex(cursor.getString(cursor.getColumnIndex("sex")));
+                    stringReturn= cursor.getString(cursor.getColumnIndex("phone_number"));
                 }
             }while (cursor.moveToNext());
         }
-        return userInfo;
+        return stringReturn;
     }
-    // 查询指定账号是否存在在本地数据库中
-    public boolean is_Exist(Account account) {
-        Cursor cursor = db.query("user", null, "phone_number = ?", new String[]{account.getPhoneNumber()}, null, null, null);
-        if (cursor == null || cursor.getCount() < 1) {
-            return false;
+
+    public Boolean checkUser(String account){
+        Boolean returnValue=false;
+        Cursor cursor= db.query("user", null, "phone_number = ?", new String[]{account}, null, null, null);
+        if(cursor.moveToNext()){
+            returnValue=(!returnValue);
         }
-        cursor.close();
-        return true;
+        return  returnValue;
     }
 
-    // 用户登录后添加用户信息到数据库中
-    public void addUser(Account account, UserInfo userInfo){
+
+    //登录状态改变 账号原本存在于本地库中则更新 否则添加进入 并设置登录状态为true
+    public void addOrUpdateUser(String account){
         ContentValues values = new ContentValues();
-        values.put("phoneNumber", account.getPhoneNumber());
-        values.put("password", account.getPassword());
-        values.put("username", userInfo.getUsername());
-        values.put("birthday", userInfo.getBirthday());
-        values.put("email", userInfo.getEmail());
-        values.put("sex", userInfo.getSex());
+        values.put("phone_number", account);
         values.put("is_login", "true");
-        db.insert("user", null, values);
+        values.put("is_multipled", "false");               //多用户状态 备用
+        if(checkUser(account))
+        {
+            db.update("user",values,"phone_number=?",new String[]{account});
+        }
+        else
+        {
+            db.insert("user", null, values);
+        }
     }
 
-    // 修改用户信息
-    public void updateUser(Account account, UserInfo userInfo) {
-        ContentValues values = new ContentValues();
-        values.put("username", userInfo.getUsername());
-        values.put("password", account.getPassword());
-        values.put("birthday", userInfo.getBirthday());
-        values.put("email", userInfo.getEmail());
-        values.put("sex", userInfo.getSex());
-        values.put("is_login", "true");
-        db.update("user", values, "phone_number = ?", new String[]{account.getPhoneNumber()});
-    }
-
-    // 账号登出
-    public void userLoginout(Account account)
+    //账号登出
+    public void userLoginout(String account)
     {
         ContentValues values= new ContentValues();
         values.put("is_login","false");
-        db.update("user",values,"phone_number = ?",new String[]{account.getPhoneNumber()});
+        db.update("user",values,"phone_number = ?",new String[]{account});
     }
-    // 多账号功能 需要账号信息存入本地数据库
-    public void MultiUserAdd(Account account)
-    {
-        ContentValues values= new ContentValues();
-        values.put("is_multipled","true");
-        db.update("user",values,"phone_number = ?",new String[]{account.getPhoneNumber()});
-    }
-    public void MultiUserDelete(Account account)
-    {
-        ContentValues values= new ContentValues();
-        values.put("is_multipled","false");
-        db.update("user",values,"phone_number = ?",new String[]{account.getPhoneNumber()});
-    }
-    // 多账号切换登录
-    public void MultiUserChange(Account old_account,Account new_account)
-    {
-        ContentValues value_old= new ContentValues();
-        ContentValues value_new= new ContentValues();
-        value_old.put("is_login","false");
-        value_new.put("is_login","true");
-        db.update("user",value_old,"phone_number = ?",new String[]{old_account.getPhoneNumber()});
-        db.update("user",value_new,"phone_number = ?",new String[]{new_account.getPhoneNumber()});
-    }
-    //返回多用户列表
-    @SuppressLint("Range")
-    public List<UserInfo> getAllUser(){
-        Cursor cursor=db.query("user",null,"is_multipled = ?",new String[]{"true"},null,null,null);
-        List<UserInfo> userList=new ArrayList<>();
-        if(cursor.moveToFirst()){
-            do {
-                {
-                    UserInfo userInfo=new UserInfo();
-                    userInfo.setUsername(cursor.getString(cursor.getColumnIndex("username")));
-                    userInfo.setSex(cursor.getString(cursor.getColumnIndex("sex")));
-                    userList.add(userInfo);
-                }
-            }while (cursor.moveToNext());
+
+    public Boolean sync(){
+        ArrayList<History> historyArrayList=new ArrayList<>();
+        ArrayList<History> reportArrayList=new ArrayList<>();
+//        historyArrayList=accountDao.getHistory_Remote(getUser());
+//        reportArrayList=accountDao.getReport_Remote(getUser());
+        for (History history:historyArrayList) {
+            ContentValues values = new ContentValues();
+            values.put("phone_number",getUser());
+            values.put("history_No",history.getNo());
+            values.put("history_content",history.getContent());
+            values.put("remind",history.getRemind());
+            if(!isExistHistory(history.getNo()))
+            {
+                db.insert("history", null, values);
+            }
+            else
+            {
+                db.update("history", values, "history_No = ? AND phone_number=?",new String[]{String.valueOf(history.getNo()),getUser()});
+            }
         }
-        cursor.close();
-        return userList;
+        for (History report:reportArrayList)
+        {
+            ContentValues values = new ContentValues();
+            values.put("phone_number",getUser());
+            values.put("report_No",report.getNo());
+            values.put("report_content",report.getContent());
+            if(!isExistReport(report.getNo()))
+            {
+                db.insert("report", null, values);
+            }
+            else
+            {
+                db.update("report", values, "report_No = ? AND phone_number=?",new String[]{String.valueOf(report.getNo()),getUser()});
+            }
+        }
+        return true;
     }
+
+    public Boolean isExistHistory(Integer history_No){
+        Cursor cursor=db.query("history",null,"history_No = ? AND phone_number=?",new String[]{String.valueOf(history_No),getUser()},null,null,null);
+        return cursor != null && cursor.getCount() > 0;
+    }
+    public Boolean isExistReport(Integer report_No){
+        Cursor cursor=db.query("report",null,"report_No = ? AND phone_number=?",new String[]{String.valueOf(report_No),getUser()},null,null,null);
+        return cursor != null && cursor.getCount() > 0;
+    }
+
+    @SuppressLint("Range")
+    public ArrayList<History> getHistory(String account)
+    {
+        ArrayList<History> historyArrayList =new ArrayList<>();
+        Cursor cursor = db.query("history", null, "phone_number = ?", new String[]{account}, null, null, null);
+        if(cursor.moveToFirst()){
+            do{
+                History history=new History();
+                history.setNo(cursor.getInt(cursor.getColumnIndex("history_No")));
+                history.setContent(cursor.getString(cursor.getColumnIndex("history_content")));
+                history.setRemind(cursor.getString(cursor.getColumnIndex("remind")));
+                historyArrayList.add(history);
+            }while(cursor.moveToNext());
+        }
+        return historyArrayList;
+    }
+
+    public Boolean insertHistory(String account,History history){
+        Boolean valueReturn=false;
+        ContentValues values = new ContentValues();
+        values.put("phone_number",getUser());
+        values.put("history_No",history.getNo());
+        values.put("history_content",history.getContent());
+        values.put("remind",history.getRemind());
+        db.insert("history", null, values);
+        valueReturn=accountDao.insertHistory_Remote(account,history);
+        return valueReturn;
+    }
+    public Boolean updateHistory(String account,History history){
+        Boolean valueReturn=false;
+        ContentValues values = new ContentValues();
+        values.put("phone_number",getUser());
+        values.put("history_No",history.getNo());
+        values.put("history_content",history.getContent());
+        values.put("remind",history.getRemind());
+        db.update("history", values, "history_No = ? AND phone_number=?", new String[]{String.valueOf(history.getNo()),account});
+//        valueReturn=accountDao.updateHistory_Remote(account,history);
+        return valueReturn;
+    }
+    public Boolean deleteHistory(String account,Integer history_No){
+        Boolean valueReturn=false;
+        ContentValues values = new ContentValues();
+        values.put("phone_number",getUser());
+//        valueReturn=accountDao.deleteHistroy_Remote(account,history_No);
+        db.delete("history", "history_No = ? AND phone_number=?", new String[]{String.valueOf(history_No),account});
+        return valueReturn;
+    }
+    public Boolean insertReport(String account,History Report){
+        Boolean valueReturn=false;
+        ContentValues values = new ContentValues();
+        values.put("phone_number",getUser());
+        values.put("history_No",Report.getNo());
+        values.put("history_content",Report.getContent());
+        db.insert("Report", null, values);
+//        valueReturn=accountDao.insertReport_Remote(account,Report);
+        return valueReturn;
+    }
+    public Boolean updateReport(String account,History Report){
+        Boolean valueReturn=false;
+        ContentValues values = new ContentValues();
+        values.put("phone_number",getUser());
+        values.put("Report_No",Report.getNo());
+        values.put("Report_content",Report.getContent());
+        db.update("Report", values, "Report_No = ? AND phone_number=?", new String[]{String.valueOf(Report.getNo()),account});
+//        valueReturn=accountDao.updateReport_Remote(account,Report);
+        return valueReturn;
+    }
+    public Boolean deleteReport(String account,Integer Report_No){
+        Boolean valueReturn=false;
+        ContentValues values = new ContentValues();
+        values.put("phone_number",getUser());
+//        valueReturn=accountDao.deleteReport_Remote(account,Report_No);
+        db.delete("Report", "Report_No = ? AND phone_number=?", new String[]{String.valueOf(Report_No),account});
+        return valueReturn;
+    }
+
 
 }
