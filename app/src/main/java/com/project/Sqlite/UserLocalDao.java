@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteException;
 
 
 import com.project.JDBC.AccountDao;
+import com.project.Pojo.Colok;
 import com.project.Pojo.History;
 
 import java.util.ArrayList;
@@ -192,7 +193,7 @@ public class UserLocalDao {
         values.put("phone_number",getUser());
         values.put("history_No",Report.getNo());
         values.put("history_content",Report.getContent());
-        db.insert("Report", null, values);
+        db.insert("report", null, values);
 //        valueReturn=accountDao.insertReport_Remote(account,Report);
         return valueReturn;
     }
@@ -202,7 +203,7 @@ public class UserLocalDao {
         values.put("phone_number",getUser());
         values.put("Report_No",Report.getNo());
         values.put("Report_content",Report.getContent());
-        db.update("Report", values, "Report_No = ? AND phone_number=?", new String[]{String.valueOf(Report.getNo()),account});
+        db.update("report", values, "Report_No = ? AND phone_number=?", new String[]{String.valueOf(Report.getNo()),account});
 //        valueReturn=accountDao.updateReport_Remote(account,Report);
         return valueReturn;
     }
@@ -211,9 +212,41 @@ public class UserLocalDao {
         ContentValues values = new ContentValues();
         values.put("phone_number",getUser());
 //        valueReturn=accountDao.deleteReport_Remote(account,Report_No);
-        db.delete("Report", "Report_No = ? AND phone_number=?", new String[]{String.valueOf(Report_No),account});
+        db.delete("report", "Report_No = ? AND phone_number=?", new String[]{String.valueOf(Report_No),account});
         return valueReturn;
     }
 
+
+    //以下暂未测试
+    public Boolean setColok(Integer history_No,String title,String date,String cycle){
+        Boolean valueReturn=false;
+        ContentValues values = new ContentValues();
+        values.put("phone_number",getUser());
+        values.put("history_No",history_No);
+        values.put("title",title);
+        values.put("date",date);
+        values.put("cycle",cycle);
+        if(db.insert("colok", null, values)>0)
+        {
+            valueReturn=true;
+        }
+        return valueReturn;
+    }
+    @SuppressLint("Range")
+    public ArrayList<Colok> getColok(){
+        ArrayList<Colok> colokArrayList=new ArrayList<>();
+        Cursor cursor = db.query("colok", null, "phone_number = ?", new String[]{getUser()}, null, null, null);
+        if(cursor.moveToFirst()){
+            do{
+                Colok colok=new Colok();
+                colok.setTilte(cursor.getString(cursor.getColumnIndex("title")));
+                colok.setCycle(cursor.getString(cursor.getColumnIndex("cycle")));
+                colok.setDate(cursor.getString(cursor.getColumnIndex("date")));
+                colok.setHistory_No(cursor.getInt(cursor.getColumnIndex("history_No")));
+                colokArrayList.add(colok);
+            }while(cursor.moveToNext());
+        }
+        return colokArrayList;
+    }
 
 }

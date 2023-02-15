@@ -36,6 +36,15 @@ public class SqliteHelper extends SQLiteOpenHelper {
             + "phone_number text,"
             + "report_No integer,"
             + "report_content text)";
+    public static final String CREATE_COLOK = "create table colok ("
+            + "ID integer primary key,"
+            + "phone_number text,"
+            + "history_No integer,"
+            + "date text,"
+            + "title text,"
+            + "cycle text)";
+
+
 
     // 创建数据库
     @Override
@@ -43,6 +52,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_USER);
         db.execSQL(CREATE_REPORT);
         db.execSQL(CREATE_HISTORY);
+        db.execSQL(CREATE_COLOK);
     }
 
     // 升级数据库
@@ -51,6 +61,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
         db.execSQL("drop table if exists user");
         db.execSQL("drop table if exists report");
         db.execSQL("drop table if exists history");
+        db.execSQL("drop table if exists colok");
         onCreate(db);
     }
 }
