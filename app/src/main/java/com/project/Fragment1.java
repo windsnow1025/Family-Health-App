@@ -4,10 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -18,74 +16,16 @@ public class Fragment1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment1, container, false);
 
-        Button buttonBrain = view.findViewById(R.id.buttonBrain);
-        Button buttonHeart = view.findViewById(R.id.buttonHeart);
-        Button buttonLung = view.findViewById(R.id.buttonLung);
-        Button buttonLiver = view.findViewById(R.id.buttonLiver);
-        Button buttonKidney = view.findViewById(R.id.buttonKidney);
-        Button buttonStomach = view.findViewById(R.id.buttonStomach);
-        Button buttonIntestine = view.findViewById(R.id.buttonIntestine);
+        ImageView imageAnatomy = view.findViewById(R.id.imageAnatomy);
+        imageAnatomy.scrollBy(0, -200);
 
-        buttonBrain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new MedicalCases("brain"));
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
-        });
+        Button buttonInside = view.findViewById(R.id.buttonInside);
 
-        buttonHeart.setOnClickListener(new View.OnClickListener() {
+        buttonInside.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new MedicalCases("heart"));
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
-        });
-        buttonLung.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new MedicalCases("lung"));
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
-        });
-        buttonLiver.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new MedicalCases("liver"));
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
-        });
-        buttonKidney.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new MedicalCases("kidney"));
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
-        });
-        buttonStomach.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new MedicalCases("stomach"));
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
-        });
-        buttonIntestine.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new MedicalCases("intestine"));
+                transaction.replace(R.id.fragment_container, new Fragment1_1());
                 transaction.addToBackStack(null);
                 transaction.commit();
             }

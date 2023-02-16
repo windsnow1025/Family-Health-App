@@ -38,8 +38,8 @@ public class MedicalCases extends Fragment {
             case "heart":
                 imageOrgan.setImageResource(R.drawable.heart);
                 break;
-            case "lung":
-                imageOrgan.setImageResource(R.drawable.lung);
+            case "respiratory":
+                imageOrgan.setImageResource(R.drawable.respiratory);
                 break;
             case "liver":
                 imageOrgan.setImageResource(R.drawable.liver);
@@ -47,15 +47,14 @@ public class MedicalCases extends Fragment {
             case "kidney":
                 imageOrgan.setImageResource(R.drawable.kidney);
                 break;
-            case "stomach":
-                imageOrgan.setImageResource(R.drawable.stomach);
+            case "digestive":
+                imageOrgan.setImageResource(R.drawable.digestive);
                 break;
-            case "intestine":
-                imageOrgan.setImageResource(R.drawable.intestine);
+            case "urinary":
+                imageOrgan.setImageResource(R.drawable.urinary);
                 break;
         }
 
         return view;
     }
-
 }
