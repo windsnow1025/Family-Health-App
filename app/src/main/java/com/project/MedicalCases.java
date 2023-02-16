@@ -53,6 +53,12 @@ public class MedicalCases extends Fragment {
             case "urinary":
                 imageOrgan.setImageResource(R.drawable.urinary);
                 break;
+            case "musculoskeletal":
+                imageOrgan.setImageResource(R.drawable.musculoskeletal);
+                break;
+            case "cardiovascular":
+                imageOrgan.setImageResource(R.drawable.cardiovascular);
+                break;
         }
 
         return view;

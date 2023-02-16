@@ -28,8 +28,8 @@
         android:id="@+id/buttonRespiratory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="248dp"
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="204dp"
         android:text="呼吸系统"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

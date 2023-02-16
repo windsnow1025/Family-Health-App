@@ -14,7 +14,18 @@ public class Fragment1_2 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment1_2, container, false);
 
+        Button buttonInside3 = view.findViewById(R.id.buttonInside3);
         Button buttonOutside2 = view.findViewById(R.id.buttonOutside2);
+
+        buttonInside3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, new Fragment1_3());
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
 
         buttonOutside2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -28,7 +39,6 @@ public class Fragment1_2 extends Fragment {
 
         Button buttonKidney = view.findViewById(R.id.buttonKidney);
         Button buttonLiver = view.findViewById(R.id.buttonLiver);
-        Button buttonHeart = view.findViewById(R.id.buttonHeart);
         Button buttonDigestive = view.findViewById(R.id.buttonDigestive);
 
         buttonKidney.setOnClickListener(new View.OnClickListener() {
@@ -46,16 +56,6 @@ public class Fragment1_2 extends Fragment {
             public void onClick(View v) {
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, new MedicalCases("liver"));
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
-        });
-
-        buttonHeart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new MedicalCases("heart"));
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
