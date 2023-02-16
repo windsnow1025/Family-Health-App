@@ -3,17 +3,22 @@ package com.project.JDBC;
 import androidx.annotation.NonNull;
 
 import com.project.Exception.updateInfoException;
-import com.project.Pojo.Account;
-import com.project.Pojo.UserInfo;
+import com.project.Pojo.History;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
 public class AccountDao {
-    public AccountDao() {}
+    public AccountDao() {
+        if(JDBCHelper.connection==null)
+        {
+            System.out.println("test");
+        }
+    }
     public String checkUserPassword(String account,String password)
     {
         String stringReturn=null;
@@ -58,7 +63,7 @@ public class AccountDao {
     }
 
     /**
-     * 生日使用String类型 格式为yyyy-MM-dd如2022-07-08等
+     * 生日使用String类型 格式为yyyy-MM-dd如2022-06-18等
      * 此处类型问题原本想使用LocalDate类型 但setDate似乎不支持LocalDate
      * 使用错误的生日会导致异常
      * */
@@ -169,121 +174,193 @@ public class AccountDao {
         return true;
     }
 
+    public ArrayList<History> getHistory_Remote(String account)
+    {
+        ArrayList<History> historyArrayList=new ArrayList<>();
+        String sql="SELECT ID,history_No,history_content,remind FROM history WHERE phone_number=? ORDER BY history_No";
+        try {
+            PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql);
+            preparedStatement.setString(1,account);
+            ResultSet resultSet= preparedStatement.executeQuery();
+            while(resultSet.next()){
+                History history_temp=new History();
+                history_temp.setID(resultSet.getInt("ID"));
+                history_temp.setNo(resultSet.getInt("history_No"));
+                history_temp.setContent(resultSet.getString("history_content"));
+                history_temp.setRemind(resultSet.getString("remind"));
+                historyArrayList.add(history_temp);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return historyArrayList;
+    }
+    public Boolean updateHistory_Remote(String account, History history_update){
+        Boolean valueReturn=false;
+        String sql="UPDATE history SET remind=?,history_content=? where phone_number=? and history_No=?";
+        try {
+            PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql);
+            preparedStatement.setString(1, history_update.getRemind());
+            preparedStatement.setString(2, history_update.getContent());
+            preparedStatement.setString(3,account);
+            preparedStatement.setInt(4,history_update.getNo());
+            if(preparedStatement.executeUpdate()>0)
+            {
+                valueReturn=true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return valueReturn;
+    }
+    public Boolean deleteHistroy_Remote(String account, Integer history_No){
+        Boolean valueReturn=false;
+        String sql="DELETE FROM history where phone_number=? and history_No=?";
+        if(history_No==null){
+            history_No=0;
+        }
+        try {
+            PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql);
+            preparedStatement.setString(1,account);
+            preparedStatement.setInt(2,history_No);
+            if(preparedStatement.executeUpdate()>0){
+                valueReturn=true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return valueReturn;
+    }
+
+    public  Boolean insertHistory_Remote(String account, History history_insert){
+        Boolean valueReturn=false;
+        String sql="INSERT INTO history (phone_number,history_content,history_No,remind) VALUES (?,?,?,?)";
+        Integer nextNo=getHistoryCount(account)+1;
+        try {
+            PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql);
+            preparedStatement.setString(1,account);
+            preparedStatement.setString(2, history_insert.getContent());
+            preparedStatement.setInt(3,nextNo);
+            preparedStatement.setString(4,history_insert.getRemind());
+            if(preparedStatement.executeUpdate()>0){
+                valueReturn=true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return valueReturn;
+    }
+
+    //计数 在插入记录时控制序号
+    private Integer getHistoryCount(String account){
+        Integer count = 0;
+        String sql="SELECT history_No from history where phone_number=? ORDER BY history_No DESC limit 1";
+        try {
+            PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql);
+            preparedStatement.setString(1,account);
+            ResultSet resultSet=preparedStatement.executeQuery();
+            if(resultSet.next()){
+                count=resultSet.getInt("history_No");
+            }
+            else
+            {
+                count=1;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return count;
+    }
 
 
-//    /**
-//     * 登录 需要account 返回Interger表示登录结果
-//     * 200表示正常登录
-//     * 301表示密码错误
-//     * 404表示账号不存在
-//     * */
-//    public Integer Login(@NonNull Account account){
-//        Integer code=0;
-//        String sql="SELECT phone_number,password FROM user WHERE phone_number=?";
-//        Account accountGet = null;
-//        try {
-//            PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql);
-//            preparedStatement.setString(1,account.getPhoneNumber());
-//            ResultSet resultSet=preparedStatement.executeQuery();
-//            if(resultSet.next())
-//            {
-//                accountGet.setPhoneNumber(resultSet.getString("phone_number"));
-//                accountGet.setPassword(resultSet.getString("password"));
-//            }
-//            else {
-//                code=404;
-//            }
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//        if(account.getPassword().equals(accountGet.getPassword())&&code!=404) {
-//            code = 200;
-//        }
-//        else {
-//            code=301;
-//        }
-//        return code;
-//    }
-//    /**
-//     * 获取用户信息
-//     * */
-//    public UserInfo getInfo(@NonNull Account account){
-//        UserInfo userInfo = new UserInfo();
-//        String sql="SELECT username,sex,email,birthday from user WHERE phone_number=?";
-//        try {
-//            PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql);
-//            preparedStatement.setString(1, account.getPhoneNumber());
-//            ResultSet resultSet=preparedStatement.executeQuery();
-//            if(resultSet.next())
-//            {
-//                userInfo.setUsername(resultSet.getString("username"));
-//                userInfo.setEmail(resultSet.getString("email"));
-//                userInfo.setSex(resultSet.getString("sex"));
-//                userInfo.setBirthday(resultSet.getString("birthday"));
-//            }
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//        return userInfo;
-//    }
-//    /**
-//     * Login()函数调用查询账户
-//     * 200表示成功查询账户但因某些原因没有成功修改密码
-//     * 201表示表示密码修改成功
-//     * 301表示密码错误
-//     * 404表示账号不存在
-//     * */
-//    public Integer AlterPassword(@NonNull Account account,@NonNull String newPassword) {
-//        Integer code;
-//        code=Login(account);
-//        String sql="UPDATE user set password=? WHERE phone_number=?";
-//        if(code==200)
-//        {
-//            try {
-//                PreparedStatement preparedStatement = JDBCHelper.connection.prepareStatement(sql);
-//                preparedStatement.setString(1, newPassword);
-//                preparedStatement.setString(2, account.getPhoneNumber());
-//                if(preparedStatement.executeUpdate()!=0)
-//                {
-//                    code=201;
-//                }
-//            } catch (SQLException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-//        return code;
-//    }
-//
-//    public Integer AlterUserName(@NonNull Account account,@NonNull String newUserName) {
-//        Integer code=0;
-//        String sql="UPDATE user set username=? WHERE phone_number=?";
-//        try {
-//            PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql);
-//            preparedStatement.setString(1,newUserName);
-//            preparedStatement.setString(2, account.getPhoneNumber());
-//            if(preparedStatement.executeUpdate()!=0)
-//            {
-//                code=200;
-//            }
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//        return code;
-//    }
-//    public Integer AlterEmail(@NonNull Account account,@NonNull String newEmail){
-//        Integer code=0;
-//        String sql="UPDATE user set email=? WHERE phone_number=?";
-//        try {
-//            PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql);
-//            preparedStatement.setString(1,newEmail);
-//            preparedStatement.setString(2, account.getPhoneNumber());
-//            if(preparedStatement.executeUpdate()!=0)
-//            {
-//                code=200;
-//            }
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//        return code;
-//    }
+    public ArrayList<History> getReport_Remote(String account)
+    {
+        ArrayList<History> historyArrayList=new ArrayList<>();
+        String sql="SELECT ID,report_No,report_content FROM report WHERE phone_number=? ORDER BY report_No";
+        try {
+            PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql);
+            preparedStatement.setString(1,account);
+            ResultSet resultSet= preparedStatement.executeQuery();
+            while(resultSet.next()){
+                History history_temp=new History();
+                history_temp.setID(resultSet.getInt("ID"));
+                history_temp.setNo(resultSet.getInt("report_No"));
+                history_temp.setContent(resultSet.getString("report_content"));
+                historyArrayList.add(history_temp);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return historyArrayList;
+    }
+    public Boolean updateReport_Remote(String account, History history_update){
+        Boolean valueReturn=false;
+        String sql="UPDATE report SET report_content=? where phone_number=? and report_No=?";
+        try {
+            PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql);
+            preparedStatement.setString(1, history_update.getContent());
+            preparedStatement.setString(2,account);
+            preparedStatement.setInt(3,history_update.getNo());
+            if(preparedStatement.executeUpdate()>0)
+            {
+                valueReturn=true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return valueReturn;
+    }
+    public Boolean deleteReport_Remote(String account, Integer history_No){
+        Boolean valueReturn=false;
+        String sql="DELETE FROM report where phone_number=? and report_No=?";
+        if(history_No==null){
+            history_No=0;
+        }
+        try {
+            PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql);
+            preparedStatement.setString(1,account);
+            preparedStatement.setInt(2,history_No);
+            if(preparedStatement.executeUpdate()>0){
+                valueReturn=true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return valueReturn;
+    }
+
+    public  Boolean insertReport_Remote(String account, History history_insert){
+        Boolean valueReturn=false;
+        String sql="INSERT INTO report (phone_number,report_content,report_No) VALUES (?,?,?)";
+        Integer nextNo=getReportCount(account)+1;
+        try {
+            PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql);
+            preparedStatement.setString(1,account);
+            preparedStatement.setString(2, history_insert.getContent());
+            preparedStatement.setInt(3,nextNo);
+            if(preparedStatement.executeUpdate()>0){
+                valueReturn=true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return valueReturn;
+    }
+
+    //计数 在插入记录时控制序号
+    private Integer getReportCount(String account){
+        Integer count = 0;
+        String sql="SELECT report_No from report where phone_number=?  ORDER BY report_No DESC limit 1";
+        try {
+            PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql);
+            preparedStatement.setString(1,account);
+            ResultSet resultSet=preparedStatement.executeQuery();
+            if(resultSet.next()){
+                count=resultSet.getInt("report_No");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return count;
+    }
 }
