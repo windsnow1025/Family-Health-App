@@ -88,7 +88,7 @@ public class Login_1 extends AppCompatActivity implements View.OnClickListener, 
         password = et_password.getText().toString();
         /*注册*/
         if (v.getId() == R.id.btn_register) {
-             intent = new Intent(this, LoginForgetActivity.class);
+            intent = new Intent(this, LoginForgetActivity.class);
             intent.putExtra("username",username);
             intent.putExtra("flag",true);
             startActivity(intent);

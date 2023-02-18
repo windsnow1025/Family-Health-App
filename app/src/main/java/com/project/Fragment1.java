@@ -17,7 +17,7 @@ public class Fragment1 extends Fragment {
         view = inflater.inflate(R.layout.fragment1, container, false);
 
         ImageView imageAnatomy = view.findViewById(R.id.imageAnatomy);
-        imageAnatomy.scrollBy(0, -200);
+        imageAnatomy.scrollBy(0, 0);
 
         Button buttonInside = view.findViewById(R.id.buttonInside);
 

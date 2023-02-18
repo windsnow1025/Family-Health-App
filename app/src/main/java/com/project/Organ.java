@@ -9,18 +9,18 @@ import android.widget.ImageView;
 
 import androidx.fragment.app.Fragment;
 
-public class MedicalCases extends Fragment {
+public class Organ extends Fragment {
 
     View view;
     String organ;
 
-    public MedicalCases(String organ) {
+    public Organ(String organ) {
         this.organ = organ;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.medial_cases, container, false);
+        View view = inflater.inflate(R.layout.organ, container, false);
 
         Button buttonBack = view.findViewById(R.id.buttonBack);
         buttonBack.setOnClickListener(new View.OnClickListener() {
