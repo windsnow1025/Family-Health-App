@@ -57,7 +57,7 @@ public class Fragment1_1 extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new Organ("respiratory"));
+                transaction.replace(R.id.fragment_container, new Organ_3d("respiratory"));
                 transaction.addToBackStack(null);
                 transaction.commit();
             }

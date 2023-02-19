@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,7 +74,7 @@ public class personalCenter extends Fragment {
                     getParentFragmentManager().popBackStack();
                     break;
                 case R.id.bt_exit:
-                   Intent intent = new Intent(getActivity(), Login_1.class);
+                   Intent intent = new Intent(getActivity(), Login.class);
                    startActivity(intent);
                     break;
                 default:

@@ -23,7 +23,7 @@ public class Fragment3 extends Fragment {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(),Login_1.class);
+                Intent intent = new Intent(getActivity(), Login.class);
                 startActivity(intent);
             }
         });
@@ -53,7 +53,7 @@ public class Fragment3 extends Fragment {
         imageButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), Login_1.class);
+                Intent intent = new Intent(getActivity(), Login.class);
                 startActivity(intent);
             }
         });

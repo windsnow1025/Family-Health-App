@@ -108,13 +108,13 @@ public class LoginForgetActivity extends AppCompatActivity implements DatePicker
                     sex = ((RadioButton) findViewById(((RadioGroup) findViewById(R.id.radioGroup)).getCheckedRadioButtonId())).getText().toString();
                     if(sex.equals("")){ Toast.makeText(this, "请选择性别", Toast.LENGTH_SHORT).show();return;}
                     Toast.makeText(this, "恭喜您注册成功，清前往登录！", Toast.LENGTH_SHORT).show();
-                    intent = new Intent(this, Login_1.class);
+                    intent = new Intent(this, Login.class);
                     intent.putExtra("username", username);
                     startActivity(intent);
                 } else {
                     System.out.println(username);
                     Toast.makeText(this, "密码已修改成功，请重新登录！", Toast.LENGTH_SHORT).show();
-                    intent = new Intent(this, Login_1.class);
+                    intent = new Intent(this, Login.class);
                     intent.putExtra("username", username);
                     startActivity(intent);
                 }
