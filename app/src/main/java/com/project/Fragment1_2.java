@@ -37,19 +37,8 @@ public class Fragment1_2 extends Fragment {
             }
         });
 
-        Button buttonKidney = view.findViewById(R.id.buttonKidney);
         Button buttonLiver = view.findViewById(R.id.buttonLiver);
         Button buttonDigestive = view.findViewById(R.id.buttonDigestive);
-
-        buttonKidney.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new Organ("kidney"));
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
-        });
 
         buttonLiver.setOnClickListener(new View.OnClickListener() {
             @Override

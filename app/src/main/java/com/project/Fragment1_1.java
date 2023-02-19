@@ -41,7 +41,7 @@ public class Fragment1_1 extends Fragment {
 
         Button buttonBrain = view.findViewById(R.id.buttonBrain);
         Button buttonRespiratory = view.findViewById(R.id.buttonRespiratory);
-        Button buttonUrinary = view.findViewById(R.id.buttonUrinary);
+        Button buttonUrinary = view.findViewById(R.id.buttonRenal);
 
         buttonBrain.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,7 +66,7 @@ public class Fragment1_1 extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new Organ("urinary"));
+                transaction.replace(R.id.fragment_container, new Organ_3d("renal"));
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
