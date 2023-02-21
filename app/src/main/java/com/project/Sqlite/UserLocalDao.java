@@ -8,19 +8,18 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
 
-import com.project.JDBC.AccountDao;
-import com.project.Pojo.Colok;
+import com.project.JDBC.UserDao;
+import com.project.Pojo.Alert;
 import com.project.Pojo.History;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class UserLocalDao {
     private Context context;         //上下文
     private SqliteHelper dbHelper; //数据库访问对象
     private SQLiteDatabase db;       //可对数据库进行读写的操作对象
 
-    private AccountDao accountDao=new AccountDao(); //用于数据同步
+    private UserDao userDao =new UserDao(); //用于数据同步
     public UserLocalDao(Context context) {
         this.context = context;
     }
@@ -92,7 +91,7 @@ public class UserLocalDao {
         values.put("is_login","false");
         db.update("user",values,"phone_number = ?",new String[]{account});
     }
-
+/*
     public Boolean sync(){
         ArrayList<History> historyArrayList=new ArrayList<>();
         ArrayList<History> reportArrayList=new ArrayList<>();
@@ -140,6 +139,13 @@ public class UserLocalDao {
         return cursor != null && cursor.getCount() > 0;
     }
 
+
+
+
+
+
+
+
     @SuppressLint("Range")
     public ArrayList<History> getHistory(String account)
     {
@@ -165,7 +171,7 @@ public class UserLocalDao {
         values.put("history_content",history.getContent());
         values.put("remind",history.getRemind());
         db.insert("history", null, values);
-        valueReturn=accountDao.insertHistory_Remote(account,history);
+        valueReturn= userDao.insertHistory_Remote(account,history);
         return valueReturn;
     }
     public Boolean updateHistory(String account,History history){
@@ -233,20 +239,22 @@ public class UserLocalDao {
         return valueReturn;
     }
     @SuppressLint("Range")
-    public ArrayList<Colok> getColok(){
-        ArrayList<Colok> colokArrayList=new ArrayList<>();
+    public ArrayList<Alert> getColok(){
+        ArrayList<Alert> alertArrayList =new ArrayList<>();
         Cursor cursor = db.query("colok", null, "phone_number = ?", new String[]{getUser()}, null, null, null);
         if(cursor.moveToFirst()){
             do{
-                Colok colok=new Colok();
-                colok.setTilte(cursor.getString(cursor.getColumnIndex("title")));
-                colok.setCycle(cursor.getString(cursor.getColumnIndex("cycle")));
-                colok.setDate(cursor.getString(cursor.getColumnIndex("date")));
-                colok.setHistory_No(cursor.getInt(cursor.getColumnIndex("history_No")));
-                colokArrayList.add(colok);
+                Alert alert =new Alert();
+                alert.setTilte(cursor.getString(cursor.getColumnIndex("title")));
+                alert.setCycle(cursor.getString(cursor.getColumnIndex("cycle")));
+                alert.setDate(cursor.getString(cursor.getColumnIndex("date")));
+                alert.setHistory_No(cursor.getInt(cursor.getColumnIndex("history_No")));
+                alertArrayList.add(alert);
             }while(cursor.moveToNext());
         }
-        return colokArrayList;
+        return alertArrayList;
     }
+
+    */
 
 }

@@ -12,20 +12,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class AccountDao {
-    public AccountDao() {
-        if(JDBCHelper.connection==null)
-        {
-            System.out.println("test");
-        }
+public class UserDao extends JDBCHelper{
+    public UserDao() {
+        getConnection();
     }
+
     public String checkUserPassword(String account,String password)
     {
         String stringReturn=null;
         String sql="SELECT phone_number,password FROM user WHERE phone_number=?";
         String passwordGet=null;
         try {
-            PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql);
+            PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1,account);
             ResultSet resultSet=preparedStatement.executeQuery();
             if(resultSet.next())
@@ -47,19 +45,20 @@ public class AccountDao {
      * */
     public Boolean checkUserUnique(String account)
     {
+        Boolean valueReturn=false;
         String sql="SELECT phone_number FROM user WHERE phone_number=?";
         try {
-            PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql);
+            PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1,account);
             ResultSet resultSet=preparedStatement.executeQuery();
             if(resultSet.next())
             {
-                return true;
+                valueReturn=true;
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return false;
+        return valueReturn;
     }
 
     /**
@@ -72,7 +71,7 @@ public class AccountDao {
         String sql="INSERT INTO user (phone_number,password,sex,birthday) VALUES (?,?,?,?)";
         if((!checkUserUnique(account))&&(account!=null)&&(password!=null)&&(!password.equals(""))) {
             try {
-                PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql);
+                PreparedStatement preparedStatement=connection.prepareStatement(sql);
                 preparedStatement.setString(1, account);
                 preparedStatement.setString(2, password);
                 preparedStatement.setString(3,sex);
@@ -92,7 +91,7 @@ public class AccountDao {
         String sql="SELECT username,sex,email,birthday from user WHERE phone_number=?";
         HashMap userInfo=new HashMap<String,String>();
         try {
-            PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql);
+            PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1, account);
             ResultSet resultSet=preparedStatement.executeQuery();
             if(resultSet.next())
@@ -111,6 +110,7 @@ public class AccountDao {
  * hashmap中 key为username,sex,email,password，birthday
  * */
     public Boolean updateUserInformation(String account,HashMap<String,String> userInfo_update) throws updateInfoException {
+        getConnection();
         String sql_username="UPDATE user set username=? WHERE phone_number=?";
         String sql_sex="UPDATE user set sex=? WHERE phone_number=?";
         String sql_email="UPDATE user set email=? WHERE phone_number=?";
@@ -130,7 +130,7 @@ public class AccountDao {
         if(sex_update!=null)
         {
             try {
-                PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql_sex);
+                PreparedStatement preparedStatement=connection.prepareStatement(sql_sex);
                 preparedStatement.setString(1, sex_update);
                 preparedStatement.setString(2,account);
                 preparedStatement.executeUpdate();
@@ -141,7 +141,7 @@ public class AccountDao {
         if(username_update!=null)
         {
             try {
-                PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql_username);
+                PreparedStatement preparedStatement=connection.prepareStatement(sql_username);
                 preparedStatement.setString(1, username_update);
                 preparedStatement.setString(2,account);
                 preparedStatement.executeUpdate();
@@ -152,7 +152,7 @@ public class AccountDao {
         if(email_update!=null)
         {
             try {
-                PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql_email);
+                PreparedStatement preparedStatement=connection.prepareStatement(sql_email);
                 preparedStatement.setString(1, email_update);
                 preparedStatement.setString(2,account);
                 preparedStatement.executeUpdate();
@@ -163,7 +163,7 @@ public class AccountDao {
         if(password_update!=null)
         {
             try {
-                PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql_password);
+                PreparedStatement preparedStatement=connection.prepareStatement(sql_password);
                 preparedStatement.setString(1, password_update);
                 preparedStatement.setString(2,account);
                 preparedStatement.executeUpdate();
@@ -174,12 +174,17 @@ public class AccountDao {
         return true;
     }
 
+
+
+
+
+/*
     public ArrayList<History> getHistory_Remote(String account)
     {
         ArrayList<History> historyArrayList=new ArrayList<>();
         String sql="SELECT ID,history_No,history_content,remind FROM history WHERE phone_number=? ORDER BY history_No";
         try {
-            PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql);
+            PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1,account);
             ResultSet resultSet= preparedStatement.executeQuery();
             while(resultSet.next()){
@@ -199,7 +204,7 @@ public class AccountDao {
         Boolean valueReturn=false;
         String sql="UPDATE history SET remind=?,history_content=? where phone_number=? and history_No=?";
         try {
-            PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql);
+            PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1, history_update.getRemind());
             preparedStatement.setString(2, history_update.getContent());
             preparedStatement.setString(3,account);
@@ -220,7 +225,7 @@ public class AccountDao {
             history_No=0;
         }
         try {
-            PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql);
+            PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1,account);
             preparedStatement.setInt(2,history_No);
             if(preparedStatement.executeUpdate()>0){
@@ -237,7 +242,7 @@ public class AccountDao {
         String sql="INSERT INTO history (phone_number,history_content,history_No,remind) VALUES (?,?,?,?)";
         Integer nextNo=getHistoryCount(account)+1;
         try {
-            PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql);
+            PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1,account);
             preparedStatement.setString(2, history_insert.getContent());
             preparedStatement.setInt(3,nextNo);
@@ -256,7 +261,7 @@ public class AccountDao {
         Integer count = 0;
         String sql="SELECT history_No from history where phone_number=? ORDER BY history_No DESC limit 1";
         try {
-            PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql);
+            PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1,account);
             ResultSet resultSet=preparedStatement.executeQuery();
             if(resultSet.next()){
@@ -278,7 +283,7 @@ public class AccountDao {
         ArrayList<History> historyArrayList=new ArrayList<>();
         String sql="SELECT ID,report_No,report_content FROM report WHERE phone_number=? ORDER BY report_No";
         try {
-            PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql);
+            PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1,account);
             ResultSet resultSet= preparedStatement.executeQuery();
             while(resultSet.next()){
@@ -297,7 +302,7 @@ public class AccountDao {
         Boolean valueReturn=false;
         String sql="UPDATE report SET report_content=? where phone_number=? and report_No=?";
         try {
-            PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql);
+            PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1, history_update.getContent());
             preparedStatement.setString(2,account);
             preparedStatement.setInt(3,history_update.getNo());
@@ -317,7 +322,7 @@ public class AccountDao {
             history_No=0;
         }
         try {
-            PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql);
+            PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1,account);
             preparedStatement.setInt(2,history_No);
             if(preparedStatement.executeUpdate()>0){
@@ -334,7 +339,7 @@ public class AccountDao {
         String sql="INSERT INTO report (phone_number,report_content,report_No) VALUES (?,?,?)";
         Integer nextNo=getReportCount(account)+1;
         try {
-            PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql);
+            PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1,account);
             preparedStatement.setString(2, history_insert.getContent());
             preparedStatement.setInt(3,nextNo);
@@ -352,7 +357,7 @@ public class AccountDao {
         Integer count = 0;
         String sql="SELECT report_No from report where phone_number=?  ORDER BY report_No DESC limit 1";
         try {
-            PreparedStatement preparedStatement=JDBCHelper.connection.prepareStatement(sql);
+            PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1,account);
             ResultSet resultSet=preparedStatement.executeQuery();
             if(resultSet.next()){
@@ -363,4 +368,5 @@ public class AccountDao {
         }
         return count;
     }
+    */
 }

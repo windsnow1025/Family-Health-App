@@ -26,15 +26,21 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     namespace 'com.project'
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
+    implementation 'androidx.navigation:navigation-fragment:2.4.1'
+    implementation 'androidx.navigation:navigation-ui:2.4.1'
     def fragment_version = "1.5.5"
 
     // Java language implementation
     implementation "androidx.fragment:fragment:$fragment_version"
     // https://mvnrepository.com/artifact/mysql/mysql-connector-java
-    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.32'
+//    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.32'
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '5.1.6'
 
     // Kotlin
     implementation "androidx.fragment:fragment-ktx:$fragment_version"

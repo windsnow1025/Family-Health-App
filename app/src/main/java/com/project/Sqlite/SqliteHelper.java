@@ -23,24 +23,38 @@ public class SqliteHelper extends SQLiteOpenHelper {
     // 创建用户表User
     public static final String CREATE_USER = "create table user ("
             + "phone_number text primary key,"
+            + "username text,"
+            + "email text,"
+            + "birthday text,"
+            + "sex text,"
             + "is_login text,"
             + "is_multipled text)";
     public static final String CREATE_HISTORY = "create table history ("
             + "ID integer primary key,"
             + "phone_number text,"
             + "history_No integer,"
-            + "history_content text,"
-            + "remind text)";
+            + "history_date text,"
+            + "history_place text,"
+            + "history_doctor text,"
+            + "history_organ text,"
+            + "syptom text,"
+            + "conclusion text,"
+            + "suggestion text)";
     public static final String CREATE_REPORT = "create table report ("
             + "ID integer primary key,"
             + "phone_number text,"
             + "report_No integer,"
-            + "report_content text)";
-    public static final String CREATE_COLOK = "create table colok ("
+            + "report_content text,"
+            + "report_type text,"
+            + "report_date text,"
+            + "report_place text)";
+    public static final String CREATE_ALERT = "create table alert ("
             + "ID integer primary key,"
             + "phone_number text,"
-            + "history_No integer,"
-            + "date text,"
+            + "alert_No text,"
+            + "type_No integer,"
+            + "type text,"
+            + "content text,"
             + "title text,"
             + "cycle text)";
 
@@ -52,7 +66,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_USER);
         db.execSQL(CREATE_REPORT);
         db.execSQL(CREATE_HISTORY);
-        db.execSQL(CREATE_COLOK);
+        db.execSQL(CREATE_ALERT);
     }
 
     // 升级数据库
@@ -61,7 +75,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
         db.execSQL("drop table if exists user");
         db.execSQL("drop table if exists report");
         db.execSQL("drop table if exists history");
-        db.execSQL("drop table if exists colok");
+        db.execSQL("drop table if exists alert");
         onCreate(db);
     }
 }
