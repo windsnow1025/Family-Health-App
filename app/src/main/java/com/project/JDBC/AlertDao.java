@@ -4,4 +4,5 @@ public class AlertDao extends JDBCHelper{
     public AlertDao(){
         getConnection();
     }
+
 }

@@ -2,10 +2,7 @@ package com.project.Pojo;
 
 import java.io.Serializable;
 
-/**
- * 取名为History 但实际上Report和History的都是用这个类封装数据
- * 区别在于remind
- * */
+
 public class History implements Serializable {
     private Integer ID;
     private Integer history_No;

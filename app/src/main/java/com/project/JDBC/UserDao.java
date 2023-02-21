@@ -3,12 +3,10 @@ package com.project.JDBC;
 import androidx.annotation.NonNull;
 
 import com.project.Exception.updateInfoException;
-import com.project.Pojo.History;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -179,105 +177,6 @@ public class UserDao extends JDBCHelper{
 
 
 /*
-    public ArrayList<History> getHistory_Remote(String account)
-    {
-        ArrayList<History> historyArrayList=new ArrayList<>();
-        String sql="SELECT ID,history_No,history_content,remind FROM history WHERE phone_number=? ORDER BY history_No";
-        try {
-            PreparedStatement preparedStatement=connection.prepareStatement(sql);
-            preparedStatement.setString(1,account);
-            ResultSet resultSet= preparedStatement.executeQuery();
-            while(resultSet.next()){
-                History history_temp=new History();
-                history_temp.setID(resultSet.getInt("ID"));
-                history_temp.setNo(resultSet.getInt("history_No"));
-                history_temp.setContent(resultSet.getString("history_content"));
-                history_temp.setRemind(resultSet.getString("remind"));
-                historyArrayList.add(history_temp);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return historyArrayList;
-    }
-    public Boolean updateHistory_Remote(String account, History history_update){
-        Boolean valueReturn=false;
-        String sql="UPDATE history SET remind=?,history_content=? where phone_number=? and history_No=?";
-        try {
-            PreparedStatement preparedStatement=connection.prepareStatement(sql);
-            preparedStatement.setString(1, history_update.getRemind());
-            preparedStatement.setString(2, history_update.getContent());
-            preparedStatement.setString(3,account);
-            preparedStatement.setInt(4,history_update.getNo());
-            if(preparedStatement.executeUpdate()>0)
-            {
-                valueReturn=true;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return valueReturn;
-    }
-    public Boolean deleteHistroy_Remote(String account, Integer history_No){
-        Boolean valueReturn=false;
-        String sql="DELETE FROM history where phone_number=? and history_No=?";
-        if(history_No==null){
-            history_No=0;
-        }
-        try {
-            PreparedStatement preparedStatement=connection.prepareStatement(sql);
-            preparedStatement.setString(1,account);
-            preparedStatement.setInt(2,history_No);
-            if(preparedStatement.executeUpdate()>0){
-                valueReturn=true;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return valueReturn;
-    }
-
-    public  Boolean insertHistory_Remote(String account, History history_insert){
-        Boolean valueReturn=false;
-        String sql="INSERT INTO history (phone_number,history_content,history_No,remind) VALUES (?,?,?,?)";
-        Integer nextNo=getHistoryCount(account)+1;
-        try {
-            PreparedStatement preparedStatement=connection.prepareStatement(sql);
-            preparedStatement.setString(1,account);
-            preparedStatement.setString(2, history_insert.getContent());
-            preparedStatement.setInt(3,nextNo);
-            preparedStatement.setString(4,history_insert.getRemind());
-            if(preparedStatement.executeUpdate()>0){
-                valueReturn=true;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return valueReturn;
-    }
-
-    //计数 在插入记录时控制序号
-    private Integer getHistoryCount(String account){
-        Integer count = 0;
-        String sql="SELECT history_No from history where phone_number=? ORDER BY history_No DESC limit 1";
-        try {
-            PreparedStatement preparedStatement=connection.prepareStatement(sql);
-            preparedStatement.setString(1,account);
-            ResultSet resultSet=preparedStatement.executeQuery();
-            if(resultSet.next()){
-                count=resultSet.getInt("history_No");
-            }
-            else
-            {
-                count=1;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return count;
-    }
-
-
     public ArrayList<History> getReport_Remote(String account)
     {
         ArrayList<History> historyArrayList=new ArrayList<>();

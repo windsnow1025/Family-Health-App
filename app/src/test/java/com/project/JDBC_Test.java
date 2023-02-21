@@ -1,8 +1,11 @@
 package com.project;
 
 import com.project.Exception.updateInfoException;
+import com.project.JDBC.HistoryDao;
+import com.project.JDBC.ReportDao;
 import com.project.JDBC.UserDao;
 import com.project.Pojo.History;
+import com.project.Pojo.Report;
 
 import org.junit.Test;
 
@@ -11,6 +14,8 @@ import java.util.HashMap;
 
 public class JDBC_Test {
     UserDao userDao =new UserDao();
+    HistoryDao historyDao=new HistoryDao();
+    ReportDao reportDao=new ReportDao();
     @Test
     public void test(){
         System.out.println("JDBC_Test\n");
@@ -91,5 +96,44 @@ public class JDBC_Test {
         } catch (updateInfoException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    @Test
+    public void historyDao_Test(){
+        historyDao.getConnection();
+        ArrayList<History> historyArrayList=historyDao.getHistory_Remote("1111");
+        for (History history:historyArrayList) {
+            System.out.println(history.getHistory_No()+history.getHistory_date()+history.getHistory_organ()+history.getSuggestion());
+        }
+        historyDao.deleteHistory_Remote("1111",7);
+        History history=new History();
+        history.setHistory_organ("test");
+        history.setHistory_date("2022-07-08");
+        history.setHistory_doctor("test");
+        history.setConclusion("tttt");
+        history.setSymptom("ddddd");
+        history.setSuggestion("stttt");
+        history.setHistory_place("ssssdd");
+        historyDao.insertHistory_Remote("1112",history);
+        history.setHistory_No(1);
+        historyDao.updateHistory_Remote("1111",history);
+        historyDao.closeConnection();
+    }
+    @Test
+    public void reportDao_Test(){
+        reportDao.getConnection();
+        ArrayList<Report> reportArrayList=reportDao.getReport_Remote("1111");
+        for(Report report:reportArrayList){
+            System.out.println(report.getReport_No()+report.getReport_content());
+        }
+        reportDao.deleteReport_Remote("1111",3);
+        Report report=new Report();
+        report.setReport_date("2022-07-08");
+        report.setReport_place("test");
+        report.setReport_type("teee");
+        report.setReport_content("健康");
+        reportDao.insertReport_Remote("1112",report);
+        report.setReport_No(1);
+        reportDao.updateReport_Remote("1111",report);
     }
 }
