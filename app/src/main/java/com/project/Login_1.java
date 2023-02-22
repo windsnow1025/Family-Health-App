@@ -46,7 +46,7 @@ public class Login_1 extends AppCompatActivity implements View.OnClickListener, 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login1);
+        setContentView(R.layout.activity_login);
         et_phone = (EditText) findViewById(R.id.et_phone);
         et_password = (EditText) findViewById(R.id.et_password);
         ck_remember = (CheckBox) findViewById(R.id.ck_remember);
