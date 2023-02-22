@@ -138,7 +138,7 @@ public class LoginForgetActivity extends AppCompatActivity implements DatePicker
     @SuppressLint("SetTextI18n")
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        et_birth.setText(year + "年" + (month + 1) + "月" + dayOfMonth + "日");
+        et_birth.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
     }
 
     /*监听、隐藏软键盘*/

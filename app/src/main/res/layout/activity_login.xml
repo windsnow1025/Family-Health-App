@@ -43,6 +43,7 @@
             android:maxLength="11"
             android:textColor="@color/black"
             android:textColorHint="@color/grey"
+            android:paddingLeft="15dp"
             android:textCursorDrawable="@drawable/text_cursor"
             android:textSize="17sp" />
     </RelativeLayout>
@@ -64,8 +65,18 @@
             android:inputType="textPassword"
             android:textColor="@color/black"
             android:textColorHint="@color/grey"
+            android:paddingLeft="15dp"
             android:textCursorDrawable="@drawable/text_cursor"
             android:textSize="17sp" />
+
+        <ImageButton
+            android:id="@+id/bt_eye1"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_alignRight="@id/et_password"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/eye" />
 
     </RelativeLayout>
 

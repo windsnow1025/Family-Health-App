@@ -1,8 +1,6 @@
 package com.project;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,36 +9,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+public class st_nameFragment extends Fragment {
 
-public class settingFragment extends Fragment {
-private Button bt_back;
-private Button bt_darkcolor;
-private Button bt_lightcolor;
-
-
-    public settingFragment() {
+    private Button bt_back;
+    private Button bt_set;
+    private EditText et_name;
+    private TextView tv_name;
+    public st_nameFragment() {
         // Required empty public constructor
     }
-
-
-
     @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_setting, container, false);
+        View view = inflater.inflate(R.layout.fragment_st_name, container, false);
+        tv_name=view.findViewById(R.id.tv_username);
+        et_name=view.findViewById(R.id.et_username);
         bt_back=view.findViewById(R.id.bt_back);
         bt_back.setOnClickListener(new BTlistener());
-        bt_darkcolor=view.findViewById(R.id.bt_darkcolor);
-        bt_darkcolor.setOnClickListener(new BTlistener());
-        bt_lightcolor=view.findViewById(R.id.bt_lightvolor);
-        bt_lightcolor.setOnClickListener(new BTlistener());
-
+        bt_set=view.findViewById(R.id.bt_set);
+        bt_set.setOnClickListener(new BTlistener());
 
         return view;
     }
@@ -49,12 +42,17 @@ private Button bt_lightcolor;
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.bt_darkcolor:
-                    break;
-                case R.id.bt_lightvolor:
-                    break;
                 case R.id.bt_back:
                     getParentFragmentManager().popBackStack();
+                    break;
+                case R.id.bt_set:
+                    String username=et_name.getText().toString();
+                    if(!username.equals("")){
+                        Toast.makeText(getContext(), "用户名称修改成功", Toast.LENGTH_SHORT).show();
+                        tv_name.setText(username);
+                        et_name.setText("");
+                        et_name.clearFocus();
+                    }
                     break;
                 default:
                     break;

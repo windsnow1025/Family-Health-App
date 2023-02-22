@@ -35,11 +35,10 @@
 
 
             <TextView
-                android:id="@+id/textViewLoginSignup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:text="个人中心"
+                android:text="绑定邮箱"
                 android:textAlignment="center"
                 android:textSize="34sp" />
 
@@ -55,119 +54,64 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:padding="10dp"
-                    android:layout_marginLeft="25dp"
-                    android:text="修改用户名"
-                    android:textSize="24sp" />
-
-                <Button
-                    android:id="@+id/bt_username"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="25dp"
-                    android:background="@drawable/get"
-                    android:textSize="30sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="15dp">
-
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="25dp"
-                    android:padding="10dp"
-                    android:text="修改密码"
-                    android:textSize="24sp" />
-
-                <Button
-                    android:id="@+id/bt_password"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/get"
-                    android:layout_marginRight="25dp"
-                    android:textSize="30sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="15dp">
-
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="25dp"
-                    android:padding="10dp"
-                    android:text="绑定邮箱"
-                    android:textSize="24sp" />
-
-
-                <Button
-                    android:id="@+id/bt_email"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/get"
-                    android:layout_marginRight="25dp"
-                    android:textSize="30sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="15dp">
-
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="25dp"
-                    android:layout_weight="1"
-
-                    android:padding="10dp"
-                    android:text="年龄"
-                    android:textSize="24sp" />
-
-                <TextView
-                    android:id="@+id/tv_age"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:background="@android:color/transparent"
-                    android:layout_weight="2" />
-
-                <Button
-                    android:id="@+id/bt_age"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="重置"
-                    android:gravity="center"
-                    android:layout_marginRight="25dp"
-                    android:textSize="20sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="15dp">
-
-                <Button
-                    android:id="@+id/bt_exit"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:text="退出登录"
+                    android:text="原邮箱:"
+                    android:gravity="center"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/tv_email"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:layout_weight="2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="15dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:text="新邮箱:"
+                    android:gravity="center"
+                    android:textSize="24sp" />
+
+                <EditText
+                    android:id="@+id/et_email"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:hint="请输入新邮箱"
+                    android:textColorHint="@color/grey"
+                    android:layout_weight="2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="25dp">
+
+                <Button
+                    android:id="@+id/bt_set"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:text="修改"
                     android:textSize="16sp" />
             </LinearLayout>
 
