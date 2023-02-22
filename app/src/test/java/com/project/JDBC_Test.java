@@ -1,9 +1,11 @@
 package com.project;
 
 import com.project.Exception.updateInfoException;
+import com.project.JDBC.AlertDao;
 import com.project.JDBC.HistoryDao;
 import com.project.JDBC.ReportDao;
 import com.project.JDBC.UserDao;
+import com.project.Pojo.Alert;
 import com.project.Pojo.History;
 import com.project.Pojo.Report;
 
@@ -16,6 +18,7 @@ public class JDBC_Test {
     UserDao userDao =new UserDao();
     HistoryDao historyDao=new HistoryDao();
     ReportDao reportDao=new ReportDao();
+    AlertDao alertDao=new AlertDao();
     @Test
     public void test(){
         System.out.println("JDBC_Test\n");
@@ -39,6 +42,7 @@ public class JDBC_Test {
     }
     @Test
     public void checkUnique_test() {
+        userDao.getConnection();
         Boolean output;
         System.out.println("\ncheckUnique_test\n");
         output= userDao.checkUserUnique("18001718981");
@@ -47,6 +51,7 @@ public class JDBC_Test {
         System.out.println("null:"+output);
         output= userDao.checkUserUnique("1800171898");
         System.out.println("wrong:"+output);
+        userDao.closeConnection();
     }
     @Test
     public void insertUser_test() {
@@ -135,5 +140,25 @@ public class JDBC_Test {
         reportDao.insertReport_Remote("1112",report);
         report.setReport_No(1);
         reportDao.updateReport_Remote("1111",report);
+    }
+    @Test
+    public void alertDao_Test(){
+        alertDao.getConnection();
+        ArrayList<Alert> alertArrayList=alertDao.getAlert_Remote("1111");
+        for(Alert alert:alertArrayList){
+            System.out.println(alert.getAlert_No()+alert.getCycle()+alert.getContent());
+        }
+        alertDao.deleteAlert_Remote("1112",4);
+        Alert alert=new Alert();
+        alert.setPhone_number("1111");
+        alert.setType("test");
+        alert.setType_No((int) 1e4);
+        alert.setCycle("eeeee");
+        alert.setContent("22222");
+        alert.setDate("2033-08-09");
+        alertDao.insertAlert_Remote("1111",alert);
+        alert.setAlert_No(1);
+        alertDao.updateAlert_Remote("1111",alert);
+        alertDao.closeConnection();
     }
 }

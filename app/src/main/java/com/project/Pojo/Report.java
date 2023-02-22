@@ -3,21 +3,12 @@ package com.project.Pojo;
 import java.io.Serializable;
 
 public class Report implements Serializable {
-    private Integer ID;
     private Integer report_No;
     private String phone_number;
     private String report_content;
     private String report_type;
     private String report_place;
     private String report_date;
-
-    public Integer getID() {
-        return ID;
-    }
-
-    public void setID(Integer ID) {
-        this.ID = ID;
-    }
 
     public Integer getReport_No() {
         return report_No;

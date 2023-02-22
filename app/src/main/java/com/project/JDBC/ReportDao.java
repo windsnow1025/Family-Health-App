@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 public class ReportDao extends JDBCHelper{
     public ReportDao(){
-        getConnection();
     }
     public ArrayList<Report> getReport_Remote(String account)
     {

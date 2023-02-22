@@ -1,7 +1,6 @@
 package com.project.Pojo;
 
 public class Alert {
-    private Integer ID;
     private Integer Alert_No;
     private String phone_number;
     private String date;
@@ -9,14 +8,6 @@ public class Alert {
     private String content;
     private String type;
     private Integer type_No;
-
-    public Integer getID() {
-        return ID;
-    }
-
-    public void setID(Integer ID) {
-        this.ID = ID;
-    }
 
     public Integer getAlert_No() {
         return Alert_No;

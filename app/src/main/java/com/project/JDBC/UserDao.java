@@ -12,7 +12,6 @@ import java.util.HashMap;
 
 public class UserDao extends JDBCHelper{
     public UserDao() {
-        getConnection();
     }
 
     public String checkUserPassword(String account,String password)

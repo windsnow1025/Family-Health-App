@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 public class HistoryDao extends JDBCHelper{
     public HistoryDao() {
-        getConnection();
     }
     public ArrayList<History> getHistory_Remote(String account)
     {

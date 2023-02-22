@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 
 public class History implements Serializable {
-    private Integer ID;
     private Integer history_No;
     private String phone_number;
     private String history_place;
@@ -14,14 +13,6 @@ public class History implements Serializable {
     private String symptom;
     private String conclusion;
     private String suggestion;
-
-    public Integer getID() {
-        return ID;
-    }
-
-    public void setID(Integer ID) {
-        this.ID = ID;
-    }
 
     public Integer getHistory_No() {
         return history_No;
