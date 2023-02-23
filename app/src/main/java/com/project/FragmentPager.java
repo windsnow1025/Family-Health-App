@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class FragmentReportRecord extends Fragment {
-    public FragmentReportRecord() {
+public class FragmentPager extends Fragment {
+    public FragmentPager() {
         // Required empty public constructor
     }
 
