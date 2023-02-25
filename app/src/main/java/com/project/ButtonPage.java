@@ -1,6 +1,5 @@
 package com.project;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +20,7 @@ public class ButtonPage extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new Fragment1_1());
+                transaction.replace(R.id.fragment_container, new FragmentMain_1());
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
@@ -32,7 +31,7 @@ public class ButtonPage extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new Fragment1_2());
+                transaction.replace(R.id.fragment_container, new FragmentMain_2());
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
@@ -43,7 +42,7 @@ public class ButtonPage extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new Fragment1_3());
+                transaction.replace(R.id.fragment_container, new FragmentMain_3());
                 transaction.addToBackStack(null);
                 transaction.commit();
             }

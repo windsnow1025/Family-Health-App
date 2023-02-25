@@ -9,12 +9,12 @@ import android.widget.Button;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-public class Fragment1_1 extends Fragment {
+public class FragmentMain_2 extends Fragment {
 
     View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment1_1, container, false);
+        view = inflater.inflate(R.layout.fragment1_2, container, false);
 
         // Button Page
         FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
@@ -22,57 +22,47 @@ public class Fragment1_1 extends Fragment {
         transaction.addToBackStack(null);
         transaction.commit();
 
-        Button buttonInside2 = view.findViewById(R.id.buttonInside2);
-        Button buttonOutside = view.findViewById(R.id.buttonOutside);
+        Button buttonInside3 = view.findViewById(R.id.buttonInside3);
+        Button buttonOutside2 = view.findViewById(R.id.buttonOutside2);
 
-        buttonInside2.setOnClickListener(new View.OnClickListener() {
+        buttonInside3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new Fragment1_2());
+                transaction.replace(R.id.fragment_container, new FragmentMain_3());
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
         });
 
-        buttonOutside.setOnClickListener(new View.OnClickListener() {
+        buttonOutside2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new Fragment1());
+                transaction.replace(R.id.fragment_container, new FragmentMain_1());
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
         });
 
-        Button buttonBrain = view.findViewById(R.id.buttonBrain);
-        Button buttonRespiratory = view.findViewById(R.id.buttonRespiratory);
-        Button buttonUrinary = view.findViewById(R.id.buttonRenal);
+        Button buttonLiver = view.findViewById(R.id.buttonLiver);
+        Button buttonDigestive = view.findViewById(R.id.buttonDigestive);
 
-        buttonBrain.setOnClickListener(new View.OnClickListener() {
+        buttonLiver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new Organ_3d("brain"));
+                transaction.replace(R.id.fragment_container, new Organ("liver"));
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
         });
 
-        buttonRespiratory.setOnClickListener(new View.OnClickListener() {
+        buttonDigestive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new Organ_3d("respiratory"));
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
-        });
-        buttonUrinary.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new Organ_3d("renal"));
+                transaction.replace(R.id.fragment_container, new Organ("digestive"));
                 transaction.addToBackStack(null);
                 transaction.commit();
             }

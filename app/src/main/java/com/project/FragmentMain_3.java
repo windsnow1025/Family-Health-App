@@ -9,12 +9,12 @@ import android.widget.Button;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-public class Fragment1_2 extends Fragment {
+public class FragmentMain_3 extends Fragment {
 
     View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment1_2, container, false);
+        view = inflater.inflate(R.layout.fragment1_3, container, false);
 
         // Button Page
         FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
@@ -22,47 +22,36 @@ public class Fragment1_2 extends Fragment {
         transaction.addToBackStack(null);
         transaction.commit();
 
-        Button buttonInside3 = view.findViewById(R.id.buttonInside3);
-        Button buttonOutside2 = view.findViewById(R.id.buttonOutside2);
+        Button buttonOutside3 = view.findViewById(R.id.buttonOutside3);
 
-        buttonInside3.setOnClickListener(new View.OnClickListener() {
+        buttonOutside3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new Fragment1_3());
+                transaction.replace(R.id.fragment_container, new FragmentMain_2());
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
         });
 
-        buttonOutside2.setOnClickListener(new View.OnClickListener() {
+        Button buttonCardiovascular = view.findViewById(R.id.buttonCardiovascular);
+        Button buttonMusculoskeletal = view.findViewById(R.id.buttonMusculoskeletal);
+
+        buttonCardiovascular.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new Fragment1_1());
+                transaction.replace(R.id.fragment_container, new Organ("cardiovascular"));
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
         });
 
-        Button buttonLiver = view.findViewById(R.id.buttonLiver);
-        Button buttonDigestive = view.findViewById(R.id.buttonDigestive);
-
-        buttonLiver.setOnClickListener(new View.OnClickListener() {
+        buttonMusculoskeletal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new Organ("liver"));
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
-        });
-
-        buttonDigestive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new Organ("digestive"));
+                transaction.replace(R.id.fragment_container, new Organ("musculoskeletal"));
                 transaction.addToBackStack(null);
                 transaction.commit();
             }

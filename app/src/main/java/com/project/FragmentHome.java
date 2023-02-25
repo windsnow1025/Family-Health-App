@@ -15,7 +15,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-public class Fragment3 extends Fragment {
+public class FragmentHome extends Fragment {
     private ImageButton imageButton;
     private ImageButton imageButton1;
     private ImageButton imageButton2;
