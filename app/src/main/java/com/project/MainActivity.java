@@ -15,9 +15,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button button1 = findViewById(R.id.button1);
-        Button button2 = findViewById(R.id.button2);
-        Button button3 = findViewById(R.id.button3);
+        Button button1 = findViewById(R.id.buttonMain);
+        Button button2 = findViewById(R.id.buttonAlert);
+        Button button3 = findViewById(R.id.buttonHome);
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override

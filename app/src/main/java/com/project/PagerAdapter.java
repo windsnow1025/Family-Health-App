@@ -14,7 +14,7 @@ public class PagerAdapter extends FragmentStateAdapter {
     public PagerAdapter(FragmentActivity fragmentActivity, List<Fragment> fragmentList) {
         super(fragmentActivity);
         this.fragmentList = fragmentList;
-        
+
     }
 
     @Override

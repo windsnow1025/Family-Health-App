@@ -26,7 +26,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/buttonMain"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -38,7 +38,7 @@
             app:strokeWidth="2dp" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/buttonAlert"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -50,7 +50,7 @@
             app:strokeWidth="2dp" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/buttonHome"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

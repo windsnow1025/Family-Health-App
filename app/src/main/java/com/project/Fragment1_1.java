@@ -10,11 +10,17 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 public class Fragment1_1 extends Fragment {
-    View view;
 
+    View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment1_1, container, false);
+
+        // Button Page
+        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+        transaction.replace(R.id.frameLayoutButtonPage, new ButtonPage());
+        transaction.addToBackStack(null);
+        transaction.commit();
 
         Button buttonInside2 = view.findViewById(R.id.buttonInside2);
         Button buttonOutside = view.findViewById(R.id.buttonOutside);
