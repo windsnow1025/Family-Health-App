@@ -9,6 +9,11 @@ import android.webkit.WebView;
 import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Organ_3d extends Fragment {
 
@@ -41,9 +46,14 @@ public class Organ_3d extends Fragment {
         webView.loadUrl(url);
 
         // ViewPager2
-        FragmentPager fragmentPager = new FragmentPager();
-        getChildFragmentManager().beginTransaction().add(R.id.view_pager, fragmentPager).commit();
+        ViewPager2 viewPager = view.findViewById(R.id.view_pager);
+        List<Fragment> fragments = new ArrayList<>(Arrays.asList(
+                new FragmentReport(),
+                new FragmentRecord()
+        ));
 
+        PagerAdapter adapter = new PagerAdapter(getActivity(), fragments);
+        viewPager.setAdapter(adapter);
         return view;
     }
 }

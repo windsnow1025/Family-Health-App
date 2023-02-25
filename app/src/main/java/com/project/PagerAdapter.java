@@ -1,6 +1,7 @@
 package com.project;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
@@ -10,8 +11,8 @@ public class PagerAdapter extends FragmentStateAdapter {
 
     private List<Fragment> fragmentList;
 
-    public PagerAdapter(FragmentManager fm, List<Fragment> fragmentList) {
-        super(fm, fragmentList.get(0).getLifecycle());
+    public PagerAdapter(FragmentActivity fragmentActivity, List<Fragment> fragmentList) {
+        super(fragmentActivity);
         this.fragmentList = fragmentList;
     }
 
