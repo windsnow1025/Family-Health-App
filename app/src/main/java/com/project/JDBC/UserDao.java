@@ -2,7 +2,7 @@ package com.project.JDBC;
 
 import androidx.annotation.NonNull;
 
-import com.project.Exception.updateInfoException;
+import com.project.Pojo.UserInfo;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -84,29 +84,28 @@ public class UserDao extends JDBCHelper{
         return accountReturn;
     }
 
-    public HashMap<String,String> getUserInformation(String account){
+    public UserInfo getUserInformation(String account){
         String sql="SELECT username,sex,email,birthday from user WHERE phone_number=?";
-        HashMap userInfo=new HashMap<String,String>();
+        UserInfo userInfo=new UserInfo();
         try {
             PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1, account);
             ResultSet resultSet=preparedStatement.executeQuery();
             if(resultSet.next())
             {
-                userInfo.put("username",resultSet.getString("username"));
-                userInfo.put("email",resultSet.getString("email"));
-                userInfo.put("sex",resultSet.getString("sex"));
-                userInfo.put("birthday",resultSet.getString("birthday"));
+                userInfo.setPhone_number(account);
+                userInfo.setUsername(resultSet.getString("username"));
+                userInfo.setEmail(resultSet.getString("email"));
+                userInfo.setSex(resultSet.getString("sex"));
+                userInfo.setBirthday(resultSet.getString("birthday"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return userInfo;
     }
-/**
- * hashmap中 key为username,sex,email,password，birthday
- * */
-    public Boolean updateUserInformation(String account,HashMap<String,String> userInfo_update) throws updateInfoException {
+
+    public Boolean updateUserInformation(String account,HashMap<String,String> userInfo_update){
         getConnection();
         String sql_username="UPDATE user set username=? WHERE phone_number=?";
         String sql_sex="UPDATE user set sex=? WHERE phone_number=?";
@@ -117,13 +116,6 @@ public class UserDao extends JDBCHelper{
         String username_update=userInfo_update.get("username");
         String email_update=userInfo_update.get("email");
         String password_update=userInfo_update.get("password");
-        if(!checkUserUnique(account)){
-            throw new updateInfoException("账号不存在");
-        }
-        if(sex_update==null&&username_update==null&&email_update==null&&password_update==null)
-        {
-            throw new updateInfoException("没有需要修改的内容");
-        }
         if(sex_update!=null)
         {
             try {
@@ -170,101 +162,4 @@ public class UserDao extends JDBCHelper{
         }
         return true;
     }
-
-
-
-
-
-/*
-    public ArrayList<History> getReport_Remote(String account)
-    {
-        ArrayList<History> historyArrayList=new ArrayList<>();
-        String sql="SELECT ID,report_No,report_content FROM report WHERE phone_number=? ORDER BY report_No";
-        try {
-            PreparedStatement preparedStatement=connection.prepareStatement(sql);
-            preparedStatement.setString(1,account);
-            ResultSet resultSet= preparedStatement.executeQuery();
-            while(resultSet.next()){
-                History history_temp=new History();
-                history_temp.setID(resultSet.getInt("ID"));
-                history_temp.setNo(resultSet.getInt("report_No"));
-                history_temp.setContent(resultSet.getString("report_content"));
-                historyArrayList.add(history_temp);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return historyArrayList;
-    }
-    public Boolean updateReport_Remote(String account, History history_update){
-        Boolean valueReturn=false;
-        String sql="UPDATE report SET report_content=? where phone_number=? and report_No=?";
-        try {
-            PreparedStatement preparedStatement=connection.prepareStatement(sql);
-            preparedStatement.setString(1, history_update.getContent());
-            preparedStatement.setString(2,account);
-            preparedStatement.setInt(3,history_update.getNo());
-            if(preparedStatement.executeUpdate()>0)
-            {
-                valueReturn=true;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return valueReturn;
-    }
-    public Boolean deleteReport_Remote(String account, Integer history_No){
-        Boolean valueReturn=false;
-        String sql="DELETE FROM report where phone_number=? and report_No=?";
-        if(history_No==null){
-            history_No=0;
-        }
-        try {
-            PreparedStatement preparedStatement=connection.prepareStatement(sql);
-            preparedStatement.setString(1,account);
-            preparedStatement.setInt(2,history_No);
-            if(preparedStatement.executeUpdate()>0){
-                valueReturn=true;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return valueReturn;
-    }
-
-    public  Boolean insertReport_Remote(String account, History history_insert){
-        Boolean valueReturn=false;
-        String sql="INSERT INTO report (phone_number,report_content,report_No) VALUES (?,?,?)";
-        Integer nextNo=getReportCount(account)+1;
-        try {
-            PreparedStatement preparedStatement=connection.prepareStatement(sql);
-            preparedStatement.setString(1,account);
-            preparedStatement.setString(2, history_insert.getContent());
-            preparedStatement.setInt(3,nextNo);
-            if(preparedStatement.executeUpdate()>0){
-                valueReturn=true;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return valueReturn;
-    }
-
-    //计数 在插入记录时控制序号
-    private Integer getReportCount(String account){
-        Integer count = 0;
-        String sql="SELECT report_No from report where phone_number=?  ORDER BY report_No DESC limit 1";
-        try {
-            PreparedStatement preparedStatement=connection.prepareStatement(sql);
-            preparedStatement.setString(1,account);
-            ResultSet resultSet=preparedStatement.executeQuery();
-            if(resultSet.next()){
-                count=resultSet.getInt("report_No");
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return count;
-    }
-    */
 }

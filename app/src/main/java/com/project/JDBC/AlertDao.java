@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class AlertDao extends JDBCHelper{
     public AlertDao(){
     }
-    public ArrayList<Alert> getAlert_Remote(String account){
+    public ArrayList<Alert> getAlertList(String account){
         ArrayList<Alert> alertArrayList=new ArrayList<>();
         String sql="SELECT alert_No,date,cycle,content,type,type_no from alert WHERE phone_number=?";
         try {
@@ -33,7 +33,7 @@ public class AlertDao extends JDBCHelper{
         }
         return alertArrayList;
     }
-    public Boolean updateAlert_Remote(String account,Alert alert_update){
+    public Boolean updateAlert(String account, Alert alert_update){
         Boolean valueReturn=false;
         String sql="UPDATE alert SET date=?,cycle=?,content=?,type=?,type_no=? WHERE alert_No=? and phone_number=?";
         try {
@@ -53,7 +53,7 @@ public class AlertDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public Boolean deleteAlert_Remote(String account,Integer alert_No){
+    public Boolean deleteAlert(String account, Integer alert_No){
         Boolean valueReturn=false;
         String sql="DELETE FROM alert where phone_number=? and alert_No=?";
         try {
@@ -68,7 +68,7 @@ public class AlertDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public Boolean insertAlert_Remote(String account,Alert alert_insert){
+    public Boolean insertAlert(String account, Alert alert_insert){
         Boolean valueReturn=false;
         String sql="INSERT INTO alert (alert_No,phone_number,date,cycle,content,type,type_no) VALUES (?,?,?,?,?,?,?)";
         try {
@@ -107,4 +107,15 @@ public class AlertDao extends JDBCHelper{
         }
         return (count+1);
     }
+    public static Alert getAlert(ArrayList<Alert> alertArrayList,Integer alert_No){
+        Alert alertReturn=null;
+        for (Alert alert:alertArrayList){
+            if(alert.getAlert_No()==alert_No){
+                alertReturn=alert;
+                break;
+            }
+        }
+        return alertReturn;
+    }
+
 }

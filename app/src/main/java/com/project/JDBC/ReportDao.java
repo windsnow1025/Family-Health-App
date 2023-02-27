@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class ReportDao extends JDBCHelper{
     public ReportDao(){
     }
-    public ArrayList<Report> getReport_Remote(String account)
+    public ArrayList<Report> getReportList(String account)
     {
         ArrayList<Report> reportArrayList=new ArrayList<>();
         String sql="SELECT report_No,report_content,report_type,report_place,report_date FROM report WHERE phone_number=? ORDER BY report_No";
@@ -33,7 +33,7 @@ public class ReportDao extends JDBCHelper{
         }
         return reportArrayList;
     }
-    public Boolean updateReport_Remote(String account, Report report_update){
+    public Boolean updateReport(String account, Report report_update){
         Boolean valueReturn=false;
         String sql="UPDATE report SET report_content=?,report_type=?,report_place=?,report_date=? where phone_number=? and report_No=?";
         try {
@@ -54,7 +54,7 @@ public class ReportDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public Boolean deleteReport_Remote(String account, Integer report_No){
+    public Boolean deleteReport(String account, Integer report_No){
         Boolean valueReturn=false;
         String sql="DELETE FROM report where phone_number=? and report_No=?";
         if(report_No==null){
@@ -74,7 +74,7 @@ public class ReportDao extends JDBCHelper{
         return valueReturn;
     }
 
-    public  Boolean insertReport_Remote(String account, Report report_insert){
+    public  Boolean insertReport(String account, Report report_insert){
         Boolean valueReturn=false;
         String sql="INSERT INTO report (phone_number,report_content,report_No,report_type,report_place,report_date) VALUES (?,?,?,?,?,?)";
         Integer nextNo=getReportCount(account)+1;
@@ -114,5 +114,16 @@ public class ReportDao extends JDBCHelper{
             throw new RuntimeException(e);
         }
         return (count+1);
+    }
+    public static Report gerReport(ArrayList<Report> reportArrayList,Integer report_No){
+        Report reportReturn=null;
+        for(Report report:reportArrayList){
+            if(report.getReport_No()==report_No)
+            {
+                reportReturn=report;
+                break;
+            }
+        }
+        return reportReturn;
     }
 }

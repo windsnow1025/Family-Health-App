@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class HistoryDao extends JDBCHelper{
     public HistoryDao() {
     }
-    public ArrayList<History> getHistory_Remote(String account)
+    public ArrayList<History> getHistoryList(String account)
     {
         ArrayList<History> historyArrayList=new ArrayList<>();
         String sql="SELECT history_No,history_date,history_place,history_doctor,history_organ,conclusion,symptom,suggestion FROM history WHERE phone_number = ? ORDER BY history_organ,history_No";
@@ -37,7 +37,7 @@ public class HistoryDao extends JDBCHelper{
         }
         return historyArrayList;
     }
-    public Boolean updateHistory_Remote(String account, History history_update){
+    public Boolean updateHistory(String account, History history_update){
         Boolean valueReturn=false;
         String sql="UPDATE history SET history_date=?,history_place=?,history_doctor=?,conclusion=?,symptom=?,suggestion=? where phone_number=? and history_No=?";
         try {
@@ -59,7 +59,7 @@ public class HistoryDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public Boolean deleteHistory_Remote(String account, Integer history_No){
+    public Boolean deleteHistory(String account, Integer history_No){
         Boolean valueReturn=false;
         String sql="DELETE FROM history where phone_number=? and history_No=?";
         if(history_No==null){
@@ -78,7 +78,7 @@ public class HistoryDao extends JDBCHelper{
         return valueReturn;
     }
 
-    public  Boolean insertHistory_Remote(String account, History history_insert){
+    public  Boolean insertHistory(String account, History history_insert){
         Boolean valueReturn=false;
         String sql="INSERT INTO history (phone_number,history_place,history_date,history_doctor,history_organ,symptom,conclusion,suggestion,history_No) VALUES (?,?,?,?,?,?,?,?,?)";
         Integer nextNo=getHistoryCount(account)+1;
@@ -121,5 +121,15 @@ public class HistoryDao extends JDBCHelper{
             throw new RuntimeException(e);
         }
         return (count+1);
+    }
+    public static History getHistory(ArrayList<History> historyArrayList,Integer history_No){
+        History historyReturn=null;
+        for(History history:historyArrayList){
+            if(history.getHistory_No()==history_No){
+                historyReturn=history;
+                break;
+            }
+        }
+        return historyReturn;
     }
 }

@@ -1,6 +1,5 @@
 package com.project;
 
-import com.project.Exception.updateInfoException;
 import com.project.JDBC.AlertDao;
 import com.project.JDBC.HistoryDao;
 import com.project.JDBC.ReportDao;
@@ -12,7 +11,6 @@ import com.project.Pojo.Report;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class JDBC_Test {
     UserDao userDao =new UserDao();
@@ -69,48 +67,15 @@ public class JDBC_Test {
         output= userDao.insertUser("3",null,"male","2022-07-08");
         System.out.println("null password:"+output);
     }
-    @Test
-    public void getUserInfo_Test(){
-        System.out.println("\ngetUserInfo_Test\n");
-        HashMap userInfo=new HashMap<>();
-        userInfo= userDao.getUserInformation("18001718981");
-        System.out.println("correct");
-        System.out.println("username="+userInfo.get("username"));
-        System.out.println("email="+userInfo.get("email"));
-        System.out.println("sex="+userInfo.get("sex"));
-        System.out.println("birthday="+userInfo.get("birthday"));
-        userInfo= userDao.getUserInformation("1800171898");
-        System.out.println("wrong account");
-        System.out.println("username="+userInfo.get("username"));
-        System.out.println("email="+userInfo.get("email"));
-        System.out.println("sex="+userInfo.get("sex"));
-        System.out.println("birthday="+userInfo.get("birthday"));
-        userInfo= userDao.getUserInformation(null);
-        System.out.println("null account");
-        System.out.println("username="+userInfo.get("username"));
-        System.out.println("email="+userInfo.get("email"));
-        System.out.println("sex="+userInfo.get("sex"));
-        System.out.println("birthday="+userInfo.get("birthday"));
-    }
-    @Test
-    public void updateUserInfo_Test(){
-        HashMap update_test=new HashMap<>();
-        update_test.put("username","test");
-        try {
-            userDao.updateUserInformation("18001718981",update_test);
-        } catch (updateInfoException e) {
-            System.out.println(e.getMessage());
-        }
-    }
 
     @Test
     public void historyDao_Test(){
         historyDao.getConnection();
-        ArrayList<History> historyArrayList=historyDao.getHistory_Remote("1111");
+        ArrayList<History> historyArrayList=historyDao.getHistoryList("1111");
         for (History history:historyArrayList) {
             System.out.println(history.getHistory_No()+history.getHistory_date()+history.getHistory_organ()+history.getSuggestion());
         }
-        historyDao.deleteHistory_Remote("1111",7);
+        historyDao.deleteHistory("1111",7);
         History history=new History();
         history.setHistory_organ("test");
         history.setHistory_date("2022-07-08");
@@ -119,36 +84,36 @@ public class JDBC_Test {
         history.setSymptom("ddddd");
         history.setSuggestion("stttt");
         history.setHistory_place("ssssdd");
-        historyDao.insertHistory_Remote("1112",history);
+        historyDao.insertHistory("1112",history);
         history.setHistory_No(1);
-        historyDao.updateHistory_Remote("1111",history);
+        historyDao.updateHistory("1111",history);
         historyDao.closeConnection();
     }
     @Test
     public void reportDao_Test(){
         reportDao.getConnection();
-        ArrayList<Report> reportArrayList=reportDao.getReport_Remote("1111");
+        ArrayList<Report> reportArrayList=reportDao.getReportList("1111");
         for(Report report:reportArrayList){
             System.out.println(report.getReport_No()+report.getReport_content());
         }
-        reportDao.deleteReport_Remote("1111",3);
+        reportDao.deleteReport("1111",3);
         Report report=new Report();
         report.setReport_date("2022-07-08");
         report.setReport_place("test");
         report.setReport_type("teee");
         report.setReport_content("健康");
-        reportDao.insertReport_Remote("1112",report);
+        reportDao.insertReport("1112",report);
         report.setReport_No(1);
-        reportDao.updateReport_Remote("1111",report);
+        reportDao.updateReport("1111",report);
     }
     @Test
     public void alertDao_Test(){
         alertDao.getConnection();
-        ArrayList<Alert> alertArrayList=alertDao.getAlert_Remote("1111");
+        ArrayList<Alert> alertArrayList=alertDao.getAlertList("1111");
         for(Alert alert:alertArrayList){
             System.out.println(alert.getAlert_No()+alert.getCycle()+alert.getContent());
         }
-        alertDao.deleteAlert_Remote("1112",4);
+        alertDao.deleteAlert("1112",4);
         Alert alert=new Alert();
         alert.setPhone_number("1111");
         alert.setType("test");
@@ -156,9 +121,20 @@ public class JDBC_Test {
         alert.setCycle("eeeee");
         alert.setContent("22222");
         alert.setDate("2033-08-09");
-        alertDao.insertAlert_Remote("1111",alert);
+        alertDao.insertAlert("1111",alert);
         alert.setAlert_No(1);
-        alertDao.updateAlert_Remote("1111",alert);
+        alertDao.updateAlert("1111",alert);
         alertDao.closeConnection();
+    }
+    @Test
+    public void staticTest(){
+        ArrayList<Alert> alertArrayList=new ArrayList<>();
+        for(int i=0;i<5;i++){
+            Alert alert=new Alert();
+            alert.setAlert_No(i);
+            alertArrayList.add(alert);
+        }
+        Alert alertTemp=AlertDao.getAlert(alertArrayList,1);
+        System.out.println(alertTemp.getAlert_No());
     }
 }
