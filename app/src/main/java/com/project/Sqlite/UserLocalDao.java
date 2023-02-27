@@ -23,7 +23,6 @@ public class UserLocalDao {
     private Context context;         //上下文
     private SqliteHelper dbHelper; //数据库访问对象
     private SQLiteDatabase db;       //可对数据库进行读写的操作对象
-
     private UserDao userDao; //用于数据同步
     private ReportDao reportDao;
     private HistoryDao historyDao;
@@ -44,7 +43,6 @@ public class UserLocalDao {
             db = dbHelper.getReadableDatabase();
         }
     }
-
     // 关闭数据库
     public void close() {
         if (db != null) {
@@ -52,8 +50,6 @@ public class UserLocalDao {
             db = null;
         }
     }
-
-
     //获取当前登录账号
     @SuppressLint("Range")
     public String getUser(){
@@ -68,7 +64,6 @@ public class UserLocalDao {
         }
         return stringReturn;
     }
-
     public Boolean checkUser(String account){
         Boolean returnValue=false;
         Cursor cursor= db.query("user", null, "phone_number = ?", new String[]{account}, null, null, null);
@@ -77,9 +72,20 @@ public class UserLocalDao {
         }
         return  returnValue;
     }
-
-
     //登录状态改变 账号原本存在于本地库中则更新 否则添加进入 并设置登录状态为true
+    @SuppressLint("Range")
+    public UserInfo gerUserInfo(String account){
+        UserInfo userInfo=new UserInfo();
+        Cursor cursor= db.query("user", null, "phone_number = ?", new String[]{account}, null, null, null);
+        if(cursor.moveToFirst()){
+            userInfo.setPhone_number(account);
+            userInfo.setUsername(cursor.getString(cursor.getColumnIndex("username")));
+            userInfo.setEmail(cursor.getString(cursor.getColumnIndex("email")));
+            userInfo.setBirthday(cursor.getString(cursor.getColumnIndex("birthday")));
+            userInfo.setSex(cursor.getString(cursor.getColumnIndex("sex")));
+        }
+        return userInfo;
+    }
     public void addOrUpdateUser(UserInfo userInfo){
         ContentValues values = new ContentValues();
         values.put("phone_number", userInfo.getPhone_number());
@@ -98,23 +104,19 @@ public class UserLocalDao {
             db.insert("user", null, values);
         }
     }
-
     //账号登出
-    public void userLoginout(String account)
-    {
+    public void userLoginOut(String account) {
         ContentValues values= new ContentValues();
         values.put("is_login","false");
         db.update("user",values,"phone_number = ?",new String[]{account});
     }
     //账号切换
     public void userAlter(String newAccount,String oldAccount){
-        userLoginout(oldAccount);
+        userLoginOut(oldAccount);
         ContentValues values= new ContentValues();
         values.put("is_login","true");
         db.update("user",values,"phone_number = ?",new String[]{newAccount});
     }
-
-
     public Boolean sync(){
         userDao.getConnection();
         ArrayList<History> historyArrayList=new ArrayList<>();
@@ -171,6 +173,27 @@ public class UserLocalDao {
         return cursor !=null &&cursor.getCount()>0;
     }
 
+    @SuppressLint("Range")
+    public ArrayList<History> getHistoryList(String account) {
+        ArrayList<History> historyArrayList =new ArrayList<>();
+        Cursor cursor = db.query("history", null, "phone_number = ?", new String[]{account}, null, null, null);
+        if(cursor.moveToFirst()){
+            do{
+                History history=new History();
+                history.setPhone_number(cursor.getString(cursor.getColumnIndex("phone_number")));
+                history.setHistory_No(cursor.getInt(cursor.getColumnIndex("history_No")));
+                history.setHistory_date(cursor.getString(cursor.getColumnIndex("history_date")));
+                history.setHistory_date(cursor.getString(cursor.getColumnIndex("history_place")));
+                history.setHistory_doctor(cursor.getString(cursor.getColumnIndex("history_doctor")));
+                history.setHistory_organ(cursor.getString(cursor.getColumnIndex("history_organ")));
+                history.setConclusion(cursor.getString(cursor.getColumnIndex("conclusion")));
+                history.setSymptom(cursor.getString(cursor.getColumnIndex("symptom")));
+                history.setSuggestion(cursor.getString(cursor.getColumnIndex("suggestion")));
+                historyArrayList.add(history);
+            }while(cursor.moveToNext());
+        }
+        return historyArrayList;
+    }
     public Boolean insertHistory(String account,History history){
         Boolean valueReturn=false;
         ContentValues values = new ContentValues();
@@ -209,6 +232,24 @@ public class UserLocalDao {
         return valueReturn;
     }
 
+    @SuppressLint("Range")
+    public ArrayList<Report> getReportList(String account) {
+        ArrayList<Report> reportArrayList =new ArrayList<>();
+        Cursor cursor = db.query("report", null, "phone_number = ?", new String[]{account}, null, null, null);
+        if(cursor.moveToFirst()){
+            do{
+                Report report=new Report();
+                report.setPhone_number(cursor.getString(cursor.getColumnIndex("phone_number")));
+                report.setReport_No(cursor.getInt(cursor.getColumnIndex("report_No")));
+                report.setReport_content(cursor.getString(cursor.getColumnIndex("report_content")));
+                report.setReport_type(cursor.getString(cursor.getColumnIndex("report_type")));
+                report.setReport_place(cursor.getString(cursor.getColumnIndex("report_place")));
+                report.setReport_date(cursor.getString(cursor.getColumnIndex("report_date")));
+                reportArrayList.add(report);
+            }while(cursor.moveToNext());
+        }
+        return reportArrayList;
+    }
     public Boolean insertReport(String account,Report report){
         Boolean valueReturn=false;
         ContentValues values = new ContentValues();
@@ -242,6 +283,24 @@ public class UserLocalDao {
         return valueReturn;
     }
 
+    @SuppressLint("Range")
+    public ArrayList<Alert> getAlertList(String account) {
+        ArrayList<Alert> alertArrayList =new ArrayList<>();
+        Cursor cursor = db.query("alert", null, "phone_number = ?", new String[]{account}, null, null, null);
+        if(cursor.moveToFirst()){
+            do{
+                Alert alert=new Alert();
+                alert.setPhone_number(cursor.getString(cursor.getColumnIndex("phone_number")));
+                alert.setAlert_No(cursor.getInt(cursor.getColumnIndex("alert_No")));
+                alert.setDate(cursor.getString(cursor.getColumnIndex("date")));
+                alert.setCycle(cursor.getString(cursor.getColumnIndex("cycle")));
+                alert.setType(cursor.getString(cursor.getColumnIndex("type")));
+                alert.setType_No(cursor.getInt(cursor.getColumnIndex("type_No")));
+                alertArrayList.add(alert);
+            }while(cursor.moveToNext());
+        }
+        return alertArrayList;
+    }
     public Boolean insertAlert(String account,Alert alert){
         Boolean valueReturn=false;
         ContentValues values=new ContentValues();
@@ -273,59 +332,4 @@ public class UserLocalDao {
         db.delete("alert", "Report_No = ? AND phone_number=?", new String[]{String.valueOf(alert_No),account});
         return valueReturn;
     }
-
-
-/*
-    @SuppressLint("Range")
-    public ArrayList<History> getHistory(String account)
-    {
-        ArrayList<History> historyArrayList =new ArrayList<>();
-        Cursor cursor = db.query("history", null, "phone_number = ?", new String[]{account}, null, null, null);
-        if(cursor.moveToFirst()){
-            do{
-                History history=new History();
-                history.setNo(cursor.getInt(cursor.getColumnIndex("history_No")));
-                history.setContent(cursor.getString(cursor.getColumnIndex("history_content")));
-                history.setRemind(cursor.getString(cursor.getColumnIndex("remind")));
-                historyArrayList.add(history);
-            }while(cursor.moveToNext());
-        }
-        return historyArrayList;
-    }
-
-
-    //以下暂未测试
-    public Boolean setColok(Integer history_No,String title,String date,String cycle){
-        Boolean valueReturn=false;
-        ContentValues values = new ContentValues();
-        values.put("phone_number",getUser());
-        values.put("history_No",history_No);
-        values.put("title",title);
-        values.put("date",date);
-        values.put("cycle",cycle);
-        if(db.insert("colok", null, values)>0)
-        {
-            valueReturn=true;
-        }
-        return valueReturn;
-    }
-    @SuppressLint("Range")
-    public ArrayList<Alert> getColok(){
-        ArrayList<Alert> alertArrayList =new ArrayList<>();
-        Cursor cursor = db.query("colok", null, "phone_number = ?", new String[]{getUser()}, null, null, null);
-        if(cursor.moveToFirst()){
-            do{
-                Alert alert =new Alert();
-                alert.setTilte(cursor.getString(cursor.getColumnIndex("title")));
-                alert.setCycle(cursor.getString(cursor.getColumnIndex("cycle")));
-                alert.setDate(cursor.getString(cursor.getColumnIndex("date")));
-                alert.setHistory_No(cursor.getInt(cursor.getColumnIndex("history_No")));
-                alertArrayList.add(alert);
-            }while(cursor.moveToNext());
-        }
-        return alertArrayList;
-    }
-
-    */
-
 }
