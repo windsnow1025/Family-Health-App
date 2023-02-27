@@ -72,7 +72,6 @@ public class UserLocalDao {
         }
         return  returnValue;
     }
-    //登录状态改变 账号原本存在于本地库中则更新 否则添加进入 并设置登录状态为true
     @SuppressLint("Range")
     public UserInfo gerUserInfo(String account){
         UserInfo userInfo=new UserInfo();
@@ -103,6 +102,29 @@ public class UserLocalDao {
         {
             db.insert("user", null, values);
         }
+    }
+    //登录状态改变 账号原本存在于本地库中则更新 否则添加进入 并设置登录状态为true
+    public void addMulti(String account){
+        ContentValues values = new ContentValues();
+        values.put("is_multipled","true");
+        db.update("user",values,"phone_number=?",new String[]{account});
+    }
+    @SuppressLint("Range")
+    public ArrayList<UserInfo> getMultiList(){
+        ArrayList<UserInfo> userInfoArrayList=new ArrayList<>();
+        Cursor cursor = db.query("user", null, "is_multipled = ?", new String[]{"true"}, null, null, null);
+        if(cursor.moveToFirst()){
+            do{
+                UserInfo userInfo=new UserInfo();
+                userInfo.setPhone_number(cursor.getString(cursor.getColumnIndex("phone_number")));
+                userInfo.setUsername(cursor.getString(cursor.getColumnIndex("username")));
+                userInfo.setEmail(cursor.getString(cursor.getColumnIndex("email")));
+                userInfo.setBirthday(cursor.getString(cursor.getColumnIndex("birthday")));
+                userInfo.setSex(cursor.getString(cursor.getColumnIndex("sex")));
+                userInfoArrayList.add(userInfo);
+            }while(cursor.moveToNext());
+        }
+        return userInfoArrayList;
     }
     //账号登出
     public void userLoginOut(String account) {
