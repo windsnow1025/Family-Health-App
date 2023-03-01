@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,7 +16,9 @@ import java.util.List;
 public class FragmentRecord extends Fragment {
 
     View view;
-    public FragmentRecord() {
+    String organ;
+    public FragmentRecord(String organ) {
+        this.organ = organ;
     }
 
     @Override

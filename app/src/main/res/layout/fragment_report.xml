@@ -26,7 +26,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewReport" />
 
     <Button
-        android:id="@+id/buttonReportInsert"
+        android:id="@+id/buttonEnterReport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="200dp"

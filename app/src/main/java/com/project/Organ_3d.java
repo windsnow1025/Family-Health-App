@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
 import java.util.ArrayList;
@@ -33,7 +34,10 @@ public class Organ_3d extends Fragment {
         buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getParentFragmentManager().popBackStack();
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, new FragmentMain());
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
 
@@ -49,8 +53,8 @@ public class Organ_3d extends Fragment {
         // ViewPager2
         ViewPager2 viewPager = view.findViewById(R.id.view_pager);
         List<Fragment> fragments = new ArrayList<>(Arrays.asList(
-                new FragmentReport(),
-                new FragmentRecord()
+                new FragmentReport(organ),
+                new FragmentRecord(organ)
         ));
 
         ImageButton nextButton = view.findViewById(R.id.next_button);
