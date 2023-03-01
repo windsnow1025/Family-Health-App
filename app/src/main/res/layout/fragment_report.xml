@@ -5,16 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageButton
-        android:id="@+id/imageButtonRight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:rotation="270"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/arrow_down_float" />
-
     <TextView
         android:id="@+id/textViewReport"
         android:layout_width="wrap_content"
@@ -36,7 +26,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewReport" />
 
     <Button
-        android:id="@+id/buttonInsert"
+        android:id="@+id/buttonReportInsert"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="200dp"

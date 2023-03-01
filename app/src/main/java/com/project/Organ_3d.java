@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
@@ -51,6 +52,24 @@ public class Organ_3d extends Fragment {
                 new FragmentReport(),
                 new FragmentRecord()
         ));
+
+        ImageButton nextButton = view.findViewById(R.id.next_button);
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int nextItem = viewPager.getCurrentItem() + 1;
+                viewPager.setCurrentItem(nextItem, true);
+            }
+        });
+
+        ImageButton prevButton = view.findViewById(R.id.prev_button);
+        prevButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int prevItem = viewPager.getCurrentItem() - 1;
+                viewPager.setCurrentItem(prevItem, true);
+            }
+        });
 
         PagerAdapter adapter = new PagerAdapter(getActivity(), fragments);
         viewPager.setAdapter(adapter);

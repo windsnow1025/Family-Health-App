@@ -30,6 +30,9 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> 
         String[] rowData = data.get(position);
         holder.column1.setText(rowData[0]);
         holder.column2.setText(rowData[1]);
+        if (rowData.length > 2) {
+            holder.column3.setText(rowData[2]);
+        }
     }
 
     @Override
@@ -40,11 +43,13 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView column1;
         TextView column2;
+        TextView column3;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             column1 = itemView.findViewById(R.id.column1);
             column2 = itemView.findViewById(R.id.column2);
+            column3 = itemView.findViewById(R.id.column3);
         }
     }
 }

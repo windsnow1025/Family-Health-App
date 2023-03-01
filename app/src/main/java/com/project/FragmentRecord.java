@@ -28,8 +28,9 @@ public class FragmentRecord extends Fragment {
         view = inflater.inflate(R.layout.fragment_record, container, false);
 
         List<String[]> data = new ArrayList<>();
-        data.add(new String[]{"Row 1, Column 1", "Row 1, Column 2"});
-        data.add(new String[]{"Row 2, Column 1", "Row 2, Column 2"});
+        data.add(new String[]{"时间", "医院", "类型"});
+        data.add(new String[]{"Row 2, Column 1", "Row 2, Column 2", "Row 2, Column 3"});
+        data.add(new String[]{"Row 3, Column 1", "Row 3, Column 2", "Row 3, Column 3"});
 
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
