@@ -1,5 +1,6 @@
 package com.project;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +11,10 @@ import androidx.fragment.app.FragmentTransaction;
 
 public class MainActivity extends AppCompatActivity {
 
+    public interface OnFragmentInteractionListener{
+        //TODO: Updata argument type and name
+        void onFragmentInteraction(Uri uri);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,7 +22,8 @@ public class MainActivity extends AppCompatActivity {
 
         Button button1 = findViewById(R.id.buttonMain);
         Button button2 = findViewById(R.id.buttonAlert);
-        Button button3 = findViewById(R.id.buttonHome);
+        Button button4 = findViewById(R.id.buttonHome);
+        Button button3 = findViewById(R.id.buttonHealth);
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,6 +48,17 @@ public class MainActivity extends AppCompatActivity {
         });
 
         button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    Fragment fragment = new FragmentHealth();
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, fragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
+
+        button4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Fragment fragment = new FragmentHome();

@@ -48,6 +48,17 @@
             app:shapeAppearance="@style/ShapeAppearanceOverlay.Material3.Corner.Bottom"
             app:strokeColor="#FF5722"
             app:strokeWidth="2dp" />
+        <Button
+            android:id="@+id/buttonHealth"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:text="疾病"
+            app:shapeAppearance="@style/ShapeAppearanceOverlay.Material3.Corner.Bottom"
+            app:strokeColor="#FF5722"
+            app:strokeWidth="2dp" />
 
         <Button
             android:id="@+id/buttonHome"
