@@ -1,7 +1,6 @@
 package com.project.JDBC;
 
 import com.project.Pojo.Alert;
-import com.project.Pojo.Report;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
