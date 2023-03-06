@@ -2,11 +2,14 @@ package com.project.JDBC;
 
 
 import com.project.Pojo.History;
+import com.project.Pojo.Report;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class HistoryDao extends JDBCHelper{
     public HistoryDao() {
@@ -92,7 +95,7 @@ public class HistoryDao extends JDBCHelper{
             preparedStatement.setString(6,history_insert.getSymptom());
             preparedStatement.setString(7,history_insert.getConclusion());
             preparedStatement.setString(8,history_insert.getSuggestion());
-            preparedStatement.setInt(9,getHistoryCount(account));
+            preparedStatement.setInt(9,history_insert.getHistory_No());
             if(preparedStatement.executeUpdate()>0){
                 valueReturn=true;
             }
@@ -103,7 +106,7 @@ public class HistoryDao extends JDBCHelper{
     }
 
     //计数 在插入记录时控制序号
-    private Integer getHistoryCount(String account){
+    public Integer getHistoryCount(String account){
         Integer count = 0;
         String sql="SELECT history_No from history where phone_number=? ORDER BY history_No DESC limit 1";
         try {
@@ -124,12 +127,8 @@ public class HistoryDao extends JDBCHelper{
     }
     public static History getHistory(ArrayList<History> historyArrayList,Integer history_No){
         History historyReturn=null;
-        for(History history:historyArrayList){
-            if(history.getHistory_No()==history_No){
-                historyReturn=history;
-                break;
-            }
-        }
+        Stream<History> historyStream=historyArrayList.stream();
+        historyReturn=historyStream.filter(e->e.getHistory_No()==history_No).collect(Collectors.toList()).get(0);
         return historyReturn;
     }
 }

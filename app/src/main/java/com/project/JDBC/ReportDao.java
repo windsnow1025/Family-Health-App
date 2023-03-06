@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ReportDao extends JDBCHelper{
     public ReportDao(){
@@ -82,7 +84,7 @@ public class ReportDao extends JDBCHelper{
             PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1,account);
             preparedStatement.setString(2,report_insert.getReport_content());
-            preparedStatement.setInt(3,getReportCount(account));
+            preparedStatement.setInt(3,report_insert.getReport_No());
             preparedStatement.setString(4,report_insert.getReport_type());
             preparedStatement.setString(5,report_insert.getReport_place());
             preparedStatement.setString(6,report_insert.getReport_date());
@@ -96,7 +98,7 @@ public class ReportDao extends JDBCHelper{
     }
 
     //计数 在插入记录时控制序号
-    private Integer getReportCount(String account){
+    public Integer getReportCount(String account){
         Integer count = 0;
         String sql="SELECT report_No from report where phone_number=?  ORDER BY report_No DESC limit 1";
         try {
@@ -117,13 +119,8 @@ public class ReportDao extends JDBCHelper{
     }
     public static Report gerReport(ArrayList<Report> reportArrayList,Integer report_No){
         Report reportReturn=null;
-        for(Report report:reportArrayList){
-            if(report.getReport_No()==report_No)
-            {
-                reportReturn=report;
-                break;
-            }
-        }
+        Stream<Report> reportStream=reportArrayList.stream();
+        reportReturn=reportStream.filter(e->e.getReport_No()==report_No).collect(Collectors.toList()).get(0);
         return reportReturn;
     }
 }

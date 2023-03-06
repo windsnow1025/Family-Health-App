@@ -37,7 +37,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
             + "history_place text,"
             + "history_doctor text,"
             + "history_organ text,"
-            + "syptom text,"
+            + "symptom text,"
             + "conclusion text,"
             + "suggestion text)";
     public static final String CREATE_REPORT = "create table report ("
@@ -56,6 +56,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
             + "type text,"
             + "content text,"
             + "title text,"
+            + "date text,"
             + "cycle text)";
 
 

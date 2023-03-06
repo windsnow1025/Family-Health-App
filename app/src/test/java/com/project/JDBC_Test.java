@@ -1,10 +1,14 @@
 package com.project;
 
+import com.project.JDBC.ReportDao;
 import com.project.JDBC.UserDao;
+import com.project.Pojo.Report;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
 
 public class JDBC_Test {
     UserDao userDao;
@@ -17,6 +21,7 @@ public class JDBC_Test {
         System.out.println("Test End");
     }
     @Test
+    //驱动测试
     public void login_test() {
         userDao=new UserDao();
         userDao.getConnection();
@@ -35,5 +40,14 @@ public class JDBC_Test {
         System.out.println("correct:"+output);
         //正确密码
         userDao.closeConnection();
+    }
+    @Test
+    //流测试
+    public void StreamTest(){
+        ReportDao reportDao=new ReportDao();
+        reportDao.getConnection();
+        ArrayList<Report> reportArrayList=reportDao.getReportList("1111");
+        Report report=ReportDao.gerReport(reportArrayList,1);
+        System.out.println(report.getReport_type());
     }
 }

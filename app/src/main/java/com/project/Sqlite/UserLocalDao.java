@@ -29,11 +29,17 @@ public class UserLocalDao {
     private AlertDao alertDao;
     public UserLocalDao(Context context) {
         this.context = context;
+        userDao=new UserDao();
         reportDao=new ReportDao();
         historyDao=new HistoryDao();
         alertDao=new AlertDao();
     }
-    public UserLocalDao(){}
+    public UserLocalDao(){
+        userDao=new UserDao();
+        reportDao=new ReportDao();
+        historyDao=new HistoryDao();
+        alertDao=new AlertDao();
+    }
     // 创建并打开数据库（如果数据库已存在直接打开）
     public void open() throws SQLiteException{
         dbHelper = new SqliteHelper(context);
@@ -107,6 +113,12 @@ public class UserLocalDao {
     public void addMulti(String account){
         ContentValues values = new ContentValues();
         values.put("is_multipled","true");
+        db.update("user",values,"phone_number=?",new String[]{account});
+    }
+
+    public void deleteMulti(String account){
+        ContentValues values = new ContentValues();
+        values.put("is_multipled","false");
         db.update("user",values,"phone_number=?",new String[]{account});
     }
     @SuppressLint("Range")
@@ -351,7 +363,7 @@ public class UserLocalDao {
     }
     public Boolean deleteAlert(String account,Integer alert_No){
         Boolean valueReturn=false;
-        db.delete("alert", "Report_No = ? AND phone_number=?", new String[]{String.valueOf(alert_No),account});
+        db.delete("alert", "Alert_No = ? AND phone_number=?", new String[]{String.valueOf(alert_No),account});
         return valueReturn;
     }
 }

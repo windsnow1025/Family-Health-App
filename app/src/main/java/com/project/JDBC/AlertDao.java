@@ -1,11 +1,14 @@
 package com.project.JDBC;
 
 import com.project.Pojo.Alert;
+import com.project.Pojo.Report;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class AlertDao extends JDBCHelper{
     public AlertDao(){
@@ -73,7 +76,7 @@ public class AlertDao extends JDBCHelper{
         String sql="INSERT INTO alert (alert_No,phone_number,date,cycle,content,type,type_no) VALUES (?,?,?,?,?,?,?)";
         try {
             PreparedStatement preparedStatement= connection.prepareStatement(sql);
-            preparedStatement.setInt(1,getAlertCount(account));
+            preparedStatement.setInt(1,alert_insert.getAlert_No());
             preparedStatement.setString(2,account);
             preparedStatement.setString(3, alert_insert.getDate());
             preparedStatement.setString(4, alert_insert.getCycle());
@@ -89,7 +92,7 @@ public class AlertDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    private Integer getAlertCount(String account){
+    public Integer getAlertCount(String account){
         Integer count=0;
         String sql="SELECT alert_No from alert where phone_number=? ORDER BY alert_No DESC limit 1";
         try {
@@ -109,12 +112,8 @@ public class AlertDao extends JDBCHelper{
     }
     public static Alert getAlert(ArrayList<Alert> alertArrayList,Integer alert_No){
         Alert alertReturn=null;
-        for (Alert alert:alertArrayList){
-            if(alert.getAlert_No()==alert_No){
-                alertReturn=alert;
-                break;
-            }
-        }
+        Stream<Alert> alertStream=alertArrayList.stream();
+        alertReturn=alertStream.filter(e->e.getAlert_No()==alert_No).collect(Collectors.toList()).get(0);
         return alertReturn;
     }
 
