@@ -5,7 +5,7 @@ public class UserInfo {
     String username;
     String email;
     String birthday;
-    String sex;
+    String gender;
 
     public String getPhone_number() {
         return phone_number;
@@ -39,11 +39,11 @@ public class UserInfo {
         this.birthday = birthday;
     }
 
-    public String getSex() {
-        return sex;
+    public String getGender() {
+        return gender;
     }
 
-    public void setSex(String sex) {
-        this.sex = sex;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 }

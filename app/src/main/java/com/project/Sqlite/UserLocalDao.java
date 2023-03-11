@@ -87,7 +87,7 @@ public class UserLocalDao {
             userInfo.setUsername(cursor.getString(cursor.getColumnIndex("username")));
             userInfo.setEmail(cursor.getString(cursor.getColumnIndex("email")));
             userInfo.setBirthday(cursor.getString(cursor.getColumnIndex("birthday")));
-            userInfo.setSex(cursor.getString(cursor.getColumnIndex("sex")));
+            userInfo.setGender(cursor.getString(cursor.getColumnIndex("gender")));
         }
         return userInfo;
     }
@@ -97,7 +97,7 @@ public class UserLocalDao {
         values.put("username", userInfo.getUsername());
         values.put("email", userInfo.getEmail());
         values.put("birthday", userInfo.getBirthday());
-        values.put("sex", userInfo.getSex());
+        values.put("gender", userInfo.getGender());
         values.put("is_login", "true");
         values.put("is_multipled", "false");               //多用户状态 备用
         if(checkUser(userInfo.getPhone_number()))
@@ -132,7 +132,7 @@ public class UserLocalDao {
                 userInfo.setUsername(cursor.getString(cursor.getColumnIndex("username")));
                 userInfo.setEmail(cursor.getString(cursor.getColumnIndex("email")));
                 userInfo.setBirthday(cursor.getString(cursor.getColumnIndex("birthday")));
-                userInfo.setSex(cursor.getString(cursor.getColumnIndex("sex")));
+                userInfo.setGender(cursor.getString(cursor.getColumnIndex("gender")));
                 userInfoArrayList.add(userInfo);
             }while(cursor.moveToNext());
         }

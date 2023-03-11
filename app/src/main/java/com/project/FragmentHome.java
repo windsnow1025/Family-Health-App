@@ -28,7 +28,7 @@ public class FragmentHome extends Fragment {
     @SuppressLint("CutPasteId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment3, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         /*个人用户登录*/
         tv_user=view.findViewById(R.id.textViewLoginSignup);
