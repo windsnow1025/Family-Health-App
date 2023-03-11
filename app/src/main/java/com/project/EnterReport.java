@@ -1,7 +1,9 @@
 package com.project;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +14,12 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.io.IOException;
+
 public class EnterReport extends Fragment {
 
     String organ;
+    Bitmap bitmap;
 
     public EnterReport(String organ) {
         this.organ = organ;
@@ -50,7 +55,13 @@ public class EnterReport extends Fragment {
     }
 
     private final ActivityResultLauncher<String> galleryLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
-        // Do something with the selected image URI
+        // Convert the image URI to a Bitmap object
+        bitmap = null;
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
+            // Do something with the Bitmap object
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     });
-
 }
