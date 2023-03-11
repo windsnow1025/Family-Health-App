@@ -55,11 +55,9 @@ public class EnterReport extends Fragment {
     }
 
     private final ActivityResultLauncher<String> galleryLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
-        // Convert the image URI to a Bitmap object
         bitmap = null;
         try {
             bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
-            // Do something with the Bitmap object
         } catch (IOException e) {
             e.printStackTrace();
         }
