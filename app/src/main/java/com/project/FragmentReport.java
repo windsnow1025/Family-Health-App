@@ -5,10 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,8 +33,8 @@ public class FragmentReport extends Fragment {
 
         List<String[]> data = new ArrayList<>();
         data.add(new String[]{"时间", "部位", "症状"});
-        data.add(new String[]{"Row 2, Column 1", "Row 2, Column 2"});
-        data.add(new String[]{"Row 3, Column 1", "Row 3, Column 2"});
+        data.add(new String[]{"Row 2, Column 1", "Row 2, Column 2", "Row 2, Column 3"});
+        data.add(new String[]{"Row 3, Column 1", "Row 3, Column 2", "Row 3, Column 3"});
 
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
