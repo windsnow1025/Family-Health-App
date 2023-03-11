@@ -49,7 +49,8 @@ public class personalCenter extends Fragment implements DatePickerDialog.OnDateS
 
 
     @SuppressLint("MissingInflatedId")
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_personal_center, container, false);
         et_password = view.findViewById(R.id.et_password);
         bt_username = view.findViewById(R.id.bt_username);

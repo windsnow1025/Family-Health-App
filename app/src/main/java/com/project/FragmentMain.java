@@ -10,36 +10,14 @@ import android.widget.ImageView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.project.JDBC.UserDao;
-import com.project.Pojo.UserInfo;
-import com.project.Sqlite.UserLocalDao;
-
 public class FragmentMain extends Fragment {
     View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_main, container, false);
+        view = inflater.inflate(R.layout.fragment1, container, false);
 
-        // Get Gender
-        String gender;
-        try {
-            UserLocalDao userLocalDao = new UserLocalDao(getContext());
-            String username = userLocalDao.getUser();
-            UserInfo userInfo = new UserDao().getUserInformation(username);
-            gender = userInfo.getGender();
-        } catch (Exception e) {
-            gender = "male";
-        }
-
-        // Set Image
         ImageView imageAnatomy = view.findViewById(R.id.imageAnatomy);
         imageAnatomy.scrollBy(0, 0);
-        if (gender.equals("female")) {
-            imageAnatomy.setImageResource(R.drawable.female);
-        } else {
-            imageAnatomy.setImageResource(R.drawable.male);
-        }
-
 
         Button buttonInside = view.findViewById(R.id.buttonInside);
 

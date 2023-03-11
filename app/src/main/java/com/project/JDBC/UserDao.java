@@ -63,15 +63,15 @@ public class UserDao extends JDBCHelper{
      * 此处类型问题原本想使用LocalDate类型 但setDate似乎不支持LocalDate
      * 使用错误的生日会导致异常
      * */
-    public String insertUser(@NonNull String account,String password,String gender,String birthday) {
+    public String insertUser(@NonNull String account,String password,String sex,String birthday) {
         String accountReturn=null;
-        String sql="INSERT INTO user (phone_number,password,gender,birthday) VALUES (?,?,?,?)";
+        String sql="INSERT INTO user (phone_number,password,sex,birthday) VALUES (?,?,?,?)";
         if((!checkUserUnique(account))&&(account!=null)&&(password!=null)&&(!password.equals(""))) {
             try {
                 PreparedStatement preparedStatement=connection.prepareStatement(sql);
                 preparedStatement.setString(1, account);
                 preparedStatement.setString(2, password);
-                preparedStatement.setString(3, gender);
+                preparedStatement.setString(3,sex);
                 preparedStatement.setString(4,birthday);
                 //preparedStatement.setDate(4,birthday);
                 if(preparedStatement.executeUpdate()!=0){
@@ -85,7 +85,7 @@ public class UserDao extends JDBCHelper{
     }
 
     public UserInfo getUserInformation(String account){
-        String sql="SELECT username,gender,email,birthday from user WHERE phone_number=?";
+        String sql="SELECT username,sex,email,birthday from user WHERE phone_number=?";
         UserInfo userInfo=new UserInfo();
         try {
             PreparedStatement preparedStatement=connection.prepareStatement(sql);
@@ -96,7 +96,7 @@ public class UserDao extends JDBCHelper{
                 userInfo.setPhone_number(account);
                 userInfo.setUsername(resultSet.getString("username"));
                 userInfo.setEmail(resultSet.getString("email"));
-                userInfo.setGender(resultSet.getString("gender"));
+                userInfo.setSex(resultSet.getString("sex"));
                 userInfo.setBirthday(resultSet.getString("birthday"));
             }
         } catch (SQLException e) {
@@ -108,19 +108,19 @@ public class UserDao extends JDBCHelper{
     public Boolean updateUserInformation(String account,HashMap<String,String> userInfo_update){
         getConnection();
         String sql_username="UPDATE user set username=? WHERE phone_number=?";
-        String sql_gender="UPDATE user set gender=? WHERE phone_number=?";
+        String sql_sex="UPDATE user set sex=? WHERE phone_number=?";
         String sql_email="UPDATE user set email=? WHERE phone_number=?";
         String sql_password="UPDATE user set password=? WHERE phone_number=?";
         //String sql_birthday="UPDATE user set birthday=? WHERE phone_number=?";
-        String gender_update=userInfo_update.get("gender");
+        String sex_update=userInfo_update.get("sex");
         String username_update=userInfo_update.get("username");
         String email_update=userInfo_update.get("email");
         String password_update=userInfo_update.get("password");
-        if(gender_update!=null)
+        if(sex_update!=null)
         {
             try {
-                PreparedStatement preparedStatement=connection.prepareStatement(sql_gender);
-                preparedStatement.setString(1, gender_update);
+                PreparedStatement preparedStatement=connection.prepareStatement(sql_sex);
+                preparedStatement.setString(1, sex_update);
                 preparedStatement.setString(2,account);
                 preparedStatement.executeUpdate();
             } catch (SQLException e) {
