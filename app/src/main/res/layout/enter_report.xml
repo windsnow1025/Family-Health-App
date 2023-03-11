@@ -9,7 +9,7 @@
         android:id="@+id/textViewHospital"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="52dp"
         android:text="医院"
         android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,11 +21,13 @@
         android:id="@+id/editTextHospital"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:ems="10"
+        android:layout_marginTop="52dp"
+        android:background="@drawable/editext_selector"
+        android:ems="6"
         android:inputType="textPersonName"
+        android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.771"
+        app:layout_constraintHorizontal_bias="0.75"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextTime" />
 
@@ -33,11 +35,13 @@
         android:id="@+id/editTextType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:ems="10"
+        android:layout_marginTop="52dp"
+        android:ems="6"
+        android:textSize="28sp"
+        android:background="@drawable/editext_selector"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.771"
+        app:layout_constraintHorizontal_bias="0.75"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextHospital" />
 
@@ -69,7 +73,7 @@
         android:id="@+id/textViewTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="132dp"
+        android:layout_marginTop="128dp"
         android:text="时间"
         android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -82,10 +86,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="128dp"
-        android:ems="10"
+        android:ems="6"
+        android:textSize="28sp"
+        android:background="@drawable/editext_selector"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.766"
+        app:layout_constraintHorizontal_bias="0.75"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -100,16 +106,13 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/buttonAdd"
+        android:id="@+id/buttonUpload"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:layout_marginBottom="272dp"
-        android:text="添加"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="上传"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.668"
+        app:layout_constraintHorizontal_bias="0.665"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextType"
-        app:layout_constraintVertical_bias="0.25" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextType" />
 </androidx.constraintlayout.widget.ConstraintLayout>
