@@ -21,14 +21,14 @@ public class FragmentMain extends Fragment {
         view = inflater.inflate(R.layout.fragment_main, container, false);
 
         // Get Sex
-        String gender;
+        String gender = "male";
         try {
             UserLocalDao userLocalDao = new UserLocalDao(getContext());
             String username = userLocalDao.getUser();
             UserInfo userInfo = new UserDao().getUserInformation(username);
             gender = userInfo.getSex();
         } catch (Exception e) {
-            gender = "male";
+            // TODO: handle exception
         }
 
         // Set Image

@@ -23,7 +23,7 @@ public class EnterRecord extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.enter_report, container, false);
+        View view = inflater.inflate(R.layout.enter_record, container, false);
 
         Button buttonConfirm = view.findViewById(R.id.buttonConfirm);
         buttonConfirm.setOnClickListener(new View.OnClickListener() {
