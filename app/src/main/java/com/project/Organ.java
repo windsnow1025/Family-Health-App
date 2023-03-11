@@ -32,27 +32,6 @@ public class Organ extends Fragment {
 
         ImageView imageOrgan = view.findViewById(R.id.imageOrgan);
         switch (organ) {
-            case "brain":
-                imageOrgan.setImageResource(R.drawable.brain);
-                break;
-            case "heart":
-                imageOrgan.setImageResource(R.drawable.heart);
-                break;
-            case "respiratory":
-                imageOrgan.setImageResource(R.drawable.respiratory);
-                break;
-            case "liver":
-                imageOrgan.setImageResource(R.drawable.liver);
-                break;
-            case "kidney":
-                imageOrgan.setImageResource(R.drawable.kidney);
-                break;
-            case "digestive":
-                imageOrgan.setImageResource(R.drawable.digestive);
-                break;
-            case "urinary":
-                imageOrgan.setImageResource(R.drawable.urinary);
-                break;
             case "musculoskeletal":
                 imageOrgan.setImageResource(R.drawable.musculoskeletal);
                 break;
