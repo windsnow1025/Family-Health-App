@@ -12,10 +12,9 @@ import java.util.stream.Stream;
 public class ReportDao extends JDBCHelper{
     public ReportDao(){
     }
-    public ArrayList<Report> getReportList(String account)
-    {
+    public ArrayList<Report> getReportList(String account) {
         ArrayList<Report> reportArrayList=new ArrayList<>();
-        String sql="SELECT report_No,report_content,report_type,report_place,report_date FROM report WHERE phone_number=? ORDER BY report_No";
+        String sql="SELECT report_No,report_content,report_type,report_place,report_date,is_deleted FROM report WHERE phone_number=? ORDER BY report_No";
         try {
             PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1,account);
@@ -28,6 +27,7 @@ public class ReportDao extends JDBCHelper{
                 report_temp.setReport_type(resultSet.getString("report_type"));
                 report_temp.setReport_place(resultSet.getString("report_place"));
                 report_temp.setReport_date(resultSet.getString("report_date"));
+                report_temp.setIs_deleted(resultSet.getString("is_deleted"));
                 reportArrayList.add(report_temp);
             }
         } catch (SQLException e) {
@@ -37,15 +37,16 @@ public class ReportDao extends JDBCHelper{
     }
     public Boolean updateReport(String account, Report report_update){
         Boolean valueReturn=false;
-        String sql="UPDATE report SET report_content=?,report_type=?,report_place=?,report_date=? where phone_number=? and report_No=?";
+        String sql="UPDATE report SET report_content=?,report_type=?,report_place=?,report_date=?,is_deleted=? where phone_number=? and report_No=?";
         try {
             PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1,report_update.getReport_content());
             preparedStatement.setString(2,report_update.getReport_type());
             preparedStatement.setString(3,report_update.getReport_place());
             preparedStatement.setString(4,report_update.getReport_date());
-            preparedStatement.setString(5,account);
-            preparedStatement.setInt(6,report_update.getReport_No());
+            preparedStatement.setString(5,report_update.getIs_deleted());
+            preparedStatement.setString(6,account);
+            preparedStatement.setInt(7,report_update.getReport_No());
 
             if(preparedStatement.executeUpdate()>0)
             {
@@ -75,11 +76,9 @@ public class ReportDao extends JDBCHelper{
         }
         return valueReturn;
     }
-
     public  Boolean insertReport(String account, Report report_insert){
         Boolean valueReturn=false;
-        String sql="INSERT INTO report (phone_number,report_content,report_No,report_type,report_place,report_date) VALUES (?,?,?,?,?,?)";
-        Integer nextNo=getReportCount(account)+1;
+        String sql="INSERT INTO report (phone_number,report_content,report_No,report_type,report_place,report_date,is_deleted) VALUES (?,?,?,?,?,?,?)";
         try {
             PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1,account);
@@ -88,6 +87,7 @@ public class ReportDao extends JDBCHelper{
             preparedStatement.setString(4,report_insert.getReport_type());
             preparedStatement.setString(5,report_insert.getReport_place());
             preparedStatement.setString(6,report_insert.getReport_date());
+            preparedStatement.setString(7,"false");
             if(preparedStatement.executeUpdate()>0){
                 valueReturn=true;
             }
@@ -96,31 +96,34 @@ public class ReportDao extends JDBCHelper{
         }
         return valueReturn;
     }
-
-    //计数 在插入记录时控制序号
-    public Integer getReportCount(String account){
-        Integer count = 0;
-        String sql="SELECT report_No from report where phone_number=?  ORDER BY report_No DESC limit 1";
-        try {
-            PreparedStatement preparedStatement=connection.prepareStatement(sql);
-            preparedStatement.setString(1,account);
-            ResultSet resultSet=preparedStatement.executeQuery();
-            if(resultSet.next()){
-                count=resultSet.getInt("report_No");
+    public void SyncReportUpload(String account,ArrayList<Report> reportArrayList) {
+        Stream<Report> alertStream=reportArrayList.stream();
+        alertStream.forEach(report -> {
+            if(is_Exist(account,report.getReport_No()))
+            {
+                updateReport(account,report);
             }
             else
             {
-                count=0;
+                insertReport(account,report);
+            }
+        });
+    }
+    private Boolean is_Exist(String account,Integer report_No) {
+        Boolean valueReturn=false;
+        String sql="SELECT phone_number FROM report WHERE phone_number=? AND report_No=?";
+        try {
+            PreparedStatement preparedStatement=connection.prepareStatement(sql);
+            preparedStatement.setString(1,account);
+            preparedStatement.setInt(2,report_No);
+            ResultSet resultSet=preparedStatement.executeQuery();
+            if(resultSet.next())
+            {
+                valueReturn=true;
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return (count+1);
-    }
-    public static Report gerReport(ArrayList<Report> reportArrayList,Integer report_No){
-        Report reportReturn=null;
-        Stream<Report> reportStream=reportArrayList.stream();
-        reportReturn=reportStream.filter(e->e.getReport_No()==report_No).collect(Collectors.toList()).get(0);
-        return reportReturn;
+        return valueReturn;
     }
 }

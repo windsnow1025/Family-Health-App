@@ -8,6 +8,15 @@ public class Alert {
     private String content;
     private String type;
     private Integer type_No;
+    private String is_deleted;
+
+    public String getIs_deleted() {
+        return is_deleted;
+    }
+
+    public void setIs_deleted(String is_deleted) {
+        this.is_deleted = is_deleted;
+    }
 
     public Integer getAlert_No() {
         return Alert_No;

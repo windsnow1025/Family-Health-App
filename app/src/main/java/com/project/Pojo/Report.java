@@ -9,6 +9,15 @@ public class Report implements Serializable {
     private String report_type;
     private String report_place;
     private String report_date;
+    private String is_deleted;
+
+    public String getIs_deleted() {
+        return is_deleted;
+    }
+
+    public void setIs_deleted(String is_deleted) {
+        this.is_deleted = is_deleted;
+    }
 
     public Integer getReport_No() {
         return report_No;

@@ -13,6 +13,15 @@ public class History implements Serializable {
     private String symptom;
     private String conclusion;
     private String suggestion;
+    private String is_deleted;
+
+    public String getIs_deleted() {
+        return is_deleted;
+    }
+
+    public void setIs_deleted(String is_deleted) {
+        this.is_deleted = is_deleted;
+    }
 
     public Integer getHistory_No() {
         return history_No;

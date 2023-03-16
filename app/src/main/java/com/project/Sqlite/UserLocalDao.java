@@ -18,6 +18,8 @@ import com.project.Pojo.Report;
 import com.project.Pojo.UserInfo;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class UserLocalDao {
     private Context context;         //上下文
@@ -79,7 +81,7 @@ public class UserLocalDao {
         return  returnValue;
     }
     @SuppressLint("Range")
-    public UserInfo gerUserInfo(String account){
+    private UserInfo gerUserInfo(String account){
         UserInfo userInfo=new UserInfo();
         Cursor cursor= db.query("user", null, "phone_number = ?", new String[]{account}, null, null, null);
         if(cursor.moveToFirst()){
@@ -151,8 +153,13 @@ public class UserLocalDao {
         values.put("is_login","true");
         db.update("user",values,"phone_number = ?",new String[]{newAccount});
     }
-    public Boolean sync(){
+    public void sync(){
         userDao.getConnection();
+        sync_Download();
+        sync_Upload();
+        userDao.closeConnection();
+    }
+    public void sync_Download(){
         ArrayList<History> historyArrayList=new ArrayList<>();
         ArrayList<Report> reportArrayList=new ArrayList<>();
         ArrayList<Alert> alertArrayList=new ArrayList<>();
@@ -190,8 +197,11 @@ public class UserLocalDao {
                 updateAlert(getUser(),alert);
             }
         }
-        userDao.closeConnection();
-        return true;
+    }
+    public void sync_Upload(){
+        alertDao.SyncAlertUpload(getUser(),getAlertList(getUser(),1));
+        reportDao.SyncReportUpload(getUser(),getReportList(getUser(),1));
+        historyDao.SyncHistoryUpload(getUser(),getHistoryList(getUser(),1));
     }
 
     public Boolean isExistHistory(Integer history_No){
@@ -208,7 +218,7 @@ public class UserLocalDao {
     }
 
     @SuppressLint("Range")
-    public ArrayList<History> getHistoryList(String account) {
+    public ArrayList<History> getHistoryList(String account,Integer...args) {
         ArrayList<History> historyArrayList =new ArrayList<>();
         Cursor cursor = db.query("history", null, "phone_number = ?", new String[]{account}, null, null, null);
         if(cursor.moveToFirst()){
@@ -217,14 +227,20 @@ public class UserLocalDao {
                 history.setPhone_number(cursor.getString(cursor.getColumnIndex("phone_number")));
                 history.setHistory_No(cursor.getInt(cursor.getColumnIndex("history_No")));
                 history.setHistory_date(cursor.getString(cursor.getColumnIndex("history_date")));
-                history.setHistory_date(cursor.getString(cursor.getColumnIndex("history_place")));
+                history.setHistory_place(cursor.getString(cursor.getColumnIndex("history_place")));
                 history.setHistory_doctor(cursor.getString(cursor.getColumnIndex("history_doctor")));
                 history.setHistory_organ(cursor.getString(cursor.getColumnIndex("history_organ")));
                 history.setConclusion(cursor.getString(cursor.getColumnIndex("conclusion")));
                 history.setSymptom(cursor.getString(cursor.getColumnIndex("symptom")));
                 history.setSuggestion(cursor.getString(cursor.getColumnIndex("suggestion")));
+                history.setIs_deleted(cursor.getString(cursor.getColumnIndex("is_deleted")));
                 historyArrayList.add(history);
             }while(cursor.moveToNext());
+        }
+        if(args.length==0)
+        {
+            Stream<History> alertStream=historyArrayList.stream();
+            historyArrayList= (ArrayList<History>) alertStream.filter(history -> history.getIs_deleted().equals("false")).collect(Collectors.toList());
         }
         return historyArrayList;
     }
@@ -232,7 +248,7 @@ public class UserLocalDao {
         Boolean valueReturn=false;
         ContentValues values = new ContentValues();
         values.put("phone_number",account);
-        values.put("history_No",history.getHistory_No());
+        values.put("history_No",getHistoryCount(account));
         values.put("history_date",history.getHistory_date());
         values.put("history_place",history.getHistory_place());
         values.put("history_doctor",history.getHistory_doctor());
@@ -240,8 +256,18 @@ public class UserLocalDao {
         values.put("conclusion",history.getConclusion());
         values.put("symptom",history.getSymptom());
         values.put("suggestion",history.getSuggestion());
-        db.insert("history", null, values);
+        values.put("is_deleted","false");
+        long flag=db.insert("history", null, values);
+        if(flag>0)
+        {
+            valueReturn=true;
+        }
         return valueReturn;
+    }
+    private Integer getHistoryCount(String account) {
+        Integer valueReturn=0;
+        valueReturn=db.query("history", null, "phone_number = ?", new String[]{account}, null, null, null).getCount();
+        return valueReturn+1;
     }
     public Boolean updateHistory(String account,History history){
         Boolean valueReturn=false;
@@ -255,19 +281,27 @@ public class UserLocalDao {
         values.put("conclusion",history.getConclusion());
         values.put("symptom",history.getSymptom());
         values.put("suggestion",history.getSuggestion());
-        db.update("history", values, "history_No = ? AND phone_number=?", new String[]{String.valueOf(history.getHistory_No()),account});
-//        valueReturn=accountDao.updateHistory_Remote(account,history);
+        int flag=db.update("history", values, "history_No = ? AND phone_number=?", new String[]{String.valueOf(history.getHistory_No()),account});
+        if(flag>0)
+        {
+            valueReturn=true;
+        }
         return valueReturn;
     }
     public Boolean deleteHistory(String account,Integer history_No){
         Boolean valueReturn=false;
-//        valueReturn=accountDao.deleteHistroy_Remote(account,history_No);
-        db.delete("history", "history_No = ? AND phone_number=?", new String[]{String.valueOf(history_No),account});
+        ContentValues values = new ContentValues();
+        values.put("is_deleted","true");
+        int flag=db.update("history", values, "history_No = ? AND phone_number=?", new String[]{String.valueOf(history_No),account});
+        if(flag>0)
+        {
+            valueReturn=true;
+        }
         return valueReturn;
     }
 
     @SuppressLint("Range")
-    public ArrayList<Report> getReportList(String account) {
+    public ArrayList<Report> getReportList(String account,Integer...args) {
         ArrayList<Report> reportArrayList =new ArrayList<>();
         Cursor cursor = db.query("report", null, "phone_number = ?", new String[]{account}, null, null, null);
         if(cursor.moveToFirst()){
@@ -279,8 +313,14 @@ public class UserLocalDao {
                 report.setReport_type(cursor.getString(cursor.getColumnIndex("report_type")));
                 report.setReport_place(cursor.getString(cursor.getColumnIndex("report_place")));
                 report.setReport_date(cursor.getString(cursor.getColumnIndex("report_date")));
+                report.setIs_deleted(cursor.getString(cursor.getColumnIndex("is_deleted")));
                 reportArrayList.add(report);
             }while(cursor.moveToNext());
+        }
+        if(args.length==0)
+        {
+            Stream<Report> alertStream=reportArrayList.stream();
+            reportArrayList= (ArrayList<Report>) alertStream.filter(report -> report.getIs_deleted().equals("false")).collect(Collectors.toList());
         }
         return reportArrayList;
     }
@@ -288,14 +328,23 @@ public class UserLocalDao {
         Boolean valueReturn=false;
         ContentValues values = new ContentValues();
         values.put("phone_number",account);
-        values.put("report_No",report.getReport_No());
+        values.put("report_No",getReportCount(account));
         values.put("report_content",report.getReport_content());
         values.put("report_type",report.getReport_type());
         values.put("report_place",report.getReport_place());
         values.put("report_date",report.getReport_date());
-        db.insert("report", null, values);
-//        valueReturn=accountDao.insertReport_Remote(account,Report);
+        values.put("is_deleted","false");
+        long flag=db.insert("report", null, values);
+        if(flag>0)
+        {
+            valueReturn=true;
+        }
         return valueReturn;
+    }
+    private Integer getReportCount(String account) {
+        Integer valueReturn=0;
+        valueReturn=db.query("report", null, "phone_number = ?", new String[]{account}, null, null, null).getCount();
+        return valueReturn+1;
     }
     public Boolean updateReport(String account,Report report){
         Boolean valueReturn=false;
@@ -306,19 +355,27 @@ public class UserLocalDao {
         values.put("report_type",report.getReport_type());
         values.put("report_place",report.getReport_place());
         values.put("report_date",report.getReport_date());
-        db.update("report", values, "Report_No = ? AND phone_number=?", new String[]{String.valueOf(report.getReport_No()),account});
-//        valueReturn=accountDao.updateReport_Remote(account,Report);
+        int flag=db.update("report", values, "Report_No = ? AND phone_number=?", new String[]{String.valueOf(report.getReport_No()),account});
+        if(flag>0)
+        {
+            valueReturn=true;
+        }
         return valueReturn;
     }
     public Boolean deleteReport(String account,Integer Report_No){
         Boolean valueReturn=false;
-//        valueReturn=accountDao.deleteReport_Remote(account,Report_No);
-        db.delete("report", "Report_No = ? AND phone_number=?", new String[]{String.valueOf(Report_No),account});
+        ContentValues values = new ContentValues();
+        values.put("is_deleted","true");
+        int flag=db.update("report", values, "Report_No = ? AND phone_number=?", new String[]{String.valueOf(Report_No),account});
+        if(flag>0)
+        {
+            valueReturn=true;
+        }
         return valueReturn;
     }
 
     @SuppressLint("Range")
-    public ArrayList<Alert> getAlertList(String account) {
+    public ArrayList<Alert> getAlertList(String account,Integer...args) {
         ArrayList<Alert> alertArrayList =new ArrayList<>();
         Cursor cursor = db.query("alert", null, "phone_number = ?", new String[]{account}, null, null, null);
         if(cursor.moveToFirst()){
@@ -330,8 +387,14 @@ public class UserLocalDao {
                 alert.setCycle(cursor.getString(cursor.getColumnIndex("cycle")));
                 alert.setType(cursor.getString(cursor.getColumnIndex("type")));
                 alert.setType_No(cursor.getInt(cursor.getColumnIndex("type_No")));
+                alert.setIs_deleted(cursor.getString(cursor.getColumnIndex("is_deleted")));
                 alertArrayList.add(alert);
             }while(cursor.moveToNext());
+        }
+        if(args.length==0)
+        {
+            Stream<Alert> alertStream=alertArrayList.stream();
+            alertArrayList= (ArrayList<Alert>) alertStream.filter(alert -> alert.getIs_deleted().equals("false")).collect(Collectors.toList());
         }
         return alertArrayList;
     }
@@ -339,14 +402,24 @@ public class UserLocalDao {
         Boolean valueReturn=false;
         ContentValues values=new ContentValues();
         values.put("phone_number",account);
-        values.put("Alert_No",alert.getAlert_No());
+        values.put("Alert_No",getAlertCount(account));
         values.put("date",alert.getDate());
         values.put("cycle",alert.getCycle());
         values.put("content",alert.getContent());
         values.put("type",alert.getType());
         values.put("type_No",alert.getType_No());
-        db.insert("alert",null,values);
+        values.put("is_deleted","false");
+        long flag=db.insert("alert",null,values);
+        if(flag>0)
+        {
+            valueReturn=true;
+        }
         return valueReturn;
+    }
+    private Integer getAlertCount(String account) {
+        Integer valueReturn=0;
+        valueReturn=db.query("alert", null, "phone_number = ?", new String[]{account}, null, null, null).getCount();
+        return valueReturn+1;
     }
     public Boolean updateAlert(String account,Alert alert){
         Boolean valueReturn=false;
@@ -358,12 +431,40 @@ public class UserLocalDao {
         values.put("content",alert.getContent());
         values.put("type",alert.getType());
         values.put("type_No",alert.getType_No());
-        db.update("alert",values,"Alert_No=? AND phone_number=?",new String[]{String.valueOf(alert.getAlert_No()),account});
+        int flag=db.update("alert",values,"Alert_No=? AND phone_number=?",new String[]{String.valueOf(alert.getAlert_No()),account});
+        if(flag>0)
+        {
+            valueReturn=true;
+        }
         return valueReturn;
     }
     public Boolean deleteAlert(String account,Integer alert_No){
         Boolean valueReturn=false;
-        db.delete("alert", "Alert_No = ? AND phone_number=?", new String[]{String.valueOf(alert_No),account});
+        ContentValues values=new ContentValues();
+        values.put("is_deleted","true");
+        int flag=db.update("alert",values,"Alert_No=? AND phone_number=?",new String[]{String.valueOf(alert_No),account});
+        if(flag>0)
+        {
+            valueReturn=true;
+        }
         return valueReturn;
+    }
+    public static Alert getAlert(ArrayList<Alert> alertArrayList,Integer alert_No){
+        Alert alertReturn=null;
+        Stream<Alert> alertStream=alertArrayList.stream();
+        alertReturn=alertStream.filter(e->e.getAlert_No()==alert_No).collect(Collectors.toList()).get(0);
+        return alertReturn;
+    }
+    public static History getHistory(ArrayList<History> historyArrayList,Integer history_No){
+        History historyReturn=null;
+        Stream<History> historyStream=historyArrayList.stream();
+        historyReturn=historyStream.filter(e->e.getHistory_No()==history_No).collect(Collectors.toList()).get(0);
+        return historyReturn;
+    }
+    public static Report gerReport(ArrayList<Report> reportArrayList,Integer report_No){
+        Report reportReturn=null;
+        Stream<Report> reportStream=reportArrayList.stream();
+        reportReturn=reportStream.filter(e->e.getReport_No()==report_No).collect(Collectors.toList()).get(0);
+        return reportReturn;
     }
 }

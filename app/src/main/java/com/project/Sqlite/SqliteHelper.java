@@ -9,7 +9,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
     // 数据库名称
     public static final String DATABASE = "Android.db";
     // 数据库版本号
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
     // 创建DB对象时的构造函数
 
     private Context context;
@@ -28,7 +28,8 @@ public class SqliteHelper extends SQLiteOpenHelper {
             + "birthday text,"
             + "sex text,"
             + "is_login text,"
-            + "is_multipled text)";
+            + "is_multipled text,"
+            + "is_deleted text)";
     public static final String CREATE_HISTORY = "create table history ("
             + "ID integer primary key,"
             + "phone_number text,"
@@ -37,27 +38,30 @@ public class SqliteHelper extends SQLiteOpenHelper {
             + "history_place text,"
             + "history_doctor text,"
             + "history_organ text,"
-            + "symptom text,"
-            + "conclusion text,"
-            + "suggestion text)";
+            + "symptom blob,"
+            + "conclusion blob,"
+            + "suggestion blob,"
+            + "is_deleted text)";
     public static final String CREATE_REPORT = "create table report ("
             + "ID integer primary key,"
             + "phone_number text,"
             + "report_No integer,"
-            + "report_content text,"
+            + "report_content blob,"
             + "report_type text,"
             + "report_date text,"
-            + "report_place text)";
+            + "report_place text,"
+            + "is_deleted text)";
     public static final String CREATE_ALERT = "create table alert ("
             + "ID integer primary key,"
             + "phone_number text,"
             + "alert_No text,"
             + "type_No integer,"
             + "type text,"
-            + "content text,"
+            + "content blob,"
             + "title text,"
             + "date text,"
-            + "cycle text)";
+            + "cycle text,"
+            + "is_deleted text)";
 
 
 
