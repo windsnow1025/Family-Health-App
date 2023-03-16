@@ -18,16 +18,17 @@
 ### 报告体检提醒
 基本都是以同一格式编写
 
-|   方法   |                    函数                    |            备注             |
-|:------:|:----------------------------------------:|:-------------------------:|
-|  获取列表  |        getXXXList(String account)        | Integer参数用于同步，正常获取不需要另外参数 |
-| 　插入　　  |    insertXXX(String account,XXX xxx)     |             无             |
-| 　更新　　  |    updateXXX(String account,XXX xxx)     |             无             |
-| 　删除　　  | deleteXXX(String account,Integer xxx_No) |             无             |
-|  获取序号  |       getXXXCount(String account)        |       获取序号，正常情况无需调用       |
-|   同步   |                  sync()                  |            同步             |
-| 同步(下载) |             sync_Download()              |        同步，从远程下载数据         |
-| 同步(上传) |              sync_Upload()               |         同步,将数据上传          |
+|   方法   |                     函数                     |            备注             |
+|:------:|:------------------------------------------:|:-------------------------:|
+|  获取列表  |         getXXXList(String account)         | Integer参数用于同步，正常获取不需要另外参数 |
+| 　插入　　  |     insertXXX(String account,XXX xxx)      |             无             |
+| 　更新　　  |     updateXXX(String account,XXX xxx)      |             无             |
+| 　删除　　  |  deleteXXX(String account,Integer xxx_No)  |             无             |
+|  获取序号  |        getXXXCount(String account)         |       获取序号，正常情况无需调用       |
+|  获取单个  | ArrayList<XXX> xxxArrayList,Integer xxx_No |       从列表中获取单个,静态方法       |
+|   同步   |                   sync()                   |            同步             |
+| 同步(下载) |              sync_Download()               |        同步，从远程下载数据         |
+| 同步(上传) |               sync_Upload()                |         同步,将数据上传          |
 
 ### 用户相关(本地)
 
