@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,10 +54,14 @@ public class EnterReport extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.enter_report, container, false);
 
-        ReportDao reportDao = new ReportDao();
 
         try {
             UserLocalDao userLocalDao = new UserLocalDao(getContext());
+
+
+            userLocalDao.open();
+
+
             username = userLocalDao.getUser();
         } catch (Exception e) {
             System.out.println(e);
@@ -74,29 +79,52 @@ public class EnterReport extends Fragment {
         buttonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.i("test","test");
                 date = editTextDate.getText().toString();
                 hospital = editTextHospital.getText().toString();
                 type = editTextType.getText().toString();
 
                 // Turn bitmap into string
-                if (bitmap == null) {
-                    System.out.println("bitmap is null");
-                    return;
-                }
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                byte[] byteArray = stream.toByteArray();
-                String bitmapString = Base64.encodeToString(byteArray, Base64.DEFAULT);
+//                if (bitmap == null) {
+//                    System.out.println("bitmap is null");
+//                    return;
+//                }
+//                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+//                byte[] byteArray = stream.toByteArray();
+//                String bitmapString = Base64.encodeToString(byteArray, Base64.DEFAULT);
+//                Report report = new Report();
+//                report.setPhone_number(username);
+//                report.setReport_content(bitmapString);
+//                report.setReport_No(0); // 由于是插入新数据，所以report_No设为0
+//                report.setReport_type(type);
+//                report.setReport_place(hospital);
+//                report.setReport_date(date);
+//                report.setIs_deleted("false");
+//                Boolean success = reportDao.insertReport(username, report);
 
-                Report report = new Report();
-                report.setPhone_number(username);
-                report.setReport_content(bitmapString);
-                report.setReport_No(0); // 由于是插入新数据，所以report_No设为0
-                report.setReport_type(type);
-                report.setReport_place(hospital);
-                report.setReport_date(date);
-                report.setIs_deleted("false");
-                Boolean success = reportDao.insertReport(username, report);
+
+                new Thread(()->{
+                    UserLocalDao userLocalDao=new UserLocalDao(getActivity().getApplicationContext());
+                    userLocalDao.open();
+                    System.out.println(userLocalDao.getHistoryList("1111").size());
+                    ReportDao reportDao=new ReportDao();
+                    reportDao.getConnection();
+                    System.out.println(reportDao.getReportList("1111").size());
+                    Log.i("test","准备上传");
+                    Report report = new Report();
+                    reportDao.getConnection();
+                    report.setPhone_number("11111");
+                    report.setReport_content("11111");
+                    report.setReport_No(0); // 由于是插入新数据，所以report_No设为0
+                    report.setReport_type("1111");
+                    report.setReport_place("!111");
+                    report.setReport_date("2022-07-08");
+                    report.setIs_deleted("false");
+                    reportDao.insertReport("11111",report);
+                    Log.i("test","结束上传");
+                }).start();
+
 
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, new Organ_3d(organ));
