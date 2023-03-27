@@ -28,7 +28,7 @@ public class FragmentMain extends Fragment {
             UserInfo userInfo = new UserDao().getUserInformation(username);
             gender = userInfo.getSex();
         } catch (Exception e) {
-            // TODO: handle exception
+            System.out.println(e);
         }
 
         // Set Image

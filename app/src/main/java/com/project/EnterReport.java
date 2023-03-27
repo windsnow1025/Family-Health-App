@@ -79,7 +79,8 @@ public class EnterReport extends Fragment {
                 type = editTextType.getText().toString();
 
                 // Turn bitmap into string
-                if (bitmap != null) {
+                if (bitmap == null) {
+                    System.out.println("bitmap is null");
                     return;
                 }
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
