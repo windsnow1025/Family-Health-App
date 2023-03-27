@@ -2,8 +2,9 @@
 
 ## 目前版本的情况
 
-目前简单尝试了一下项目的运行，发现一个比较棘手的问题，在activity调用数据库不会有异常 
-但是在fragment中调用就会产生空指针异常，无论是sqllite还是mysql都会产生空指针异常 正在尝试解决
+~~目前简单尝试了一下项目的运行，发现一个比较棘手的问题，在activity调用数据库不会有异常 
+但是在fragment中调用就会产生空指针异常，无论是sqllite还是mysql都会产生空指针异常 正在尝试解决~~
+好像又没有问题 使用时对SQllite的dao记得使用open()方法 对于Mysql部分的记得getConnection和closeConnection 还有新开线程(~~虽然目前大部分的功能都可以通过SQllite实现~~)
 
 ### 简单说明
 
