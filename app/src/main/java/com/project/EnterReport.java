@@ -57,11 +57,7 @@ public class EnterReport extends Fragment {
 
         try {
             UserLocalDao userLocalDao = new UserLocalDao(getContext());
-
-
             userLocalDao.open();
-
-
             username = userLocalDao.getUser();
         } catch (Exception e) {
             System.out.println(e);
@@ -71,10 +67,12 @@ public class EnterReport extends Fragment {
         Button buttonUpload = view.findViewById(R.id.buttonUpload);
         buttonUpload.setOnClickListener(v -> galleryLauncher.launch("image/*"));
 
+        // Get views
         editTextDate = view.findViewById(R.id.editTextDate);
         editTextHospital = view.findViewById(R.id.editTextHospital);
         editTextType = view.findViewById(R.id.editTextType);
 
+        // Confirm button
         Button buttonConfirm = view.findViewById(R.id.buttonConfirm);
         buttonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
