@@ -85,25 +85,14 @@ public class EnterReport extends Fragment {
                 type = editTextType.getText().toString();
 
                 // Turn bitmap into string
-//                if (bitmap == null) {
-//                    System.out.println("bitmap is null");
-//                    return;
-//                }
-//                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-//                byte[] byteArray = stream.toByteArray();
-//                String bitmapString = Base64.encodeToString(byteArray, Base64.DEFAULT);
-//                Report report = new Report();
-//                report.setPhone_number(username);
-//                report.setReport_content(bitmapString);
-//                report.setReport_No(0); // 由于是插入新数据，所以report_No设为0
-//                report.setReport_type(type);
-//                report.setReport_place(hospital);
-//                report.setReport_date(date);
-//                report.setIs_deleted("false");
-//                Boolean success = reportDao.insertReport(username, report);
+                if (bitmap != null) {
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    byte[] byteArray = stream.toByteArray();
+                    String bitmapString = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                }
 
-
+                // Upload to database
                 new Thread(()->{
                     UserLocalDao userLocalDao=new UserLocalDao(getActivity().getApplicationContext());
                     userLocalDao.open();
@@ -116,7 +105,7 @@ public class EnterReport extends Fragment {
                     reportDao.getConnection();
                     report.setPhone_number("11111");
                     report.setReport_content("11111");
-                    report.setReport_No(0); // 由于是插入新数据，所以report_No设为0
+                    report.setReport_No(0);
                     report.setReport_type("1111");
                     report.setReport_place("!111");
                     report.setReport_date("2022-07-08");
@@ -125,7 +114,7 @@ public class EnterReport extends Fragment {
                     Log.i("test","结束上传");
                 }).start();
 
-
+                // Jump to 3d model
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, new Organ_3d(organ));
                 transaction.addToBackStack(null);
