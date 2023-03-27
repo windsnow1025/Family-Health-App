@@ -56,7 +56,7 @@ public class FragmentReport extends Fragment {
             recyclerView.setAdapter(new TableAdapter(data));
 
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
 
 
