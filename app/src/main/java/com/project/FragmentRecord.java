@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+// 病例记录显示
 public class FragmentRecord extends Fragment {
 
     View view;

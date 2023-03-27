@@ -9,6 +9,7 @@ import android.widget.Button;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+// 病例记录录入
 public class EnterRecord extends Fragment {
 
     String organ;
