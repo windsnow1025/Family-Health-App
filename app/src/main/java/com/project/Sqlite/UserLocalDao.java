@@ -248,7 +248,7 @@ public class UserLocalDao {
         Boolean valueReturn=false;
         ContentValues values = new ContentValues();
         values.put("phone_number",account);
-        values.put("history_No",getHistoryCount(account));
+        values.put("history_No",history.getHistory_No());
         values.put("history_date",history.getHistory_date());
         values.put("history_place",history.getHistory_place());
         values.put("history_doctor",history.getHistory_doctor());
@@ -264,11 +264,11 @@ public class UserLocalDao {
         }
         return valueReturn;
     }
-    private Integer getHistoryCount(String account) {
-        Integer valueReturn=0;
-        valueReturn=db.query("history", null, "phone_number = ?", new String[]{account}, null, null, null).getCount();
-        return valueReturn+1;
-    }
+//    private Integer getHistoryCount(String account) {
+//        Integer valueReturn=0;
+//        valueReturn=db.query("history", null, "phone_number = ?", new String[]{account}, null, null, null).getCount();
+//        return valueReturn+1;
+//    }
     public Boolean updateHistory(String account,History history){
         Boolean valueReturn=false;
         ContentValues values = new ContentValues();
@@ -328,7 +328,7 @@ public class UserLocalDao {
         Boolean valueReturn=false;
         ContentValues values = new ContentValues();
         values.put("phone_number",account);
-        values.put("report_No",getReportCount(account));
+        values.put("report_No",report.getReport_No());
         values.put("report_content",report.getReport_content());
         values.put("report_type",report.getReport_type());
         values.put("report_place",report.getReport_place());
@@ -341,11 +341,11 @@ public class UserLocalDao {
         }
         return valueReturn;
     }
-    private Integer getReportCount(String account) {
-        Integer valueReturn=0;
-        valueReturn=db.query("report", null, "phone_number = ?", new String[]{account}, null, null, null).getCount();
-        return valueReturn+1;
-    }
+//    private Integer getReportCount(String account) {
+//        Integer valueReturn=0;
+//        valueReturn=db.query("report", null, "phone_number = ?", new String[]{account}, null, null, null).getCount();
+//        return valueReturn+1;
+//    }
     public Boolean updateReport(String account,Report report){
         Boolean valueReturn=false;
         ContentValues values = new ContentValues();
@@ -402,7 +402,7 @@ public class UserLocalDao {
         Boolean valueReturn=false;
         ContentValues values=new ContentValues();
         values.put("phone_number",account);
-        values.put("Alert_No",getAlertCount(account));
+        values.put("Alert_No",alert.getAlert_No());
         values.put("date",alert.getDate());
         values.put("cycle",alert.getCycle());
         values.put("content",alert.getContent());
@@ -416,11 +416,11 @@ public class UserLocalDao {
         }
         return valueReturn;
     }
-    private Integer getAlertCount(String account) {
-        Integer valueReturn=0;
-        valueReturn=db.query("alert", null, "phone_number = ?", new String[]{account}, null, null, null).getCount();
-        return valueReturn+1;
-    }
+//    private Integer getAlertCount(String account) {
+//        Integer valueReturn=0;
+//        valueReturn=db.query("alert", null, "phone_number = ?", new String[]{account}, null, null, null).getCount();
+//        return valueReturn+1;
+//    }
     public Boolean updateAlert(String account,Alert alert){
         Boolean valueReturn=false;
         ContentValues values=new ContentValues();

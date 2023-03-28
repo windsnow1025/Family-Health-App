@@ -59,7 +59,7 @@ public class ReportDao extends JDBCHelper{
     }
     public Boolean deleteReport(String account, Integer report_No){
         Boolean valueReturn=false;
-        String sql="DELETE FROM report where phone_number=? and report_No=?";
+        String sql="UPDATE report SET is_deleted='true' where phone_number=? and report_No=?";
         if(report_No==null){
             report_No=0;
         }
@@ -120,6 +120,23 @@ public class ReportDao extends JDBCHelper{
             if(resultSet.next())
             {
                 valueReturn=true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return valueReturn;
+    }
+
+    public Integer reportCount(String account){
+        Integer valueReturn=0;
+        String sql="SELECT COUNT(report_No)as count FROM report WHERE phone_number=?";
+        try {
+            PreparedStatement preparedStatement=connection.prepareStatement(sql);
+            preparedStatement.setString(1,account);
+            ResultSet resultSet=preparedStatement.executeQuery();
+            if(resultSet.next())
+            {
+                valueReturn=resultSet.getInt("count")+1;
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

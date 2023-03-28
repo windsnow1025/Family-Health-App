@@ -59,7 +59,7 @@ public class AlertDao extends JDBCHelper{
     }
     public Boolean deleteAlert(String account, Integer alert_No){
         Boolean valueReturn=false;
-        String sql="DELETE FROM alert where phone_number=? and alert_No=?";
+        String sql="UPDATE alert SET is_deleted='true' WHERE alert_No=? and phone_number=?";
         try {
             PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1,account);
@@ -119,6 +119,22 @@ public class AlertDao extends JDBCHelper{
             if(resultSet.next())
             {
                 valueReturn=true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return valueReturn;
+    }
+    public Integer alertCount(String account){
+        Integer valueReturn=0;
+        String sql="SELECT COUNT(alert_No)as count FROM alert WHERE phone_number=?";
+        try {
+            PreparedStatement preparedStatement=connection.prepareStatement(sql);
+            preparedStatement.setString(1,account);
+            ResultSet resultSet=preparedStatement.executeQuery();
+            if(resultSet.next())
+            {
+                valueReturn=resultSet.getInt("count")+1;
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
