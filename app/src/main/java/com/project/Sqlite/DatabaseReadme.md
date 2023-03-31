@@ -24,6 +24,7 @@
 
 |   方法   |                    函数                    |            备注             |
 |:------:|:----------------------------------------:|:-------------------------:|
+|  获取连接  |             getConnection()              |         静态方法获取连接          |
 |  获取列表  |        getXXXList(String account)        | Integer参数用于同步，正常获取不需要另外参数 |
 | 　插入　　  |    insertXXX(String account,XXX xxx)     |             无             |
 | 　更新　　  |    updateXXX(String account,XXX xxx)     |             无             |
