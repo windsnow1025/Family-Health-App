@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-// 病例记录显示
+// 就诊记录显示
 public class FragmentRecord extends Fragment {
 
     View view;
@@ -34,8 +34,8 @@ public class FragmentRecord extends Fragment {
 
         List<String[]> data = new ArrayList<>();
         data.add(new String[]{"时间", "医院", "类型"});
-        data.add(new String[]{"Row 2, Column 1", "Row 2, Column 2", "Row 2, Column 3"});
-        data.add(new String[]{"Row 3, Column 1", "Row 3, Column 2", "Row 3, Column 3"});
+        data.add(new String[]{"2022-09-01", "A医院", "brain"});
+        data.add(new String[]{"2023-01-01", "B医院", "heart"});
 
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
