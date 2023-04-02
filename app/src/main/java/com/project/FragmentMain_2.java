@@ -52,7 +52,7 @@ public class FragmentMain_2 extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new Organ_3d("liver"));
+                transaction.replace(R.id.fragment_container, new Organ("liver"));
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
@@ -62,7 +62,7 @@ public class FragmentMain_2 extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new Organ_3d("digestive"));
+                transaction.replace(R.id.fragment_container, new Organ("digestive"));
                 transaction.addToBackStack(null);
                 transaction.commit();
             }

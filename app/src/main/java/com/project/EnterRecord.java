@@ -50,7 +50,7 @@ public class EnterRecord extends Fragment {
                 String suggestion = editTextSuggestion.getText().toString();
 
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new Organ_3d(organ));
+                transaction.replace(R.id.fragment_container, new Organ(organ));
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
