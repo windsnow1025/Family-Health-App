@@ -11,6 +11,10 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.project.JDBC.HistoryDao;
+import com.project.Pojo.History;
+import com.project.Sqlite.UserLocalDao;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +23,7 @@ public class FragmentRecord extends Fragment {
 
     View view;
     String organ;
+
     public FragmentRecord(String organ) {
         this.organ = organ;
     }
@@ -32,14 +37,31 @@ public class FragmentRecord extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_record, container, false);
 
-        List<String[]> data = new ArrayList<>();
-        data.add(new String[]{"时间", "医院", "类型"});
-        data.add(new String[]{"2022-09-01", "A医院", "brain"});
-        data.add(new String[]{"2023-01-01", "B医院", "heart"});
+        // Get history list from database
+        try {
+            // Get username
+            UserLocalDao userLocalDao = new UserLocalDao(getContext());
+            userLocalDao.open();
+            String username = userLocalDao.getUser();
 
-        RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new TableAdapter(data));
+            // Get history list
+            HistoryDao historyDao = new HistoryDao();
+            ArrayList<History> histories = historyDao.getHistoryList(username);
+
+            // Set history list to recycler view
+            List<String[]> data = new ArrayList<>();
+            data.add(new String[]{"时间", "医院", "类型"});
+            for (History history : histories) {
+                data.add(new String[]{history.getHistory_date(), history.getHistory_place(), history.getHistory_organ()});
+            }
+
+            RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.setAdapter(new TableAdapter(data));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         Button buttonEnterRecord = view.findViewById(R.id.buttonEnterRecord);
         buttonEnterRecord.setOnClickListener(new View.OnClickListener() {
