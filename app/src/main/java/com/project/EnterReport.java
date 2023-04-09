@@ -17,7 +17,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.project.JDBC.ReportDao;
-import com.project.JDBC.UserDao;
 import com.project.Pojo.Report;
 import com.project.Sqlite.UserLocalDao;
 
@@ -114,7 +113,7 @@ public class EnterReport extends Fragment {
 
                 // Jump to 3d model
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new Organ_3d(organ));
+                transaction.replace(R.id.fragment_container, new Organ(organ));
                 transaction.addToBackStack(null);
                 transaction.commit();
             }

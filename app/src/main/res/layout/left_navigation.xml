@@ -1,0 +1,222 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutNavigation"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:visibility="gone">
+
+    <!-- Organs -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="36dp">
+
+        <!-- Page 1 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp">
+
+            <Button
+                android:id="@+id/buttonPage1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="第一页"
+                android:textSize="18sp"
+                android:textColor="@android:color/black"
+                android:background="@drawable/button_background"
+                android:padding="12dp"
+                android:gravity="center"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <!-- Brain -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp">
+
+            <Button
+                android:id="@+id/buttonBrain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="大脑"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:background="@drawable/button_background"
+                android:padding="8dp"
+                android:gravity="center" />
+
+        </LinearLayout>
+
+        <!-- Respiratory -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp">
+
+            <Button
+                android:id="@+id/buttonRespiratory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="呼吸系统"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:background="@drawable/button_background"
+                android:padding="8dp"
+                android:gravity="center" />
+
+        </LinearLayout>
+
+        <!-- Renal -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp">
+
+            <Button
+                android:id="@+id/buttonRenal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="肾脏"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:background="@drawable/button_background"
+                android:padding="8dp"
+                android:gravity="center" />
+
+        </LinearLayout>
+
+        <!-- Page 2 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp">
+
+            <Button
+                android:id="@+id/buttonPage2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="第二页"
+                android:textSize="18sp"
+                android:textColor="@android:color/black"
+                android:background="@drawable/button_background"
+                android:padding="12dp"
+                android:gravity="center"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <!-- Liver -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp">
+
+            <Button
+                android:id="@+id/buttonLiver"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="肝脏"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:background="@drawable/button_background"
+                android:padding="8dp"
+                android:gravity="center" />
+
+        </LinearLayout>
+
+        <!-- Digestive -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp">
+
+            <Button
+                android:id="@+id/buttonDigestive"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="消化系统"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:background="@drawable/button_background"
+                android:padding="8dp"
+                android:gravity="center" />
+
+        </LinearLayout>
+
+        <!-- Page 3 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp">
+
+            <Button
+                android:id="@+id/buttonPage3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="第三页"
+                android:textSize="18sp"
+                android:textColor="@android:color/black"
+                android:background="@drawable/button_background"
+                android:padding="12dp"
+                android:gravity="center"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <!-- Musculoskeletal -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp">
+
+            <Button
+                android:id="@+id/buttonMusculoskeletal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="肌肉骨骼"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:background="@drawable/button_background"
+                android:padding="8dp"
+                android:gravity="center" />
+
+        </LinearLayout>
+
+        <!-- Cardiovascular -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp">
+
+            <Button
+                android:id="@+id/buttonCardiovascular"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="心血系统"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:background="@drawable/button_background"
+                android:padding="8dp"
+                android:gravity="center" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

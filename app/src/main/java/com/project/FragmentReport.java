@@ -46,15 +46,7 @@ public class FragmentReport extends Fragment {
             String username = userLocalDao.getUser();
 
             // Get report list
-            /**
-             *
-             *
-             *调用reportDao会出现问题
-             *
-             * */
-
             ReportDao reportDao = new ReportDao();
-
             ArrayList<Report> reports =userLocalDao.getReportList("1111");// reportDao.getReportList("1111"); // For test
 
             // Set report list to recycler view
@@ -71,7 +63,6 @@ public class FragmentReport extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
         Button buttonEnterReport = view.findViewById(R.id.buttonEnterReport);
         buttonEnterReport.setOnClickListener(new View.OnClickListener() {
