@@ -1,5 +1,6 @@
 package com.project;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,11 @@ import java.util.List;
 public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> {
 
     private List<String[]> data;
+    private OnItemClickListener mOnItemClickListener;
 
-    public TableAdapter(List<String[]> data) {
+    public TableAdapter(List<String[]> data,OnItemClickListener onItemClickListener) {
         this.data = data;
+        this.mOnItemClickListener=onItemClickListener;
     }
 
     @NonNull
@@ -26,10 +29,17 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         String[] rowData = data.get(position);
         holder.column1.setText(rowData[0]);
         holder.column2.setText(rowData[1]);
+        holder.column2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mOnItemClickListener.onClick(position);
+            }
+        });
         if (rowData.length > 2) {
             holder.column3.setText(rowData[2]);
         }
@@ -52,4 +62,15 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> 
             column3 = itemView.findViewById(R.id.column3);
         }
     }
+
+
+
+    public interface OnItemClickListener{
+
+        void onClick(int pos);
+    }
+
+
+
+
 }
