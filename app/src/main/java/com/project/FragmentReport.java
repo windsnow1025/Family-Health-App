@@ -47,7 +47,7 @@ public class FragmentReport extends Fragment {
 
             // Get report list
             ReportDao reportDao = new ReportDao();
-            ArrayList<Report> reports =userLocalDao.getReportList("1111");// reportDao.getReportList("1111"); // For test
+            ArrayList<Report> reports =userLocalDao.getReportList(username);
 
             // Set report list to recycler view
             List<String[]> data = new ArrayList<>();

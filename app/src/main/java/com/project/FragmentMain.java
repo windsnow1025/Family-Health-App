@@ -28,13 +28,9 @@ public class FragmentMain extends Fragment {
             UserLocalDao userLocalDao = new UserLocalDao(getContext());
             userLocalDao.open();
             String username = userLocalDao.getUser();
-//            UserInfo userInfo = new UserDao().getUserInformation(username);
-//            gender = userInfo.getSex();
-            /**
-             *
-             * 此处调用也会出现问题
-             *
-             * */
+            UserInfo userInfo = new UserDao().getUserInformation(username);
+            gender = userInfo.getSex();
+            // To be fixed
         } catch (Exception e) {
             e.printStackTrace();
         }
