@@ -2,9 +2,32 @@
 
 ## 目前版本的情况
 
-~~目前简单尝试了一下项目的运行，发现一个比较棘手的问题，在activity调用数据库不会有异常 
-但是在fragment中调用就会产生空指针异常，无论是sqllite还是mysql都会产生空指针异常 正在尝试解决~~
-好像又没有问题 使用时对SQllite的dao记得使用open()方法 对于Mysql部分的记得getConnection和closeConnection 还有新开线程(~~虽然目前大部分的功能都可以通过SQllite实现~~)
+调整过后,目前只有登录注册同步需要mysql数据库,其余功能更多优先选择SQllite数据库进行使用。
+
+以下代码为禁用线程策略 Activity类的onCreate方法中使用即可
+``` Java
+StrictMode.ThreadPolicy policy=new StrictMode.ThreadPolicy.Builder().permitAll().build();
+StrictMode.setThreadPolicy(policy);
+```
+
+或者使用futuretask来进行异步操作
+```Java
+FutureTask<T> futureTask=new FutureTask<>(()->{          //使用FutureTask创建可获得返回值的执行任务 泛型为返回值类型
+    T valueReturn=new T();
+    return valueReturn;
+});
+new Thread(futureTask).start();                          //必须使用start,使用run会导致异常
+try {
+    value=futureTask.get();                              //使用get方法获得返回值 需要异常处理
+} catch (ExecutionException e) {                         //异常处理
+    throw new RuntimeException(e);
+} catch (InterruptedException e) {
+    throw new RuntimeException(e);
+}
+```
+#### 效果
+![img.png](img.png)
+
 
 ### 简单说明
 
