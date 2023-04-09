@@ -61,7 +61,7 @@ public class EnterReport extends Fragment {
         try {
             UserLocalDao userLocalDao = new UserLocalDao(getContext());
             userLocalDao.open();
-            username = userLocalDao.getUser();
+            username = userLocalDao.getUser();                                                      //关于这里的getUser()是获取当前登录的账号 理论上应该需要从登录入口进入才能获取到 我测试的时候是事先写了数据到本地进行测试
         } catch (Exception e) {
             System.out.println(e);
         }
