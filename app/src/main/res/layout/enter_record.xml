@@ -1,200 +1,192 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="16dp">
 
-    <TextView
-        android:id="@+id/textViewSymptom"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:text="症状："
-        android:textSize="28sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.088"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewOrgan" />
+        android:orientation="horizontal"
+        android:layout_marginTop="32dp">
 
-    <TextView
-        android:id="@+id/textViewConclusion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:text="结论："
-        android:textSize="28sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.088"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewSymptom" />
+        <TextView
+            android:id="@+id/textViewTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="时间："
+            android:textSize="28sp" />
 
-    <TextView
-        android:id="@+id/textViewSuggestion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:text="建议："
-        android:textSize="28sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.088"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewConclusion" />
+        <EditText
+            android:id="@+id/editTextDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="6"
+            android:textSize="28sp"
+            android:background="@drawable/editext_selector"
+            android:inputType="textPersonName" />
 
-    <TextView
-        android:id="@+id/textViewHospital"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:text="医院："
-        android:textSize="28sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.09"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTime" />
+    </LinearLayout>
 
-    <EditText
-        android:id="@+id/editTextHospital"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:background="@drawable/editext_selector"
-        android:ems="6"
-        android:inputType="textPersonName"
-        android:textSize="28sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.75"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTime" />
+        android:orientation="horizontal"
+        android:layout_marginTop="32dp">
 
-    <EditText
-        android:id="@+id/editTextDoctor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:ems="6"
-        android:textSize="28sp"
-        android:background="@drawable/editext_selector"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.75"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextHospital" />
+        <TextView
+            android:id="@+id/textViewHospital"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="医院："
+            android:textSize="28sp" />
 
-    <EditText
-        android:id="@+id/editTextOrgan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:background="@drawable/editext_selector"
-        android:ems="6"
-        android:inputType="textPersonName"
-        android:textSize="28sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.754"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextDoctor" />
+        <EditText
+            android:id="@+id/editTextHospital"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="6"
+            android:textSize="28sp"
+            android:background="@drawable/editext_selector"
+            android:inputType="textPersonName" />
 
-    <EditText
-        android:id="@+id/editTextSymptom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:background="@drawable/editext_selector"
-        android:ems="6"
-        android:inputType="textPersonName"
-        android:textSize="28sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.754"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextOrgan" />
+    </LinearLayout>
 
-    <EditText
-        android:id="@+id/editTextConclusion"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:background="@drawable/editext_selector"
-        android:ems="6"
-        android:inputType="textPersonName"
-        android:textSize="28sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.754"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextSymptom" />
+        android:orientation="horizontal"
+        android:layout_marginTop="32dp">
 
-    <EditText
-        android:id="@+id/editTextSuggestion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:background="@drawable/editext_selector"
-        android:ems="6"
-        android:inputType="textPersonName"
-        android:textSize="28sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.754"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextConclusion" />
+        <TextView
+            android:id="@+id/textViewDoctor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="医生："
+            android:textSize="28sp" />
 
-    <TextView
-        android:id="@+id/textViewDoctor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:text="医生："
-        android:textSize="28sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.09"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewHospital" />
+        <EditText
+            android:id="@+id/editTextType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="6"
+            android:textSize="28sp"
+            android:background="@drawable/editext_selector"
+            android:inputType="textPersonName" />
 
-    <TextView
-        android:id="@+id/textViewOrgan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:text="部位："
-        android:textSize="28sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.09"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDoctor" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/textViewTime"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:text="时间："
-        android:textSize="28sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.09"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="horizontal"
+        android:layout_marginTop="32dp">
 
-    <EditText
-        android:id="@+id/editTextTime"
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/textViewPicture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="部位："
+            android:textSize="28sp" />
+
+        <EditText
+            android:id="@+id/editTextOrgan"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="6"
+            android:textSize="28sp"
+            android:background="@drawable/editext_selector"
+            android:inputType="textPersonName" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:ems="6"
-        android:textSize="28sp"
-        android:background="@drawable/editext_selector"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.75"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="horizontal"
+        android:layout_marginTop="32dp">
+
+        <TextView
+            android:id="@+id/textViewSymptom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="症状："
+            android:textSize="28sp" />
+
+        <EditText
+            android:id="@+id/editTextSymptom"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="6"
+            android:textSize="28sp"
+            android:background="@drawable/editext_selector"
+            android:inputType="textPersonName" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="32dp">
+
+        <TextView
+            android:id="@+id/textViewConclusion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="结论："
+            android:textSize="28sp" />
+
+        <EditText
+            android:id="@+id/editTextConclusion"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="6"
+            android:textSize="28sp"
+            android:background="@drawable/editext_selector"
+            android:inputType="textPersonName" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="32dp">
+
+        <TextView
+            android:id="@+id/textViewSuggestion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="建议："
+            android:textSize="28sp" />
+
+        <EditText
+            android:id="@+id/editTextSuggestion"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="6"
+            android:textSize="28sp"
+            android:background="@drawable/editext_selector"
+            android:inputType="textPersonName" />
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/buttonConfirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="64dp"
-        android:text="确认"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
+        android:text="确认" />
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 public class FragmentMain_1 extends Fragment {
 
     View view;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main_1, container, false);
@@ -53,7 +54,7 @@ public class FragmentMain_1 extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new Organ_3d("brain"));
+                transaction.replace(R.id.fragment_container, new Organ("brain"));
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
@@ -63,16 +64,17 @@ public class FragmentMain_1 extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new Organ_3d("respiratory"));
+                transaction.replace(R.id.fragment_container, new Organ("respiratory"));
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
         });
+
         buttonUrinary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new Organ_3d("renal"));
+                transaction.replace(R.id.fragment_container, new Organ("renal"));
                 transaction.addToBackStack(null);
                 transaction.commit();
             }

@@ -4,10 +4,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager2.widget.ViewPager2;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Organ extends Fragment {
 
@@ -26,20 +34,49 @@ public class Organ extends Fragment {
         buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getParentFragmentManager().popBackStack();
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, new FragmentMain());
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
 
-        ImageView imageOrgan = view.findViewById(R.id.imageOrgan);
-        switch (organ) {
-            case "musculoskeletal":
-                imageOrgan.setImageResource(R.drawable.musculoskeletal);
-                break;
-            case "cardiovascular":
-                imageOrgan.setImageResource(R.drawable.cardiovascular);
-                break;
-        }
+        // WebView
+        WebView webView = view.findViewById(R.id.webView);
+        webView.setLayerType(WebView.LAYER_TYPE_HARDWARE, null);
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
 
+        String url = "https://www.windsnow1025.com/webview/organ.html?organ=" + organ;
+        webView.loadUrl(url);
+
+        // ViewPager2
+        ViewPager2 viewPager = view.findViewById(R.id.view_pager);
+        List<Fragment> fragments = new ArrayList<>(Arrays.asList(
+                new FragmentReport(organ),
+                new FragmentRecord(organ)
+        ));
+
+        ImageButton nextButton = view.findViewById(R.id.next_button);
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int nextItem = viewPager.getCurrentItem() + 1;
+                viewPager.setCurrentItem(nextItem, true);
+            }
+        });
+
+        ImageButton prevButton = view.findViewById(R.id.prev_button);
+        prevButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int prevItem = viewPager.getCurrentItem() - 1;
+                viewPager.setCurrentItem(prevItem, true);
+            }
+        });
+
+        PagerAdapter adapter = new PagerAdapter(getActivity(), fragments);
+        viewPager.setAdapter(adapter);
         return view;
     }
 }

@@ -16,6 +16,8 @@ import com.project.Sqlite.UserLocalDao;
 
 public class FragmentMain extends Fragment {
     View view;
+    private LeftNavigation leftNavigation;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main, container, false);
@@ -24,11 +26,13 @@ public class FragmentMain extends Fragment {
         String gender = "male";
         try {
             UserLocalDao userLocalDao = new UserLocalDao(getContext());
+            userLocalDao.open();
             String username = userLocalDao.getUser();
             UserInfo userInfo = new UserDao().getUserInformation(username);
             gender = userInfo.getSex();
+            // To be fixed
         } catch (Exception e) {
-            // TODO: handle exception
+            e.printStackTrace();
         }
 
         // Set Image
@@ -53,11 +57,30 @@ public class FragmentMain extends Fragment {
             }
         });
 
+        // Left Navigation
+        leftNavigation = new LeftNavigation();
+        FragmentTransaction transactionLeft = getParentFragmentManager().beginTransaction();
+        transactionLeft.add(R.id.layoutLeftNavigation, leftNavigation);
+        transactionLeft.commit();
+
+        // Button Navigation
+        Button buttonNavigation = view.findViewById(R.id.buttonNavigation);
+        buttonNavigation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (leftNavigation.isVisible()) {
+                    leftNavigation.getView().setVisibility(View.GONE);
+                } else {
+                    leftNavigation.getView().setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
         // Button Page
-        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-        transaction.replace(R.id.frameLayoutButtonPage, new ButtonPage());
-        transaction.addToBackStack(null);
-        transaction.commit();
+        FragmentTransaction transactionButton = getParentFragmentManager().beginTransaction();
+        transactionButton.replace(R.id.frameLayoutButtonPage, new ButtonPage());
+        transactionButton.addToBackStack(null);
+        transactionButton.commit();
 
         return view;
     }

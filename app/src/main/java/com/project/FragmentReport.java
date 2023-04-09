@@ -11,9 +11,16 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.project.JDBC.ReportDao;
+import com.project.JDBC.UserDao;
+import com.project.Pojo.Report;
+import com.project.Pojo.UserInfo;
+import com.project.Sqlite.UserLocalDao;
+
 import java.util.ArrayList;
 import java.util.List;
 
+// 体检报告显示
 public class FragmentReport extends Fragment {
 
     View view;
@@ -31,14 +38,31 @@ public class FragmentReport extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_report, container, false);
 
-        List<String[]> data = new ArrayList<>();
-        data.add(new String[]{"时间", "部位", "症状"});
-        data.add(new String[]{"Row 2, Column 1", "Row 2, Column 2", "Row 2, Column 3"});
-        data.add(new String[]{"Row 3, Column 1", "Row 3, Column 2", "Row 3, Column 3"});
+        // Get report list from database
+        try {
+            // Get username
+            UserLocalDao userLocalDao = new UserLocalDao(getContext());
+            userLocalDao.open();
+            String username = userLocalDao.getUser();
 
-        RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new TableAdapter(data));
+            // Get report list
+            ReportDao reportDao = new ReportDao();
+            ArrayList<Report> reports =userLocalDao.getReportList(username);
+
+            // Set report list to recycler view
+            List<String[]> data = new ArrayList<>();
+            data.add(new String[]{"时间", "部位", "症状"});
+            for (Report report : reports) {
+                data.add(new String[]{report.getReport_date(), report.getReport_place(), report.getReport_content()});
+            }
+
+            RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.setAdapter(new TableAdapter(data));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         Button buttonEnterReport = view.findViewById(R.id.buttonEnterReport);
         buttonEnterReport.setOnClickListener(new View.OnClickListener() {

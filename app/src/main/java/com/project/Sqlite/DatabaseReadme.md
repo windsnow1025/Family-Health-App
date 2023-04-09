@@ -2,6 +2,33 @@
 
 ## 目前版本的情况
 
+调整过后,目前只有登录注册同步需要mysql数据库,其余功能更多优先选择SQllite数据库进行使用。
+
+以下代码为禁用线程策略 Activity类的onCreate方法中使用即可
+``` Java
+StrictMode.ThreadPolicy policy=new StrictMode.ThreadPolicy.Builder().permitAll().build();
+StrictMode.setThreadPolicy(policy);
+```
+
+或者使用futuretask来进行异步操作
+```Java
+FutureTask<T> futureTask=new FutureTask<>(()->{          //使用FutureTask创建可获得返回值的执行任务 泛型为返回值类型
+    T valueReturn=new T();
+    return valueReturn;
+});
+new Thread(futureTask).start();                          //必须使用start,使用run会导致异常
+try {
+    value=futureTask.get();                              //使用get方法获得返回值 需要异常处理
+} catch (ExecutionException e) {                         //异常处理
+    throw new RuntimeException(e);
+} catch (InterruptedException e) {
+    throw new RuntimeException(e);
+}
+```
+#### 效果
+![img.png](img.png)
+
+
 ### 简单说明
 
 我尽可能减少了使用Mysql数据库的频率，但仍有部分调用需要使用Mysql，而这部分毋庸置疑的需要使用多线程进行调用。
@@ -20,11 +47,13 @@
 
 |   方法   |                    函数                    |            备注             |
 |:------:|:----------------------------------------:|:-------------------------:|
+|  获取连接  |             getConnection()              |         静态方法获取连接          |
 |  获取列表  |        getXXXList(String account)        | Integer参数用于同步，正常获取不需要另外参数 |
 | 　插入　　  |    insertXXX(String account,XXX xxx)     |             无             |
 | 　更新　　  |    updateXXX(String account,XXX xxx)     |             无             |
 | 　删除　　  | deleteXXX(String account,Integer xxx_No) |             无             |
 |  获取序号  |       getXXXCount(String account)        |       获取序号，正常情况无需调用       |
+|  获取单个  |   getXXX(xxxArrayList,Integer xxx_No)    |       从列表中获取单个,静态方法       |
 |   同步   |                  sync()                  |            同步             |
 | 同步(下载) |             sync_Download()              |        同步，从远程下载数据         |
 | 同步(上传) |              sync_Upload()               |         同步,将数据上传          |

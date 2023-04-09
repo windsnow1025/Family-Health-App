@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 public class FragmentMain_3 extends Fragment {
 
     View view;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main_3, container, false);

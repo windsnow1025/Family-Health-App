@@ -66,7 +66,7 @@ public class HistoryDao extends JDBCHelper{
     }
     public Boolean deleteHistory(String account, Integer history_No){
         Boolean valueReturn=false;
-        String sql="DELETE FROM history where phone_number=? and history_No=?";
+        String sql="UPDATE history SET is_deleted='true' where phone_number=? and history_No=?";
         if(history_No==null){
             history_No=0;
         }
@@ -129,6 +129,23 @@ public class HistoryDao extends JDBCHelper{
             if(resultSet.next())
             {
                 valueReturn=true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return valueReturn;
+    }
+
+    public Integer historyCount(String account){
+        Integer valueReturn=0;
+        String sql="SELECT COUNT(history_No)as count FROM history WHERE phone_number=?";
+        try {
+            PreparedStatement preparedStatement=connection.prepareStatement(sql);
+            preparedStatement.setString(1,account);
+            ResultSet resultSet=preparedStatement.executeQuery();
+            if(resultSet.next())
+            {
+                valueReturn=resultSet.getInt("count")+1;
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
