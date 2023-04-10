@@ -10,13 +10,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class HistoryDao extends JDBCHelper{
     public HistoryDao() {
     }
-    public ArrayList<History> getHistoryList(String account){
+    public ArrayList<History> getHistoryList(String account) throws TimeoutException {
         ArrayList<History> valueReturn=new ArrayList<>();
         FutureTask<ArrayList<History>> futureTask=new FutureTask<>(()->{
             getConnection();
@@ -26,11 +28,14 @@ public class HistoryDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get();
+            valueReturn=futureTask.get(2, TimeUnit.MILLISECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        }
+        finally {
+            futureTask.cancel(true);
         }
         return valueReturn;
     }
@@ -60,7 +65,7 @@ public class HistoryDao extends JDBCHelper{
         }
         return historyArrayList;
     }
-    public Boolean updateHistory(String account, History history_update){
+    public Boolean updateHistory(String account, History history_update) throws TimeoutException {
         Boolean valueReturn=false;
         FutureTask<Boolean> futureTask=new FutureTask<>(()->{
             getConnection();
@@ -70,11 +75,14 @@ public class HistoryDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get();
+            valueReturn=futureTask.get(2, TimeUnit.MILLISECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        }
+        finally {
+            futureTask.cancel(true);
         }
         return valueReturn;
     }
@@ -101,7 +109,7 @@ public class HistoryDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public Boolean deleteHistory(String account, Integer history_No){
+    public Boolean deleteHistory(String account, Integer history_No) throws TimeoutException {
         Boolean valueReturn=false;
         FutureTask<Boolean> futureTask=new FutureTask<>(()->{
             getConnection();
@@ -111,11 +119,14 @@ public class HistoryDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get();
+            valueReturn=futureTask.get(2, TimeUnit.MILLISECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        }
+        finally {
+            futureTask.cancel(true);
         }
         return valueReturn;
     }
@@ -137,7 +148,7 @@ public class HistoryDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public Boolean insertHistory(String account, History history_insert){
+    public Boolean insertHistory(String account, History history_insert) throws TimeoutException {
         Boolean valueReturn=false;
         FutureTask<Boolean> futureTask=new FutureTask<>(()->{
             getConnection();
@@ -148,11 +159,14 @@ public class HistoryDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get();
+            valueReturn=futureTask.get(2, TimeUnit.MILLISECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        }
+        finally {
+            futureTask.cancel(true);
         }
         return valueReturn;
     }
@@ -179,7 +193,7 @@ public class HistoryDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public void SyncHistoryUpload(String account,ArrayList<History> historyArrayList){
+    public void SyncHistoryUpload(String account,ArrayList<History> historyArrayList) throws TimeoutException {
         FutureTask<Boolean> futureTask=new FutureTask<>(()->{
             getConnection();
             SyncHistoryUploadImpl(account,historyArrayList);
@@ -187,6 +201,13 @@ public class HistoryDao extends JDBCHelper{
             return null;
         });
         new Thread(futureTask).start();
+        try {
+            futureTask.get(2, TimeUnit.MILLISECONDS);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
     public void SyncHistoryUploadImpl(String account,ArrayList<History> historyArrayList) {
         Stream<History> alertStream=historyArrayList.stream();

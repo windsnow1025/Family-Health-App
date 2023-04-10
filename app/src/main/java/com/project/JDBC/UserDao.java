@@ -10,13 +10,15 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 
 public class UserDao extends JDBCHelper{
     public UserDao() {
     }
     //account 均指手机号码
-    public String checkUserPassword(String account,String password){
+    public String checkUserPassword(String account,String password) throws TimeoutException {
         String valueReturn=null;
         FutureTask<String> futureTask= new FutureTask<>(()->{
             getConnection();
@@ -26,11 +28,14 @@ public class UserDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get();
+            valueReturn=futureTask.get(2, TimeUnit.MILLISECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        }
+        finally {
+            futureTask.cancel(true);
         }
         return valueReturn;
     }
@@ -59,7 +64,7 @@ public class UserDao extends JDBCHelper{
      * 测试包含错误密码 错误账号 空账号 正确三种情况 这三种情况均通过
      * 未测试空密码
      * */
-    public Boolean checkUserUnique(String account){
+    public Boolean checkUserUnique(String account) throws TimeoutException {
         Boolean valueReturn=false;
         FutureTask<Boolean> futureTask=new FutureTask<>(()->{
             getConnection();
@@ -69,11 +74,14 @@ public class UserDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get();
+            valueReturn=futureTask.get(2, TimeUnit.MILLISECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        }
+        finally {
+            futureTask.cancel(true);
         }
         return valueReturn;
     }
@@ -99,7 +107,7 @@ public class UserDao extends JDBCHelper{
      * 此处类型问题原本想使用LocalDate类型 但setDate似乎不支持LocalDate
      * 使用错误的生日会导致异常
      * */
-    public String insertUser(String account,String password,String sex,String birthday){
+    public String insertUser(String account,String password,String sex,String birthday) throws TimeoutException {
         String valueReturn=null;
         FutureTask<String> futureTask=new FutureTask<>(()->{
             getConnection();
@@ -109,15 +117,18 @@ public class UserDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get();
+            valueReturn=futureTask.get(2, TimeUnit.MILLISECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        finally {
+            futureTask.cancel(true);
+        }
         return valueReturn;
     }
-    public String insertUserImpl(String account,String password,String sex,String birthday) {
+    public String insertUserImpl(String account,String password,String sex,String birthday) throws TimeoutException {
         String accountReturn=null;
         String sql="INSERT INTO user (phone_number,password,sex,birthday) VALUES (?,?,?,?)";
         if((!checkUserUnique(account))&&(account!=null)&&(password!=null)&&(!password.equals(""))) {
@@ -137,7 +148,7 @@ public class UserDao extends JDBCHelper{
         }
         return accountReturn;
     }
-    public UserInfo getUserInformation(String account){
+    public UserInfo getUserInformation(String account) throws TimeoutException {
         UserInfo valueReturn=new UserInfo();
         FutureTask<UserInfo> futureTask=new FutureTask<>(()->{
             getConnection();
@@ -147,11 +158,14 @@ public class UserDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get();
+            valueReturn=futureTask.get(2, TimeUnit.MILLISECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        }
+        finally {
+            futureTask.cancel(true);
         }
         return valueReturn;
     }
@@ -175,7 +189,7 @@ public class UserDao extends JDBCHelper{
         }
         return userInfo;
     }
-    public Boolean updateUserInformation(String account,HashMap<String,String> userInfo_update){
+    public Boolean updateUserInformation(String account,HashMap<String,String> userInfo_update) throws TimeoutException {
         Boolean valueReturn=false;
         FutureTask<Boolean> futureTask=new FutureTask<>(()->{
             getConnection();
@@ -185,11 +199,14 @@ public class UserDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get();
+            valueReturn=futureTask.get(2, TimeUnit.MILLISECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        }
+        finally {
+            futureTask.cancel(true);
         }
         return valueReturn;
     }

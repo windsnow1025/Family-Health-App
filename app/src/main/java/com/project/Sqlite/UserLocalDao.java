@@ -18,6 +18,7 @@ import com.project.Pojo.Report;
 import com.project.Pojo.UserInfo;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -153,13 +154,13 @@ public class UserLocalDao {
         values.put("is_login","true");
         db.update("user",values,"phone_number = ?",new String[]{newAccount});
     }
-    public void sync(){
+    public void sync() throws TimeoutException {
         userDao.getConnection();
         sync_Download();
         sync_Upload();
         userDao.closeConnection();
     }
-    public void sync_Download(){
+    public void sync_Download() throws TimeoutException {
         ArrayList<History> historyArrayList=new ArrayList<>();
         ArrayList<Report> reportArrayList=new ArrayList<>();
         ArrayList<Alert> alertArrayList=new ArrayList<>();
@@ -198,7 +199,7 @@ public class UserLocalDao {
             }
         }
     }
-    public void sync_Upload(){
+    public void sync_Upload() throws TimeoutException {
         alertDao.SyncAlertUpload(getUser(),getAlertList(getUser(),1));
         reportDao.SyncReportUpload(getUser(),getReportList(getUser(),1));
         historyDao.SyncHistoryUpload(getUser(),getHistoryList(getUser(),1));

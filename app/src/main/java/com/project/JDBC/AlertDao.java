@@ -8,13 +8,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class AlertDao extends JDBCHelper{
     public AlertDao(){
     }
-    public ArrayList<Alert> getAlertList(String account){
+    public ArrayList<Alert> getAlertList(String account) throws TimeoutException {
         ArrayList<Alert> valueReturn=new ArrayList<>();
         FutureTask<ArrayList<Alert>> futureTask=new FutureTask<>(()->{
             getConnection();
@@ -24,11 +26,14 @@ public class AlertDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get();
+            valueReturn=futureTask.get(3, null);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        }
+        finally {
+            futureTask.cancel(true);
         }
         return valueReturn;
     }
@@ -57,7 +62,7 @@ public class AlertDao extends JDBCHelper{
         return alertArrayList;
     }
 
-    public Boolean updateAlert(String account, Alert alert_update){
+    public Boolean updateAlert(String account, Alert alert_update) throws TimeoutException {
         Boolean valueReturn=false;
         FutureTask<Boolean> futureTask=new FutureTask<>(()->{
             getConnection();
@@ -67,11 +72,14 @@ public class AlertDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get();
+            valueReturn=futureTask.get(2, TimeUnit.MILLISECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        }
+        finally {
+            futureTask.cancel(true);
         }
         return valueReturn;
     }
@@ -97,7 +105,7 @@ public class AlertDao extends JDBCHelper{
         return valueReturn;
     }
 
-    public Boolean deleteAlert(String account, Integer alert_No){
+    public Boolean deleteAlert(String account, Integer alert_No) throws TimeoutException {
         Boolean valueReturn=false;
         FutureTask<Boolean> futureTask=new FutureTask<>(()->{
             getConnection();
@@ -107,11 +115,14 @@ public class AlertDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get();
+            valueReturn=futureTask.get(2, TimeUnit.MILLISECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        }
+        finally {
+            futureTask.cancel(true);
         }
         return valueReturn;
     }
@@ -131,7 +142,7 @@ public class AlertDao extends JDBCHelper{
         return valueReturn;
     }
 
-    public Boolean insertAlert(String account, Alert alert_insert){
+    public Boolean insertAlert(String account, Alert alert_insert) throws TimeoutException {
         Boolean valueReturn=false;
         FutureTask<Boolean> futureTask=new FutureTask<>(()->{
             getConnection();
@@ -142,11 +153,14 @@ public class AlertDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get();
+            valueReturn=futureTask.get(2, TimeUnit.MILLISECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        }
+        finally {
+            futureTask.cancel(true);
         }
         return valueReturn;
     }
@@ -173,7 +187,7 @@ public class AlertDao extends JDBCHelper{
         return valueReturn;
     }
 
-    public void SyncAlertUpload(String account,ArrayList<Alert> alertArrayList){
+    public void SyncAlertUpload(String account,ArrayList<Alert> alertArrayList) throws TimeoutException {
         FutureTask<Boolean> futureTask=new FutureTask<>(()->{
             getConnection();
             SyncAlertUploadImpl(account,alertArrayList);
@@ -181,6 +195,16 @@ public class AlertDao extends JDBCHelper{
             return null;
         });
         new Thread(futureTask).start();
+        try {
+            futureTask.get(2, TimeUnit.MILLISECONDS);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        finally {
+            futureTask.cancel(true);
+        }
     }
     public void SyncAlertUploadImpl(String account,ArrayList<Alert> alertArrayList) {
         Stream<Alert> alertStream=alertArrayList.stream();

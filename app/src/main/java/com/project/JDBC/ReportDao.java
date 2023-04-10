@@ -8,13 +8,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ReportDao extends JDBCHelper{
     public ReportDao(){
     }
-    public ArrayList<Report> getReportList(String account){
+    public ArrayList<Report> getReportList(String account) throws TimeoutException {
         ArrayList<Report> valueReturn=new ArrayList<>();
         FutureTask<ArrayList<Report>> futureTask=new FutureTask<>(()->{
             getConnection();
@@ -24,11 +26,14 @@ public class ReportDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get();
+            valueReturn=futureTask.get(2, TimeUnit.MILLISECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        }
+        finally {
+            futureTask.cancel(true);
         }
         return valueReturn;
     }
@@ -55,7 +60,7 @@ public class ReportDao extends JDBCHelper{
         }
         return reportArrayList;
     }
-    public Boolean updateReport(String account,Report report_update){
+    public Boolean updateReport(String account,Report report_update) throws TimeoutException {
         Boolean valueReturn=false;
         FutureTask<Boolean> futureTask=new FutureTask<>(()->{
             getConnection();
@@ -65,11 +70,14 @@ public class ReportDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get();
+            valueReturn=futureTask.get(2, TimeUnit.MILLISECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        }
+        finally {
+            futureTask.cancel(true);
         }
         return valueReturn;
     }
@@ -95,7 +103,7 @@ public class ReportDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public Boolean deleteReport(String account,Integer report_No){
+    public Boolean deleteReport(String account,Integer report_No) throws TimeoutException {
         Boolean valueReturn=false;
         FutureTask<Boolean> futureTask=new FutureTask<>(()->{
             getConnection();
@@ -105,11 +113,14 @@ public class ReportDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get();
+            valueReturn=futureTask.get(2, TimeUnit.MILLISECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        }
+        finally {
+            futureTask.cancel(true);
         }
         return valueReturn;
     }
@@ -132,7 +143,7 @@ public class ReportDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public Boolean insertReport(String account,Report report_insert){
+    public Boolean insertReport(String account,Report report_insert) throws TimeoutException {
         Boolean valueReturn=false;
         FutureTask<Boolean> futureTask=new FutureTask<>(()->{
             getConnection();
@@ -143,11 +154,14 @@ public class ReportDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get();
+            valueReturn=futureTask.get(2, TimeUnit.MILLISECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        }
+        finally {
+            futureTask.cancel(true);
         }
         return valueReturn;
     }
@@ -171,7 +185,7 @@ public class ReportDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public void SyncReportUpload(String account,ArrayList<Report> reportArrayList){
+    public void SyncReportUpload(String account,ArrayList<Report> reportArrayList) throws TimeoutException {
         FutureTask<Boolean> futureTask=new FutureTask<>(()->{
             getConnection();
             SyncReportUploadImpl(account,reportArrayList);
@@ -179,17 +193,27 @@ public class ReportDao extends JDBCHelper{
             return null;
         });
         new Thread(futureTask).start();
+        try {
+            futureTask.get(2, TimeUnit.MILLISECONDS);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        finally {
+            futureTask.cancel(true);
+        }
     }
-    public void SyncReportUploadImpl(String account,ArrayList<Report> reportArrayList) {
+    public void SyncReportUploadImpl(String account,ArrayList<Report> reportArrayList){
         Stream<Report> alertStream=reportArrayList.stream();
         alertStream.forEach(report -> {
             if(is_Exist(account,report.getReport_No()))
             {
-                updateReport(account,report);
+                updateReportImpl(account,report);
             }
             else
             {
-                insertReport(account,report);
+                insertReportImpl(account,report);
             }
         });
     }

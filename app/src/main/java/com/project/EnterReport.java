@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeoutException;
 
 // 体检报告录入
 public class EnterReport extends Fragment {
@@ -110,7 +111,11 @@ public class EnterReport extends Fragment {
                 else
                     report.setReport_date(date);
                 report.setIs_deleted("false");
-                insertStatus=reportDao.insertReport(username, report);
+                try {
+                    insertStatus=reportDao.insertReport(username, report);
+                } catch (TimeoutException e) {
+                    Log.i("Test","网络有问题");
+                }
                 Log.i("主线程", "报告插入情况" + insertStatus);
                 Log.i("主线程", "多线程数据库测试结束");
 
