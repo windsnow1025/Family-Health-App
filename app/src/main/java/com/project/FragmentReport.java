@@ -25,6 +25,7 @@ public class FragmentReport extends Fragment {
 
     View view;
     String organ;
+
     public FragmentReport(String organ) {
         this.organ = organ;
     }
@@ -47,7 +48,7 @@ public class FragmentReport extends Fragment {
 
             // Get report list
             ReportDao reportDao = new ReportDao();
-            ArrayList<Report> reports =userLocalDao.getReportList(username);
+            ArrayList<Report> reports = reportDao.getReportList(username);
 
             // Set report list to recycler view
             List<String[]> data = new ArrayList<>();
