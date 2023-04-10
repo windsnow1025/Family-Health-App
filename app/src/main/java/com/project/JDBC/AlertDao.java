@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -13,6 +15,24 @@ public class AlertDao extends JDBCHelper{
     public AlertDao(){
     }
     public ArrayList<Alert> getAlertList(String account){
+        ArrayList<Alert> valueReturn=new ArrayList<>();
+        FutureTask<ArrayList<Alert>> futureTask=new FutureTask<>(()->{
+            getConnection();
+            ArrayList<Alert> alertArrayList=getAlertListImpl(account);
+            closeConnection();
+            return alertArrayList;
+        });
+        new Thread(futureTask).start();
+        try {
+            valueReturn=futureTask.get();
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return valueReturn;
+    }
+    public ArrayList<Alert> getAlertListImpl(String account){
         ArrayList<Alert> alertArrayList=new ArrayList<>();
         String sql="SELECT alert_No,date,cycle,content,type,type_no,is_deleted from alert WHERE phone_number=?";
         try {
@@ -36,7 +56,26 @@ public class AlertDao extends JDBCHelper{
         }
         return alertArrayList;
     }
+
     public Boolean updateAlert(String account, Alert alert_update){
+        Boolean valueReturn=false;
+        FutureTask<Boolean> futureTask=new FutureTask<>(()->{
+            getConnection();
+            Boolean value=updateAlertImpl(account,alert_update);
+            closeConnection();
+            return value;
+        });
+        new Thread(futureTask).start();
+        try {
+            valueReturn=futureTask.get();
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return valueReturn;
+    }
+    public Boolean updateAlertImpl(String account, Alert alert_update){
         Boolean valueReturn=false;
         String sql="UPDATE alert SET date=?,cycle=?,content=?,type=?,type_no=?,is_deleted=? WHERE alert_No=? and phone_number=?";
         try {
@@ -57,7 +96,26 @@ public class AlertDao extends JDBCHelper{
         }
         return valueReturn;
     }
+
     public Boolean deleteAlert(String account, Integer alert_No){
+        Boolean valueReturn=false;
+        FutureTask<Boolean> futureTask=new FutureTask<>(()->{
+            getConnection();
+            Boolean value=deleteAlertImpl(account,alert_No);
+            closeConnection();
+            return value;
+        });
+        new Thread(futureTask).start();
+        try {
+            valueReturn=futureTask.get();
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return valueReturn;
+    }
+    public Boolean deleteAlertImpl(String account, Integer alert_No){
         Boolean valueReturn=false;
         String sql="UPDATE alert SET is_deleted='true' WHERE alert_No=? and phone_number=?";
         try {
@@ -72,7 +130,27 @@ public class AlertDao extends JDBCHelper{
         }
         return valueReturn;
     }
+
     public Boolean insertAlert(String account, Alert alert_insert){
+        Boolean valueReturn=false;
+        FutureTask<Boolean> futureTask=new FutureTask<>(()->{
+            getConnection();
+            alert_insert.setAlert_No(alertCount(account));
+            Boolean value=insertAlertImpl(account,alert_insert);
+            closeConnection();
+            return value;
+        });
+        new Thread(futureTask).start();
+        try {
+            valueReturn=futureTask.get();
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return valueReturn;
+    }
+    public Boolean insertAlertImpl(String account, Alert alert_insert){
         Boolean valueReturn=false;
         String sql="INSERT INTO alert (alert_No,phone_number,date,cycle,content,type,type_no,is_deleted) VALUES (?,?,?,?,?,?,?,?)";
         try {
@@ -94,17 +172,26 @@ public class AlertDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public void SyncAlertUpload(String account,ArrayList<Alert> alertArrayList)
-    {
+
+    public void SyncAlertUpload(String account,ArrayList<Alert> alertArrayList){
+        FutureTask<Boolean> futureTask=new FutureTask<>(()->{
+            getConnection();
+            SyncAlertUploadImpl(account,alertArrayList);
+            closeConnection();
+            return null;
+        });
+        new Thread(futureTask).start();
+    }
+    public void SyncAlertUploadImpl(String account,ArrayList<Alert> alertArrayList) {
         Stream<Alert> alertStream=alertArrayList.stream();
         alertStream.forEach(alert -> {
             if(is_Exist(account,alert.getAlert_No()))
             {
-                updateAlert(account,alert);
+                updateAlertImpl(account,alert);
             }
             else
             {
-                insertAlert(account,alert);
+                insertAlertImpl(account,alert);
             }
         });
     }
@@ -125,7 +212,7 @@ public class AlertDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public Integer alertCount(String account){
+    private Integer alertCount(String account){
         Integer valueReturn=0;
         String sql="SELECT COUNT(alert_No)as count FROM alert WHERE phone_number=?";
         try {

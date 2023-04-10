@@ -6,13 +6,33 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ReportDao extends JDBCHelper{
     public ReportDao(){
     }
-    public ArrayList<Report> getReportList(String account) {
+    public ArrayList<Report> getReportList(String account){
+        ArrayList<Report> valueReturn=new ArrayList<>();
+        FutureTask<ArrayList<Report>> futureTask=new FutureTask<>(()->{
+            getConnection();
+            ArrayList<Report> value=getReportListImpl(account);
+            closeConnection();
+            return value;
+        });
+        new Thread(futureTask).start();
+        try {
+            valueReturn=futureTask.get();
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return valueReturn;
+    }
+    public ArrayList<Report> getReportListImpl(String account) {
         ArrayList<Report> reportArrayList=new ArrayList<>();
         String sql="SELECT report_No,report_content,report_type,report_place,report_date,is_deleted FROM report WHERE phone_number=? ORDER BY report_No";
         try {
@@ -35,7 +55,25 @@ public class ReportDao extends JDBCHelper{
         }
         return reportArrayList;
     }
-    public Boolean updateReport(String account, Report report_update){
+    public Boolean updateReport(String account,Report report_update){
+        Boolean valueReturn=false;
+        FutureTask<Boolean> futureTask=new FutureTask<>(()->{
+            getConnection();
+            Boolean value=updateReportImpl(account,report_update);
+            closeConnection();
+            return value;
+        });
+        new Thread(futureTask).start();
+        try {
+            valueReturn=futureTask.get();
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return valueReturn;
+    }
+    public Boolean updateReportImpl(String account, Report report_update){
         Boolean valueReturn=false;
         String sql="UPDATE report SET report_content=?,report_type=?,report_place=?,report_date=?,is_deleted=? where phone_number=? and report_No=?";
         try {
@@ -57,7 +95,25 @@ public class ReportDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public Boolean deleteReport(String account, Integer report_No){
+    public Boolean deleteReport(String account,Integer report_No){
+        Boolean valueReturn=false;
+        FutureTask<Boolean> futureTask=new FutureTask<>(()->{
+            getConnection();
+            Boolean value=deleteReportImpl(account,report_No);
+            closeConnection();
+            return value;
+        });
+        new Thread(futureTask).start();
+        try {
+            valueReturn=futureTask.get();
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return valueReturn;
+    }
+    public Boolean deleteReportImpl(String account, Integer report_No){
         Boolean valueReturn=false;
         String sql="UPDATE report SET is_deleted='true' where phone_number=? and report_No=?";
         if(report_No==null){
@@ -76,7 +132,26 @@ public class ReportDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public  Boolean insertReport(String account, Report report_insert){
+    public Boolean insertReport(String account,Report report_insert){
+        Boolean valueReturn=false;
+        FutureTask<Boolean> futureTask=new FutureTask<>(()->{
+            getConnection();
+            report_insert.setReport_No(reportCount(account));
+            Boolean value=insertReportImpl(account,report_insert);
+            closeConnection();
+            return value;
+        });
+        new Thread(futureTask).start();
+        try {
+            valueReturn=futureTask.get();
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return valueReturn;
+    }
+    public  Boolean insertReportImpl(String account, Report report_insert){
         Boolean valueReturn=false;
         String sql="INSERT INTO report (phone_number,report_content,report_No,report_type,report_place,report_date,is_deleted) VALUES (?,?,?,?,?,?,?)";
         try {
@@ -96,7 +171,16 @@ public class ReportDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public void SyncReportUpload(String account,ArrayList<Report> reportArrayList) {
+    public void SyncReportUpload(String account,ArrayList<Report> reportArrayList){
+        FutureTask<Boolean> futureTask=new FutureTask<>(()->{
+            getConnection();
+            SyncReportUploadImpl(account,reportArrayList);
+            closeConnection();
+            return null;
+        });
+        new Thread(futureTask).start();
+    }
+    public void SyncReportUploadImpl(String account,ArrayList<Report> reportArrayList) {
         Stream<Report> alertStream=reportArrayList.stream();
         alertStream.forEach(report -> {
             if(is_Exist(account,report.getReport_No()))
@@ -126,8 +210,7 @@ public class ReportDao extends JDBCHelper{
         }
         return valueReturn;
     }
-
-    public Integer reportCount(String account){
+    private Integer reportCount(String account){
         Integer valueReturn=0;
         String sql="SELECT COUNT(report_No)as count FROM report WHERE phone_number=?";
         try {

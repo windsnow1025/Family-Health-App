@@ -98,38 +98,19 @@ public class EnterReport extends Fragment {
                 Boolean insertStatus=false;
                 Log.i("主线程", "多线程数据库测试开始");
                 String finalBitmapString = bitmapString;
-                FutureTask<Boolean> futureTask = new FutureTask<>(() -> {                           //使用FutureTask创建可获得返回值的执行任务 泛型为返回值类型
-                    //Thread.sleep(2000);                                                           //使用sleep模拟耗时操作
-                    Boolean valueReturn=false;
-                    ReportDao reportDao = new ReportDao();
-                    Log.i("子线程", "准备调用数据库");
-                    reportDao.getConnection();                                                      //调用mysql记得连接
-                    Report report = new Report();
-                    reportDao.getConnection();
-                    report.setPhone_number(username);
-                    report.setReport_content(finalBitmapString);
-                    report.setReport_No(reportDao.reportCount(username));
-                    report.setReport_type(type);
-                    report.setReport_place(hospital);
-                    if(date.equals(""))                                                             //判定日期是否填写 未填写则设置为null
-                        report.setReport_date(null);
-                    else
-                        report.setReport_date(date);
-                    report.setIs_deleted("false");
-                    valueReturn=reportDao.insertReport(username, report);
-                    //ArrayList<Report> reportArrayList = reportDao.getReportList(username);
-                    reportDao.closeConnection();                                                    //关闭连接 我不确定不关闭会不会产生bug
-                    Log.i("子线程", "数据库调用结束,返回数据");
-                    return valueReturn;
-                });
-                new Thread(futureTask).start();                                                     //必须使用start,使用run会导致异常
-                try {
-                    insertStatus = futureTask.get();                                                //使用get方法获得返回值 需要异常处理
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                ReportDao reportDao=new ReportDao();
+                Report report = new Report();
+                report.setPhone_number(username);
+                report.setReport_content(finalBitmapString);
+                //report.setReport_No(reportDao.reportCount(username));                             //获取序号封装进插入中
+                report.setReport_type(type);
+                report.setReport_place(hospital);
+                if(date.equals(""))                                                                 //判定日期是否填写 未填写则设置为null
+                    report.setReport_date(null);
+                else
+                    report.setReport_date(date);
+                report.setIs_deleted("false");
+                insertStatus=reportDao.insertReport(username, report);
                 Log.i("主线程", "报告插入情况" + insertStatus);
                 Log.i("主线程", "多线程数据库测试结束");
 

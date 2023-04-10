@@ -8,14 +8,33 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class HistoryDao extends JDBCHelper{
     public HistoryDao() {
     }
-    public ArrayList<History> getHistoryList(String account)
-    {
+    public ArrayList<History> getHistoryList(String account){
+        ArrayList<History> valueReturn=new ArrayList<>();
+        FutureTask<ArrayList<History>> futureTask=new FutureTask<>(()->{
+            getConnection();
+            ArrayList<History> value=getHistoryListImpl(account);
+            closeConnection();
+            return value;
+        });
+        new Thread(futureTask).start();
+        try {
+            valueReturn=futureTask.get();
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return valueReturn;
+    }
+    public ArrayList<History> getHistoryListImpl(String account) {
         ArrayList<History> historyArrayList=new ArrayList<>();
         String sql="SELECT history_No,history_date,history_place,history_doctor,history_organ,conclusion,symptom,suggestion,is_deleted FROM history WHERE phone_number = ? ORDER BY history_organ,history_No";
         try {
@@ -43,6 +62,24 @@ public class HistoryDao extends JDBCHelper{
     }
     public Boolean updateHistory(String account, History history_update){
         Boolean valueReturn=false;
+        FutureTask<Boolean> futureTask=new FutureTask<>(()->{
+            getConnection();
+            Boolean value=updateHistoryImpl(account,history_update);
+            closeConnection();
+            return value;
+        });
+        new Thread(futureTask).start();
+        try {
+            valueReturn=futureTask.get();
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return valueReturn;
+    }
+    public Boolean updateHistoryImpl(String account, History history_update){
+        Boolean valueReturn=false;
         String sql="UPDATE history SET history_date=?,history_place=?,history_doctor=?,conclusion=?,symptom=?,suggestion=?,is_deleted=? where phone_number=? and history_No=?";
         try {
             PreparedStatement preparedStatement=connection.prepareStatement(sql);
@@ -66,6 +103,24 @@ public class HistoryDao extends JDBCHelper{
     }
     public Boolean deleteHistory(String account, Integer history_No){
         Boolean valueReturn=false;
+        FutureTask<Boolean> futureTask=new FutureTask<>(()->{
+            getConnection();
+            Boolean value=deleteHistoryImpl(account,history_No);
+            closeConnection();
+            return value;
+        });
+        new Thread(futureTask).start();
+        try {
+            valueReturn=futureTask.get();
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return valueReturn;
+    }
+    public Boolean deleteHistoryImpl(String account, Integer history_No){
+        Boolean valueReturn=false;
         String sql="UPDATE history SET is_deleted='true' where phone_number=? and history_No=?";
         if(history_No==null){
             history_No=0;
@@ -82,7 +137,26 @@ public class HistoryDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public  Boolean insertHistory(String account, History history_insert){
+    public Boolean insertHistory(String account, History history_insert){
+        Boolean valueReturn=false;
+        FutureTask<Boolean> futureTask=new FutureTask<>(()->{
+            getConnection();
+            history_insert.setHistory_No(historyCount(account));
+            Boolean value=insertHistoryImpl(account,history_insert);
+            closeConnection();
+            return value;
+        });
+        new Thread(futureTask).start();
+        try {
+            valueReturn=futureTask.get();
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return valueReturn;
+    }
+    public  Boolean insertHistoryImpl(String account, History history_insert){
         Boolean valueReturn=false;
         String sql="INSERT INTO history (phone_number,history_place,history_date,history_doctor,history_organ,symptom,conclusion,suggestion,history_No,is_deleted) VALUES (?,?,?,?,?,?,?,?,?,?)";
         try {
@@ -105,16 +179,25 @@ public class HistoryDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public void SyncHistoryUpload(String account,ArrayList<History> historyArrayList) {
+    public void SyncHistoryUpload(String account,ArrayList<History> historyArrayList){
+        FutureTask<Boolean> futureTask=new FutureTask<>(()->{
+            getConnection();
+            SyncHistoryUploadImpl(account,historyArrayList);
+            closeConnection();
+            return null;
+        });
+        new Thread(futureTask).start();
+    }
+    public void SyncHistoryUploadImpl(String account,ArrayList<History> historyArrayList) {
         Stream<History> alertStream=historyArrayList.stream();
         alertStream.forEach(history -> {
             if(is_Exist(account,history.getHistory_No()))
             {
-                updateHistory(account,history);
+                updateHistoryImpl(account,history);
             }
             else
             {
-                insertHistory(account,history);
+                insertHistoryImpl(account,history);
             }
         });
     }
@@ -135,8 +218,7 @@ public class HistoryDao extends JDBCHelper{
         }
         return valueReturn;
     }
-
-    public Integer historyCount(String account){
+    private Integer historyCount(String account){
         Integer valueReturn=0;
         String sql="SELECT COUNT(history_No)as count FROM history WHERE phone_number=?";
         try {
