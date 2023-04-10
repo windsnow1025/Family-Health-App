@@ -26,7 +26,7 @@ public class AlertDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get(3, null);
+            valueReturn=futureTask.get(2, TimeUnit.SECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
@@ -72,7 +72,7 @@ public class AlertDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get(2, TimeUnit.MILLISECONDS);
+            valueReturn=futureTask.get(2, TimeUnit.SECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
@@ -115,7 +115,7 @@ public class AlertDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get(2, TimeUnit.MILLISECONDS);
+            valueReturn=futureTask.get(2, TimeUnit.SECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
@@ -153,7 +153,7 @@ public class AlertDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get(2, TimeUnit.MILLISECONDS);
+            valueReturn=futureTask.get(2, TimeUnit.SECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
@@ -187,7 +187,7 @@ public class AlertDao extends JDBCHelper{
         return valueReturn;
     }
 
-    public void SyncAlertUpload(String account,ArrayList<Alert> alertArrayList) throws TimeoutException {
+    public void SyncAlertUpload(String account,ArrayList<Alert> alertArrayList){
         FutureTask<Boolean> futureTask=new FutureTask<>(()->{
             getConnection();
             SyncAlertUploadImpl(account,alertArrayList);
@@ -195,16 +195,6 @@ public class AlertDao extends JDBCHelper{
             return null;
         });
         new Thread(futureTask).start();
-        try {
-            futureTask.get(2, TimeUnit.MILLISECONDS);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        finally {
-            futureTask.cancel(true);
-        }
     }
     public void SyncAlertUploadImpl(String account,ArrayList<Alert> alertArrayList) {
         Stream<Alert> alertStream=alertArrayList.stream();

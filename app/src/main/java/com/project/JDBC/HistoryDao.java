@@ -28,7 +28,7 @@ public class HistoryDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get(2, TimeUnit.MILLISECONDS);
+            valueReturn=futureTask.get(2, TimeUnit.SECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
@@ -75,7 +75,7 @@ public class HistoryDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get(2, TimeUnit.MILLISECONDS);
+            valueReturn=futureTask.get(2, TimeUnit.SECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
@@ -119,7 +119,7 @@ public class HistoryDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get(2, TimeUnit.MILLISECONDS);
+            valueReturn=futureTask.get(2, TimeUnit.SECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
@@ -159,7 +159,7 @@ public class HistoryDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get(2, TimeUnit.MILLISECONDS);
+            valueReturn=futureTask.get(2, TimeUnit.SECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
@@ -193,7 +193,7 @@ public class HistoryDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public void SyncHistoryUpload(String account,ArrayList<History> historyArrayList) throws TimeoutException {
+    public void SyncHistoryUpload(String account,ArrayList<History> historyArrayList){
         FutureTask<Boolean> futureTask=new FutureTask<>(()->{
             getConnection();
             SyncHistoryUploadImpl(account,historyArrayList);
@@ -201,13 +201,6 @@ public class HistoryDao extends JDBCHelper{
             return null;
         });
         new Thread(futureTask).start();
-        try {
-            futureTask.get(2, TimeUnit.MILLISECONDS);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
     }
     public void SyncHistoryUploadImpl(String account,ArrayList<History> historyArrayList) {
         Stream<History> alertStream=historyArrayList.stream();

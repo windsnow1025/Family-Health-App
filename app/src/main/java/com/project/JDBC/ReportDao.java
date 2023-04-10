@@ -26,7 +26,7 @@ public class ReportDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get(2, TimeUnit.MILLISECONDS);
+            valueReturn=futureTask.get(2, TimeUnit.SECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
@@ -70,7 +70,7 @@ public class ReportDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get(2, TimeUnit.MILLISECONDS);
+            valueReturn=futureTask.get(2, TimeUnit.SECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
@@ -113,7 +113,7 @@ public class ReportDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get(2, TimeUnit.MILLISECONDS);
+            valueReturn=futureTask.get(2, TimeUnit.SECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
@@ -146,6 +146,7 @@ public class ReportDao extends JDBCHelper{
     public Boolean insertReport(String account,Report report_insert) throws TimeoutException {
         Boolean valueReturn=false;
         FutureTask<Boolean> futureTask=new FutureTask<>(()->{
+            Thread.sleep(3000);
             getConnection();
             report_insert.setReport_No(reportCount(account));
             Boolean value=insertReportImpl(account,report_insert);
@@ -154,7 +155,7 @@ public class ReportDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get(2, TimeUnit.MILLISECONDS);
+            valueReturn=futureTask.get(2, TimeUnit.SECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
@@ -185,7 +186,7 @@ public class ReportDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public void SyncReportUpload(String account,ArrayList<Report> reportArrayList) throws TimeoutException {
+    public void SyncReportUpload(String account,ArrayList<Report> reportArrayList){
         FutureTask<Boolean> futureTask=new FutureTask<>(()->{
             getConnection();
             SyncReportUploadImpl(account,reportArrayList);
@@ -193,16 +194,6 @@ public class ReportDao extends JDBCHelper{
             return null;
         });
         new Thread(futureTask).start();
-        try {
-            futureTask.get(2, TimeUnit.MILLISECONDS);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        finally {
-            futureTask.cancel(true);
-        }
     }
     public void SyncReportUploadImpl(String account,ArrayList<Report> reportArrayList){
         Stream<Report> alertStream=reportArrayList.stream();
