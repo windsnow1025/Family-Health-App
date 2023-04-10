@@ -25,7 +25,6 @@
             android:layout_weight="1"
             android:ems="6"
             android:textSize="28sp"
-            android:background="@drawable/editext_selector"
             android:inputType="textPersonName" />
 
     </LinearLayout>
@@ -50,7 +49,6 @@
             android:layout_weight="1"
             android:ems="6"
             android:textSize="28sp"
-            android:background="@drawable/editext_selector"
             android:inputType="textPersonName" />
 
     </LinearLayout>
@@ -75,7 +73,6 @@
             android:layout_weight="1"
             android:ems="6"
             android:textSize="28sp"
-            android:background="@drawable/editext_selector"
             android:inputType="textPersonName" />
 
     </LinearLayout>
@@ -100,7 +97,6 @@
             android:layout_weight="1"
             android:ems="6"
             android:textSize="28sp"
-            android:background="@drawable/editext_selector"
             android:inputType="textPersonName" />
 
     </LinearLayout>
@@ -125,7 +121,6 @@
             android:layout_weight="1"
             android:ems="6"
             android:textSize="28sp"
-            android:background="@drawable/editext_selector"
             android:inputType="textPersonName" />
 
     </LinearLayout>
@@ -150,7 +145,6 @@
             android:layout_weight="1"
             android:ems="6"
             android:textSize="28sp"
-            android:background="@drawable/editext_selector"
             android:inputType="textPersonName" />
 
     </LinearLayout>
@@ -175,7 +169,6 @@
             android:layout_weight="1"
             android:ems="6"
             android:textSize="28sp"
-            android:background="@drawable/editext_selector"
             android:inputType="textPersonName" />
 
     </LinearLayout>

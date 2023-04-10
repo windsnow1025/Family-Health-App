@@ -24,7 +24,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_weight="1"
-            android:background="@drawable/editext_selector"
             android:ems="6"
             android:inputType="textPersonName"
             android:textSize="28sp" />
@@ -50,7 +49,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_weight="1"
-            android:background="@drawable/editext_selector"
             android:ems="6"
             android:inputType="textPersonName"
             android:textSize="28sp" />
@@ -76,7 +74,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_weight="1"
-            android:background="@drawable/editext_selector"
             android:ems="6"
             android:inputType="textPersonName"
             android:textSize="28sp" />
