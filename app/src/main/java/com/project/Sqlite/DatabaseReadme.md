@@ -10,7 +10,7 @@ StrictMode.ThreadPolicy policy=new StrictMode.ThreadPolicy.Builder().permitAll()
 StrictMode.setThreadPolicy(policy);
 ```
 
-或者使用futuretask来进行异步操作
+或者使用futuretask来进行异步操作 已进行封装 
 ```Java
 FutureTask<T> futureTask=new FutureTask<>(()->{          //使用FutureTask创建可获得返回值的执行任务 泛型为返回值类型
     T valueReturn=new T();
