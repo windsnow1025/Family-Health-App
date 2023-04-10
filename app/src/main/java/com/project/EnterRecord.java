@@ -1,6 +1,7 @@
 package com.project;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,22 +85,24 @@ public class EnterRecord extends Fragment {
                 suggestion = editTextSuggestion.getText().toString();
 
                 // Insert data into database
+                Boolean insertStatus = false;
+                Log.i("主线程", "数据库测试开始");
+                HistoryDao historyDao = new HistoryDao();
+                History history = new History();
+                history.setHistory_date(date);
+                history.setHistory_place(hospital);
+                history.setHistory_organ(type);
+                history.setHistory_organ(organ);
+                history.setSymptom(symptom);
+                history.setConclusion(conclusion);
+                history.setSuggestion(suggestion);
                 try {
-                    HistoryDao historyDao = new HistoryDao();
-                    historyDao.getConnection();
-                    History history = new History();
-                    history.setHistory_date(date);
-                    history.setHistory_place(hospital);
-                    history.setHistory_organ(type);
-                    history.setHistory_organ(organ);
-                    history.setSymptom(symptom);
-                    history.setConclusion(conclusion);
-                    history.setSuggestion(suggestion);
-                    historyDao.insertHistory(username, history);
-                    historyDao.closeConnection();
+                    insertStatus = historyDao.insertHistory(username, history);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                Log.i("主线程", "记录插入情况" + insertStatus);
+                Log.i("主线程", "数据库测试结束");
 
                 // Jump to organ page
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();

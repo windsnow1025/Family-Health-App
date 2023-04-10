@@ -96,28 +96,29 @@ public class EnterReport extends Fragment {
                 }
 
                 // Upload to database
-                Boolean insertStatus=false;
-                Log.i("主线程", "多线程数据库测试开始");
+                Boolean insertStatus = false;
+                Log.i("主线程", "数据库测试开始");
                 String finalBitmapString = bitmapString;
-                ReportDao reportDao=new ReportDao();
+                ReportDao reportDao = new ReportDao();
                 Report report = new Report();
                 report.setPhone_number(username);
-                report.setReport_content(finalBitmapString);
-                //report.setReport_No(reportDao.reportCount(username));                             //获取序号封装进插入中
+                report.setReport_content(finalBitmapString);                           //获取序号封装进插入中
                 report.setReport_type(type);
                 report.setReport_place(hospital);
-                if(date.equals(""))                                                                 //判定日期是否填写 未填写则设置为null
+                if (date.equals("")) {
+                    //判定日期是否填写 未填写则设置为null
                     report.setReport_date(null);
-                else
+                } else {
                     report.setReport_date(date);
+                }
                 report.setIs_deleted("false");
                 try {
-                    insertStatus=reportDao.insertReport(username, report);
+                    insertStatus = reportDao.insertReport(username, report);
                 } catch (TimeoutException e) {
-                    Log.i("Test","网络有问题");
+                    Log.i("Test", "网络有问题");
                 }
                 Log.i("主线程", "报告插入情况" + insertStatus);
-                Log.i("主线程", "多线程数据库测试结束");
+                Log.i("主线程", "数据库测试结束");
 
                 // Jump to organ page
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();

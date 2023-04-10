@@ -25,7 +25,7 @@ public class FragmentMain extends Fragment {
         // Get Sex
         String gender = "male";
         try {
-            UserLocalDao userLocalDao = new UserLocalDao(getContext());
+            UserLocalDao userLocalDao = new UserLocalDao();
             userLocalDao.open();
             String username = userLocalDao.getUser();
             UserInfo userInfo = new UserDao().getUserInformation(username);
