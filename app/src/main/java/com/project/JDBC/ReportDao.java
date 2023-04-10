@@ -37,7 +37,7 @@ public class ReportDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public ArrayList<Report> getReportListImpl(String account) {
+    private ArrayList<Report> getReportListImpl(String account) {
         ArrayList<Report> reportArrayList=new ArrayList<>();
         String sql="SELECT report_No,report_content,report_type,report_place,report_date,is_deleted FROM report WHERE phone_number=? AND is_deleted='false' ORDER BY report_No";
         try {
@@ -81,7 +81,7 @@ public class ReportDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public Boolean updateReportImpl(String account, Report report_update){
+    private Boolean updateReportImpl(String account, Report report_update){
         Boolean valueReturn=false;
         String sql="UPDATE report SET report_content=?,report_type=?,report_place=?,report_date=?,is_deleted=? where phone_number=? and report_No=?";
         try {
@@ -124,7 +124,7 @@ public class ReportDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public Boolean deleteReportImpl(String account, Integer report_No){
+    private Boolean deleteReportImpl(String account, Integer report_No){
         Boolean valueReturn=false;
         String sql="UPDATE report SET is_deleted='true' where phone_number=? and report_No=?";
         if(report_No==null){
@@ -166,7 +166,7 @@ public class ReportDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public  Boolean insertReportImpl(String account, Report report_insert){
+    private  Boolean insertReportImpl(String account, Report report_insert){
         Boolean valueReturn=false;
         String sql="INSERT INTO report (phone_number,report_content,report_No,report_type,report_place,report_date,is_deleted) VALUES (?,?,?,?,?,?,?)";
         try {
@@ -195,7 +195,7 @@ public class ReportDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
     }
-    public void SyncReportUploadImpl(String account,ArrayList<Report> reportArrayList){
+    private void SyncReportUploadImpl(String account,ArrayList<Report> reportArrayList){
         Stream<Report> alertStream=reportArrayList.stream();
         alertStream.forEach(report -> {
             if(is_Exist(account,report.getReport_No()))

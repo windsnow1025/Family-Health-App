@@ -2,31 +2,9 @@
 
 ## 目前版本的情况
 
-调整过后,目前只有登录注册同步需要mysql数据库,其余功能更多优先选择SQllite数据库进行使用。
-
-以下代码为禁用线程策略 Activity类的onCreate方法中使用即可
-``` Java
-StrictMode.ThreadPolicy policy=new StrictMode.ThreadPolicy.Builder().permitAll().build();
-StrictMode.setThreadPolicy(policy);
-```
-
-或者使用futuretask来进行异步操作 已进行封装 
-```Java
-FutureTask<T> futureTask=new FutureTask<>(()->{          //使用FutureTask创建可获得返回值的执行任务 泛型为返回值类型
-    T valueReturn=new T();
-    return valueReturn;
-});
-new Thread(futureTask).start();                          //必须使用start,使用run会导致异常
-try {
-    value=futureTask.get();                              //使用get方法获得返回值 需要异常处理
-} catch (ExecutionException e) {                         //异常处理
-    throw new RuntimeException(e);
-} catch (InterruptedException e) {
-    throw new RuntimeException(e);
-}
-```
-#### 效果
-![img.png](img.png)
+所有的Dao方法都进行了封装,都可以直接调用而无需创建线程
+大部分方法都会抛出TimeoutException 记得处理(原因网络问题) 抛出检测时间目前设置为2s
+同步方法不会抛出这个异常 如此做的原因是不确定大规模同步需要耗费的时间 所以没有让这个方法抛出异常
 
 
 ### 简单说明

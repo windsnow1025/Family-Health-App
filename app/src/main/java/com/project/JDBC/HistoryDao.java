@@ -39,7 +39,7 @@ public class HistoryDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public ArrayList<History> getHistoryListImpl(String account) {
+    private ArrayList<History> getHistoryListImpl(String account) {
         ArrayList<History> historyArrayList=new ArrayList<>();
         String sql="SELECT history_No,history_date,history_place,history_doctor,history_organ,conclusion,symptom,suggestion,is_deleted FROM history WHERE phone_number = ? AND is_deleted='false' ORDER BY history_organ,history_No";
         try {
@@ -86,7 +86,7 @@ public class HistoryDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public Boolean updateHistoryImpl(String account, History history_update){
+    private Boolean updateHistoryImpl(String account, History history_update){
         Boolean valueReturn=false;
         String sql="UPDATE history SET history_date=?,history_place=?,history_doctor=?,conclusion=?,symptom=?,suggestion=?,is_deleted=? where phone_number=? and history_No=?";
         try {
@@ -130,7 +130,7 @@ public class HistoryDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public Boolean deleteHistoryImpl(String account, Integer history_No){
+    private Boolean deleteHistoryImpl(String account, Integer history_No){
         Boolean valueReturn=false;
         String sql="UPDATE history SET is_deleted='true' where phone_number=? and history_No=?";
         if(history_No==null){
@@ -170,7 +170,7 @@ public class HistoryDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public  Boolean insertHistoryImpl(String account, History history_insert){
+    private  Boolean insertHistoryImpl(String account, History history_insert){
         Boolean valueReturn=false;
         String sql="INSERT INTO history (phone_number,history_place,history_date,history_doctor,history_organ,symptom,conclusion,suggestion,history_No,is_deleted) VALUES (?,?,?,?,?,?,?,?,?,?)";
         try {
@@ -202,7 +202,7 @@ public class HistoryDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
     }
-    public void SyncHistoryUploadImpl(String account,ArrayList<History> historyArrayList) {
+    private void SyncHistoryUploadImpl(String account,ArrayList<History> historyArrayList) {
         Stream<History> alertStream=historyArrayList.stream();
         alertStream.forEach(history -> {
             if(is_Exist(account,history.getHistory_No()))

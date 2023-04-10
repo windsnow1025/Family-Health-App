@@ -37,7 +37,7 @@ public class AlertDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public ArrayList<Alert> getAlertListImpl(String account){
+    private ArrayList<Alert> getAlertListImpl(String account){
         ArrayList<Alert> alertArrayList=new ArrayList<>();
         String sql="SELECT alert_No,date,cycle,content,type,type_no,is_deleted from alert WHERE phone_number=? AND is_deleted='false'";
         try {
@@ -83,7 +83,7 @@ public class AlertDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public Boolean updateAlertImpl(String account, Alert alert_update){
+    private Boolean updateAlertImpl(String account, Alert alert_update){
         Boolean valueReturn=false;
         String sql="UPDATE alert SET date=?,cycle=?,content=?,type=?,type_no=?,is_deleted=? WHERE alert_No=? and phone_number=?";
         try {
@@ -126,7 +126,7 @@ public class AlertDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public Boolean deleteAlertImpl(String account, Integer alert_No){
+    private Boolean deleteAlertImpl(String account, Integer alert_No){
         Boolean valueReturn=false;
         String sql="UPDATE alert SET is_deleted='true' WHERE alert_No=? and phone_number=?";
         try {
@@ -164,7 +164,7 @@ public class AlertDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public Boolean insertAlertImpl(String account, Alert alert_insert){
+    private Boolean insertAlertImpl(String account, Alert alert_insert){
         Boolean valueReturn=false;
         String sql="INSERT INTO alert (alert_No,phone_number,date,cycle,content,type,type_no,is_deleted) VALUES (?,?,?,?,?,?,?,?)";
         try {
@@ -196,7 +196,7 @@ public class AlertDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
     }
-    public void SyncAlertUploadImpl(String account,ArrayList<Alert> alertArrayList) {
+    private void SyncAlertUploadImpl(String account,ArrayList<Alert> alertArrayList) {
         Stream<Alert> alertStream=alertArrayList.stream();
         alertStream.forEach(alert -> {
             if(is_Exist(account,alert.getAlert_No()))

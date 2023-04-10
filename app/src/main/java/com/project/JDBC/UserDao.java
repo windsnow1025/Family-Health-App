@@ -39,7 +39,7 @@ public class UserDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public String checkUserPasswordImpl(String account,String password) {
+    private String checkUserPasswordImpl(String account,String password) {
         String stringReturn=null;
         String sql="SELECT phone_number,password FROM user WHERE phone_number=?";
         String passwordGet=null;
@@ -85,7 +85,7 @@ public class UserDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public Boolean checkUserUniqueImpl(String account) {
+    private Boolean checkUserUniqueImpl(String account) {
         Boolean valueReturn=false;
         String sql="SELECT phone_number FROM user WHERE phone_number=?";
         try {
@@ -128,7 +128,7 @@ public class UserDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public String insertUserImpl(String account,String password,String sex,String birthday) throws TimeoutException {
+    private String insertUserImpl(String account,String password,String sex,String birthday) throws TimeoutException {
         String accountReturn=null;
         String sql="INSERT INTO user (phone_number,password,sex,birthday) VALUES (?,?,?,?)";
         if((!checkUserUnique(account))&&(account!=null)&&(password!=null)&&(!password.equals(""))) {
@@ -169,7 +169,7 @@ public class UserDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public UserInfo getUserInformationImpl(String account){
+    private UserInfo getUserInformationImpl(String account){
         String sql="SELECT username,sex,email,birthday from user WHERE phone_number=?";
         UserInfo userInfo=new UserInfo();
         try {
@@ -210,7 +210,7 @@ public class UserDao extends JDBCHelper{
         }
         return valueReturn;
     }
-    public Boolean updateUserInformationImpl(String account,HashMap<String,String> userInfo_update){
+    private Boolean updateUserInformationImpl(String account,HashMap<String,String> userInfo_update){
         getConnection();
         String sql_username="UPDATE user set username=? WHERE phone_number=?";
         String sql_sex="UPDATE user set sex=? WHERE phone_number=?";
