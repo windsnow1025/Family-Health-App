@@ -1,6 +1,9 @@
 package com.project.JDBC;
 
+import android.util.Log;
+
 import com.project.Pojo.Report;
+import com.project.Sqlite.UserLocalDao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +20,7 @@ public class ReportDao extends JDBCHelper{
     public ReportDao(){
     }
     public ArrayList<Report> getReportList(String account) throws TimeoutException {
-        ArrayList<Report> valueReturn=new ArrayList<>();
+        ArrayList<Report> valueReturn=null;
         FutureTask<ArrayList<Report>> futureTask=new FutureTask<>(()->{
             getConnection();
             ArrayList<Report> value=getReportListImpl(account);
@@ -61,11 +64,14 @@ public class ReportDao extends JDBCHelper{
         return reportArrayList;
     }
     public Boolean updateReport(String account,Report report_update) throws TimeoutException {
-        Boolean valueReturn=false;
+        Boolean valueReturn=null;
         FutureTask<Boolean> futureTask=new FutureTask<>(()->{
             getConnection();
             Boolean value=updateReportImpl(account,report_update);
             closeConnection();
+            UserLocalDao userLocalDao=new UserLocalDao();
+            userLocalDao.open();
+            userLocalDao.updateReport(account, report_update);
             return value;
         });
         new Thread(futureTask).start();
@@ -104,11 +110,14 @@ public class ReportDao extends JDBCHelper{
         return valueReturn;
     }
     public Boolean deleteReport(String account,Integer report_No) throws TimeoutException {
-        Boolean valueReturn=false;
+        Boolean valueReturn=null;
         FutureTask<Boolean> futureTask=new FutureTask<>(()->{
             getConnection();
             Boolean value=deleteReportImpl(account,report_No);
             closeConnection();
+            UserLocalDao userLocalDao=new UserLocalDao();
+            userLocalDao.open();
+            userLocalDao.deleteReport(account, report_No);
             return value;
         });
         new Thread(futureTask).start();
@@ -144,13 +153,15 @@ public class ReportDao extends JDBCHelper{
         return valueReturn;
     }
     public Boolean insertReport(String account,Report report_insert) throws TimeoutException {
-        Boolean valueReturn=false;
+        Boolean valueReturn=null;
         FutureTask<Boolean> futureTask=new FutureTask<>(()->{
-            Thread.sleep(3000);
             getConnection();
             report_insert.setReport_No(reportCount(account));
             Boolean value=insertReportImpl(account,report_insert);
             closeConnection();
+            UserLocalDao userLocalDao=new UserLocalDao();
+            userLocalDao.open();
+            userLocalDao.insertReport(account, report_insert);
             return value;
         });
         new Thread(futureTask).start();

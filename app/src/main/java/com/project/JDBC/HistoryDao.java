@@ -3,6 +3,7 @@ package com.project.JDBC;
 
 import com.project.Pojo.Alert;
 import com.project.Pojo.History;
+import com.project.Sqlite.UserLocalDao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,7 +20,7 @@ public class HistoryDao extends JDBCHelper{
     public HistoryDao() {
     }
     public ArrayList<History> getHistoryList(String account) throws TimeoutException {
-        ArrayList<History> valueReturn=new ArrayList<>();
+        ArrayList<History> valueReturn=null;
         FutureTask<ArrayList<History>> futureTask=new FutureTask<>(()->{
             getConnection();
             ArrayList<History> value=getHistoryListImpl(account);
@@ -36,6 +37,10 @@ public class HistoryDao extends JDBCHelper{
         }
         finally {
             futureTask.cancel(true);
+        }
+        if(valueReturn==null)
+        {
+            valueReturn=new UserLocalDao().getHistoryList(account);
         }
         return valueReturn;
     }
@@ -71,6 +76,9 @@ public class HistoryDao extends JDBCHelper{
             getConnection();
             Boolean value=updateHistoryImpl(account,history_update);
             closeConnection();
+            UserLocalDao userLocalDao=new UserLocalDao();
+            userLocalDao.open();
+            userLocalDao.updateHistory(account, history_update);
             return value;
         });
         new Thread(futureTask).start();
@@ -115,6 +123,9 @@ public class HistoryDao extends JDBCHelper{
             getConnection();
             Boolean value=deleteHistoryImpl(account,history_No);
             closeConnection();
+            UserLocalDao userLocalDao=new UserLocalDao();
+            userLocalDao.open();
+            userLocalDao.deleteHistory(account, history_No);
             return value;
         });
         new Thread(futureTask).start();
@@ -155,6 +166,9 @@ public class HistoryDao extends JDBCHelper{
             history_insert.setHistory_No(historyCount(account));
             Boolean value=insertHistoryImpl(account,history_insert);
             closeConnection();
+            UserLocalDao userLocalDao=new UserLocalDao();
+            userLocalDao.open();
+            userLocalDao.insertHistory(account, history_insert);
             return value;
         });
         new Thread(futureTask).start();

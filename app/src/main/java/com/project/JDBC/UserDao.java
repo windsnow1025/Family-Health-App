@@ -65,7 +65,7 @@ public class UserDao extends JDBCHelper{
      * 未测试空密码
      * */
     public Boolean checkUserUnique(String account) throws TimeoutException {
-        Boolean valueReturn=false;
+        Boolean valueReturn=null;
         FutureTask<Boolean> futureTask=new FutureTask<>(()->{
             getConnection();
             Boolean value=checkUserUniqueImpl(account);
@@ -149,7 +149,7 @@ public class UserDao extends JDBCHelper{
         return accountReturn;
     }
     public UserInfo getUserInformation(String account) throws TimeoutException {
-        UserInfo valueReturn=new UserInfo();
+        UserInfo valueReturn=null;
         FutureTask<UserInfo> futureTask=new FutureTask<>(()->{
             getConnection();
             UserInfo value=getUserInformationImpl(account);
@@ -190,7 +190,7 @@ public class UserDao extends JDBCHelper{
         return userInfo;
     }
     public Boolean updateUserInformation(String account,HashMap<String,String> userInfo_update) throws TimeoutException {
-        Boolean valueReturn=false;
+        Boolean valueReturn=null;
         FutureTask<Boolean> futureTask=new FutureTask<>(()->{
             getConnection();
             Boolean value=updateUserInformationImpl(account,userInfo_update);

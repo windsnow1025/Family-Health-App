@@ -1,6 +1,7 @@
 package com.project.JDBC;
 
 import com.project.Pojo.Alert;
+import com.project.Sqlite.UserLocalDao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +18,7 @@ public class AlertDao extends JDBCHelper{
     public AlertDao(){
     }
     public ArrayList<Alert> getAlertList(String account) throws TimeoutException {
-        ArrayList<Alert> valueReturn=new ArrayList<>();
+        ArrayList<Alert> valueReturn=null;
         FutureTask<ArrayList<Alert>> futureTask=new FutureTask<>(()->{
             getConnection();
             ArrayList<Alert> alertArrayList=getAlertListImpl(account);
@@ -63,11 +64,14 @@ public class AlertDao extends JDBCHelper{
     }
 
     public Boolean updateAlert(String account, Alert alert_update) throws TimeoutException {
-        Boolean valueReturn=false;
+        Boolean valueReturn=null;
         FutureTask<Boolean> futureTask=new FutureTask<>(()->{
             getConnection();
             Boolean value=updateAlertImpl(account,alert_update);
             closeConnection();
+            UserLocalDao userLocalDao=new UserLocalDao();
+            userLocalDao.open();
+            userLocalDao.updateAlert(account, alert_update);
             return value;
         });
         new Thread(futureTask).start();
@@ -106,11 +110,14 @@ public class AlertDao extends JDBCHelper{
     }
 
     public Boolean deleteAlert(String account, Integer alert_No) throws TimeoutException {
-        Boolean valueReturn=false;
+        Boolean valueReturn=null;
         FutureTask<Boolean> futureTask=new FutureTask<>(()->{
             getConnection();
             Boolean value=deleteAlertImpl(account,alert_No);
             closeConnection();
+            UserLocalDao userLocalDao=new UserLocalDao();
+            userLocalDao.open();
+            userLocalDao.deleteAlert(account, alert_No);
             return value;
         });
         new Thread(futureTask).start();
@@ -143,12 +150,15 @@ public class AlertDao extends JDBCHelper{
     }
 
     public Boolean insertAlert(String account, Alert alert_insert) throws TimeoutException {
-        Boolean valueReturn=false;
+        Boolean valueReturn=null;
         FutureTask<Boolean> futureTask=new FutureTask<>(()->{
             getConnection();
             alert_insert.setAlert_No(alertCount(account));
             Boolean value=insertAlertImpl(account,alert_insert);
             closeConnection();
+            UserLocalDao userLocalDao=new UserLocalDao();
+            userLocalDao.open();
+            userLocalDao.insertAlert(account, alert_insert);
             return value;
         });
         new Thread(futureTask).start();
