@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="32dp">
+        android:layout_marginTop="36dp">
 
         <TextView
             android:id="@+id/textViewTime"
@@ -33,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="32dp">
+        android:layout_marginTop="16dp">
 
         <TextView
             android:id="@+id/textViewHospital"
@@ -57,7 +57,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="32dp">
+        android:layout_marginTop="16dp">
 
         <TextView
             android:id="@+id/textViewDoctor"
@@ -81,7 +81,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="32dp">
+        android:layout_marginTop="16dp">
 
         <TextView
             android:id="@+id/textViewPicture"
@@ -105,7 +105,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="32dp">
+        android:layout_marginTop="16dp">
 
         <TextView
             android:id="@+id/textViewSymptom"
@@ -129,7 +129,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="32dp">
+        android:layout_marginTop="16dp">
 
         <TextView
             android:id="@+id/textViewConclusion"
@@ -153,7 +153,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="32dp">
+        android:layout_marginTop="16dp">
 
         <TextView
             android:id="@+id/textViewSuggestion"
@@ -178,8 +178,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:text="确认" />
 
 </LinearLayout>
