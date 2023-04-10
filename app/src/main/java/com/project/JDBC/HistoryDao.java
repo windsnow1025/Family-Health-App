@@ -41,7 +41,7 @@ public class HistoryDao extends JDBCHelper{
     }
     public ArrayList<History> getHistoryListImpl(String account) {
         ArrayList<History> historyArrayList=new ArrayList<>();
-        String sql="SELECT history_No,history_date,history_place,history_doctor,history_organ,conclusion,symptom,suggestion,is_deleted FROM history WHERE phone_number = ? ORDER BY history_organ,history_No";
+        String sql="SELECT history_No,history_date,history_place,history_doctor,history_organ,conclusion,symptom,suggestion,is_deleted FROM history WHERE phone_number = ? AND is_deleted='false' ORDER BY history_organ,history_No";
         try {
             PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1,account);

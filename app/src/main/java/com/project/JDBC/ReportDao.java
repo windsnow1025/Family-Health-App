@@ -39,7 +39,7 @@ public class ReportDao extends JDBCHelper{
     }
     public ArrayList<Report> getReportListImpl(String account) {
         ArrayList<Report> reportArrayList=new ArrayList<>();
-        String sql="SELECT report_No,report_content,report_type,report_place,report_date,is_deleted FROM report WHERE phone_number=? ORDER BY report_No";
+        String sql="SELECT report_No,report_content,report_type,report_place,report_date,is_deleted FROM report WHERE phone_number=? AND is_deleted='false' ORDER BY report_No";
         try {
             PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1,account);

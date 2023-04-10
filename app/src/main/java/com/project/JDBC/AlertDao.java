@@ -39,7 +39,7 @@ public class AlertDao extends JDBCHelper{
     }
     public ArrayList<Alert> getAlertListImpl(String account){
         ArrayList<Alert> alertArrayList=new ArrayList<>();
-        String sql="SELECT alert_No,date,cycle,content,type,type_no,is_deleted from alert WHERE phone_number=?";
+        String sql="SELECT alert_No,date,cycle,content,type,type_no,is_deleted from alert WHERE phone_number=? AND is_deleted='false'";
         try {
             PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1,account);
