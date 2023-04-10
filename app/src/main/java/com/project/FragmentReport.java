@@ -19,6 +19,7 @@ import com.project.Sqlite.UserLocalDao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 // 体检报告显示
 public class FragmentReport extends Fragment {
@@ -48,7 +49,14 @@ public class FragmentReport extends Fragment {
 
             // Get report list
             ReportDao reportDao = new ReportDao();
-            ArrayList<Report> reports = reportDao.getReportList(username);
+            ArrayList<Report> reports = null;
+            try {
+                reports=reportDao.getReportList(username);
+            }
+            catch (TimeoutException e)
+            {
+                reports=userLocalDao.getReportList(username);                                       //异常处理 如果超时调用本地数据库中的资料
+            }
 
             // Set report list to recycler view
             List<String[]> data = new ArrayList<>();

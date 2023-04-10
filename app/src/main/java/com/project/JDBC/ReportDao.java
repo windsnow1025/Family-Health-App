@@ -22,6 +22,7 @@ public class ReportDao extends JDBCHelper{
     public ArrayList<Report> getReportList(String account) throws TimeoutException {
         ArrayList<Report> valueReturn=null;
         FutureTask<ArrayList<Report>> futureTask=new FutureTask<>(()->{
+            //Thread.sleep(3000);                                                                   //模拟网络出了问题
             getConnection();
             ArrayList<Report> value=getReportListImpl(account);
             closeConnection();
