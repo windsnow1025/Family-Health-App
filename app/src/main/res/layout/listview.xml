@@ -41,24 +41,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
-        android:layout_marginLeft="20dp">
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:text="周期/日期："
-            android:textSize="14sp"/>
         <TextView
             android:id="@+id/tv_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="6"
+            android:layout_weight="1"
             android:gravity="center"
             android:text="6"
-            android:textSize="14sp"
-            android:layout_marginRight="10dp"/>
+            android:textSize="14sp"/>
 
     </TableRow>
     <TextView

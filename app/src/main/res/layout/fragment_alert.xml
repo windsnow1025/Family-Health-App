@@ -46,7 +46,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="13sp"
-            android:text="点击查看，长按删除"/>
+            android:textColor="#EF8282"
+            android:text="点击修改，长按删除"/>
 
         <TableRow
             android:layout_width="match_parent"
