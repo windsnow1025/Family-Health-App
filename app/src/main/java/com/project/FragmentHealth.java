@@ -38,18 +38,8 @@ public class FragmentHealth extends Fragment implements ExpandableListView.OnGro
             ,"脑梗死、脑出血、帕金森病、阿尔茨海默病、癫痫");
     final List<String> list3= Arrays.asList("预防","治疗","饮食");
 
-
-    /**
-     * 初始化菜单数据源
-     */
     private void loadData() {
 
-
-
-        /*Map<String,String> mp=new HashMap<String,String>();
-        for(int i=0;i<list1.size();i++){
-            mp.put(list1.get(i),list2.get(i));
-        }*/
         parents = new ArrayList<ParentEntity>();
         for (int i = 0; i < list1.size(); i++) {
             ParentEntity parent = new ParentEntity(); //父类对象
@@ -79,9 +69,7 @@ public class FragmentHealth extends Fragment implements ExpandableListView.OnGro
         }
     }
 
-    /**
-     * 初始化ExpandableListView
-     */
+
     private void initEList() {
 
         eList.setOnGroupExpandListener(this);
@@ -91,12 +79,10 @@ public class FragmentHealth extends Fragment implements ExpandableListView.OnGro
 
     }
 
-    /**
-     * 点击子ExpandableListView的子项时，回调本方法，根据下标获取值来做相应的操作
-     */
+
     @Override
     public void onClickPosition(int parentPosition, int groupPosition, int childPosition) {
-        // do something
+
         String childName1 = parents.get(parentPosition).getChilds()
                 .get(groupPosition).getGroupName()
                 .toString();
@@ -107,9 +93,7 @@ public class FragmentHealth extends Fragment implements ExpandableListView.OnGro
         startActivity(intent);
     }
 
-    /**
-     * 展开一项，关闭其他项，保证每次只能展开一项
-     */
+
     @Override
     public void onGroupExpand(int groupPosition) {
         for (int i = 0; i < parents.size(); i++) {

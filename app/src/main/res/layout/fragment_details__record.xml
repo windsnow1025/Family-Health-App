@@ -102,7 +102,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
         android:textSize="16sp"
         android:text="
 （1）健康生活方式；患者平时需养成良好的生活习惯，保证充足的睡眠，并适当增加体育锻炼，有利于预防肩周炎。"
@@ -180,7 +181,15 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:layout_gravity="center"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/bt_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="90dp"
+            android:text="取消"/>
         <Button
             android:id="@+id/rStartAlarm"
             android:layout_width="wrap_content"

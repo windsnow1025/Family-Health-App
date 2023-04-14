@@ -1,9 +1,9 @@
 package com.project;
 
-import android.graphics.Rect;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,15 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.project.utils.Info;
 import com.project.utils.InfoAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 
 public class FragmentAlert_set extends Fragment {
@@ -51,10 +47,27 @@ public class FragmentAlert_set extends Fragment {
         tableAdapter1=new TableAdapter(data,new TableAdapter.OnItemClickListener() {
             @Override
             public void onClick(int pos) {
-                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new FragmentDetails_Record(data.get(pos),adapter));
-                transaction.addToBackStack(null);
-                transaction.commit();
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("类型选择");
+                builder.setMessage("请选择为该记录添加提醒的类型");
+                builder.setNegativeButton("吃药提醒", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                        transaction.replace(R.id.fragment_container, new FragmentDetails(data.get(pos),adapter));
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                    }
+                });
+                builder.setPositiveButton("复诊提醒", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                        transaction.replace(R.id.fragment_container, new FragmentDetails_Record(data.get(pos),adapter));
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                    }
+                });
+                builder.show();
             }
         });
 
@@ -70,10 +83,29 @@ public class FragmentAlert_set extends Fragment {
         tableAdapter2=new TableAdapter(data1,new TableAdapter.OnItemClickListener() {
             @Override
             public void onClick(int pos) {
-                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new FragmentDetails(data1.get(pos),adapter));
-                transaction.addToBackStack(null);
-                transaction.commit();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("类型选择");
+                builder.setMessage("请选择为该记录添加提醒的类型");
+                builder.setNegativeButton("吃药提醒", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                        transaction.replace(R.id.fragment_container, new FragmentDetails(data1.get(pos),adapter));
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                    }
+                });
+                builder.setPositiveButton("复诊提醒", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                        transaction.replace(R.id.fragment_container, new FragmentDetails_Record(data.get(pos),adapter));
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                    }
+                });
+                builder.show();
+
             }
 
         });

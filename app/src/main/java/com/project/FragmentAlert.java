@@ -25,29 +25,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentAlert extends Fragment {
-
     private static List<Info> infoList=new ArrayList<>();
+    private InfoAdapter adapter;
+   private ListView listView;
+   private TableLayout tableLayout;
+   private Button button;
+   private boolean report;
 
-    public List<Info> getInfoList(List<Info> list,Boolean flag){
-
-        if(flag){
-            list.add(new Info("","","",true));
-        }
-        return  list;
+    private void init(View view){
+        listView=view.findViewById(R.id.list_view);
+        tableLayout=view.findViewById(R.id.tableLayout);
+        button = view.findViewById(R.id.btn_add_dada);
     }
-    InfoAdapter adapter;
-    ListView listView;
-    TableLayout tableLayout;
-    Boolean flag=true;
 
+    /*读取数据*/
+    public List<Info> getInfoList(){
+            infoList.add(new Info("","","",true));
+        return  infoList;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-
-//        infoList=getInfoList(infoList,flag);
+/*读取本地提醒列表数据*/
+//        infoList=getInfoList(infoList);
         View view = inflater.inflate(R.layout.fragment_alert, container, false);
-        listView= (ListView) view.findViewById(R.id.list_view);
-        tableLayout=view.findViewById(R.id.tableLayout);
+        init(view);
+
         if(infoList.isEmpty()){
             tableLayout.setVisibility(View.GONE);
             view.findViewById(R.id.tv_blank).setVisibility(View.VISIBLE);
@@ -56,13 +59,24 @@ public class FragmentAlert extends Fragment {
             tableLayout.setVisibility(View.VISIBLE);
             view.findViewById(R.id.tv_blank).setVisibility(View.GONE);
         }
+
         adapter=new InfoAdapter(requireContext(),R.layout.listview,infoList);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                report=infoList.get(position).getFlag();//true为体检报告,吃药
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
 
+                if(report){
+                    transaction.replace(R.id.fragment_container, new FragmentDetails(adapter,infoList,position,true));
+                }else {
+                    transaction.replace(R.id.fragment_container, new FragmentDetails_Record(adapter,infoList,position,true));
+
+                }
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -88,7 +102,6 @@ public class FragmentAlert extends Fragment {
                 return false;
             }
         });
-        Button button = view.findViewById(R.id.btn_add_dada);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

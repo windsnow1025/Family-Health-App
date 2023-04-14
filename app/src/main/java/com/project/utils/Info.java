@@ -4,14 +4,15 @@ public class Info {
     private String title;
     private String time;
     private String date;
-    private Boolean flag;
+
+    private Boolean report;//用于标记提醒类型，true为体检,需要吃药，false为就诊，需要复检
 
 
 
     public Info(String mtitle, String mdate,String mtime,Boolean mflag) {
         this.title = mtitle;
         this.time = mtime;
-        this.flag = mflag;
+        this.report = mflag;
         this.date = mdate;
     }
 
@@ -36,7 +37,7 @@ public class Info {
     }
 
     public void setFlag(Boolean flag) {
-        this.flag = flag;
+        this.report = flag;
     }
 
     public String getTime() {
@@ -44,6 +45,6 @@ public class Info {
     }
 
     public Boolean getFlag() {
-        return flag;
+        return report;
     }
 }
