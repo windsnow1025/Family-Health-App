@@ -157,7 +157,7 @@ public class UserLocalDao {
     public void sync() throws TimeoutException {
         userDao.getConnection();
         sync_Download();
-        sync_Upload();
+        //sync_Upload();
         userDao.closeConnection();
     }
     public void sync_Download() throws TimeoutException {
