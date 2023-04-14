@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:id="@+id/LL">
 
 
 
@@ -61,7 +62,7 @@
                    android:layout_marginLeft="15dp"
                     android:textSize="16sp" />
                 <Button
-                    android:id="@+id/bt_lightvolor"
+                    android:id="@+id/bt_lightcolor"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
