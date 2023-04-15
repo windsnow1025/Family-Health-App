@@ -124,9 +124,9 @@
                 android:id="@+id/radioButtonMale"
                 android:layout_width="70dp"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="男"
                 android:checked="true"
+                android:gravity="center"
+                android:text="male"
                 android:textColor="@color/black"
                 android:textSize="17sp" />
 
@@ -134,7 +134,7 @@
                 android:id="@+id/radioButtonFemale"
                 android:layout_width="70dp"
                 android:layout_height="match_parent"
-                android:text="女"
+                android:text="female"
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textSize="17sp" />

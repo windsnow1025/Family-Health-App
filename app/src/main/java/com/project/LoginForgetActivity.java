@@ -18,33 +18,42 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-
+import com.project.JDBC.UserDao;
+import com.project.Pojo.UserInfo;
+import com.project.Sqlite.UserLocalDao;
 import com.project.utils.ViewUtil;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.concurrent.TimeoutException;
 
 
 public class LoginForgetActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, View.OnClickListener, View.OnFocusChangeListener {
 
     private EditText et_usename;
     private EditText et_password;
-
     private EditText et_birth;
     private EditText et_verifycode;
-
     private String mVerifyCode;
     private Intent intent;
     private String username;
     private String password;
-
     private String birth;
     private String sex;
     private Boolean flag = false;
+    private UserDao userDao;
+    private UserLocalDao userLocalDao;
 
+    public LoginForgetActivity() {
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        userDao = new UserDao();
+        userLocalDao = new UserLocalDao(getApplicationContext());
+        userLocalDao.open();
         intent = getIntent();
         username = intent.getStringExtra("username");
         flag = intent.getBooleanExtra("flag", false);
@@ -83,8 +92,27 @@ public class LoginForgetActivity extends AppCompatActivity implements DatePicker
     @SuppressLint("DefaultLocale")
     @Override
     public void onClick(View v) {
-
-        if (v.getId() == R.id.btn_getcode && !et_usename.getText().toString().equals("")) {
+        username = et_usename.getText().toString();
+        if (v.getId() == R.id.btn_getcode && !username.equals("") && flag) {
+            try {
+                /**
+                 * 判断账号是否已存在
+                 **/
+                if (!userDao.checkUserUnique(username)) {
+                    mVerifyCode = String.format("%06d", (int) (Math.random() * 1000000 % 1000000));
+                    AlertDialog.Builder builder = new AlertDialog.Builder(LoginForgetActivity.this);
+                    builder.setTitle("请记住验证码");
+                    builder.setMessage("手机号" + et_usename.getText().toString() + "，本次验证码是" + mVerifyCode + "，请输入验证码");
+                    builder.setPositiveButton("好的", null);
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                } else {
+                    Toast.makeText(this, "该手机号已注册", Toast.LENGTH_SHORT).show();
+                }
+            } catch (TimeoutException e) {
+                throw new RuntimeException(e);
+            }
+        } else if (v.getId() == R.id.btn_getcode && !username.equals("") && !flag) {
             mVerifyCode = String.format("%06d", (int) (Math.random() * 1000000 % 1000000));
             AlertDialog.Builder builder = new AlertDialog.Builder(LoginForgetActivity.this);
             builder.setTitle("请记住验证码");
@@ -96,27 +124,53 @@ public class LoginForgetActivity extends AppCompatActivity implements DatePicker
 
             username = et_usename.getText().toString();
             password = et_password.getText().toString();
-
+            if (flag) {
+                birth = et_birth.getText().toString();
+                sex = ((RadioButton) findViewById(((RadioGroup) findViewById(R.id.radioGroup)).getCheckedRadioButtonId())).getText().toString();
+            }
             if (username.equals("") || password.equals("")) {
                 Toast.makeText(this, "用户名、密码不能为空", Toast.LENGTH_SHORT).show();
             } else if (!et_verifycode.getText().toString().equals(mVerifyCode)) {
                 Toast.makeText(this, "验证码错误，清重新输入", Toast.LENGTH_SHORT).show();
             } else {
                 if (flag) {
-                    birth = et_birth.getText().toString();
-                    if(birth.equals("")){ Toast.makeText(this, "请选择生日", Toast.LENGTH_SHORT).show();return;}
-                    sex = ((RadioButton) findViewById(((RadioGroup) findViewById(R.id.radioGroup)).getCheckedRadioButtonId())).getText().toString();
-                    if(sex.equals("")){ Toast.makeText(this, "请选择性别", Toast.LENGTH_SHORT).show();return;}
-                    Toast.makeText(this, "恭喜您注册成功，清前往登录！", Toast.LENGTH_SHORT).show();
-                    intent = new Intent(this, Login.class);
-                    intent.putExtra("username", username);
-                    startActivity(intent);
+                    if (birth.equals("")) {
+                        Toast.makeText(this, "请选择生日", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (sex.equals("")) {
+                        Toast.makeText(this, "请选择性别", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    try {
+                        /**
+                         * 插入账号
+                         **/
+                        if (userDao.insertUser(username, password, sex, birth).equals(username)) {
+                            Toast.makeText(this, "恭喜您注册成功，清前往登录！", Toast.LENGTH_SHORT).show();
+                            intent = new Intent(this, Login_1.class);
+                            intent.putExtra("username", username);
+                            startActivity(intent);
+                        } else Toast.makeText(this, "网络请求超时，请稍后重试", Toast.LENGTH_SHORT).show();
+                    } catch (TimeoutException e) {
+                        throw new RuntimeException(e);
+                    }
                 } else {
-                    System.out.println(username);
-                    Toast.makeText(this, "密码已修改成功，请重新登录！", Toast.LENGTH_SHORT).show();
-                    intent = new Intent(this, Login.class);
-                    intent.putExtra("username", username);
-                    startActivity(intent);
+                    /**
+                     * 修改密码
+                     **/
+                    HashMap<String, String> hashMap = new HashMap<>();
+                    hashMap.put("password", password);
+                    try {
+                        if (userDao.updateUserInformation(username, hashMap)) {
+                            Toast.makeText(this, "密码已修改成功，请重新登录！", Toast.LENGTH_SHORT).show();
+                            intent = new Intent(this, Login_1.class);
+                            intent.putExtra("username", username);
+                            startActivity(intent);
+                        } else Toast.makeText(this, "网络请求超时，请稍后重试", Toast.LENGTH_SHORT).show();
+                    } catch (TimeoutException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
 

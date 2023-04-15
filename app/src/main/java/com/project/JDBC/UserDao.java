@@ -74,7 +74,7 @@ public class UserDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get(2, TimeUnit.SECONDS);
+            valueReturn=futureTask.get(20, TimeUnit.SECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
@@ -117,7 +117,7 @@ public class UserDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get(2, TimeUnit.SECONDS);
+            valueReturn=futureTask.get(20, TimeUnit.SECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
@@ -131,7 +131,7 @@ public class UserDao extends JDBCHelper{
     private String insertUserImpl(String account,String password,String sex,String birthday) throws TimeoutException {
         String accountReturn=null;
         String sql="INSERT INTO user (phone_number,password,sex,birthday) VALUES (?,?,?,?)";
-        if((!checkUserUnique(account))&&(account!=null)&&(password!=null)&&(!password.equals(""))) {
+        if((!checkUserUniqueImpl(account))&&(account!=null)&&(password!=null)&&(!password.equals(""))) {
             try {
                 PreparedStatement preparedStatement=connection.prepareStatement(sql);
                 preparedStatement.setString(1, account);
@@ -158,7 +158,7 @@ public class UserDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get(2, TimeUnit.SECONDS);
+            valueReturn=futureTask.get(20, TimeUnit.SECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
@@ -199,7 +199,7 @@ public class UserDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get(2, TimeUnit.SECONDS);
+            valueReturn=futureTask.get(20, TimeUnit.SECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {

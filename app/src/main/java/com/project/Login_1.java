@@ -20,8 +20,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.project.JDBC.UserDao;
+import com.project.Pojo.UserInfo;
+import com.project.Sqlite.UserLocalDao;
 import com.project.utils.MainApplication;
 import com.project.utils.ViewUtil;
+
+import java.util.concurrent.TimeoutException;
 
 
 public class Login_1 extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener {
@@ -41,11 +46,16 @@ public class Login_1 extends AppCompatActivity implements View.OnClickListener, 
     private SharedPreferences mShared;
     private MainApplication mainApplication;
     private Boolean flag_eye=false;
+    private UserDao userDao;
+    private UserLocalDao userLocalDao;
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        userDao = new UserDao();
+        userLocalDao=new UserLocalDao(getApplicationContext());
+        userLocalDao.open();
         setContentView(R.layout.activity_login);
         et_phone = (EditText) findViewById(R.id.et_phone);
         et_password = (EditText) findViewById(R.id.et_password);
@@ -119,19 +129,28 @@ public class Login_1 extends AppCompatActivity implements View.OnClickListener, 
         }
         /*登录*/
         else if (v.getId() == R.id.btn_login) {
-            /*保存用户名为全局变量*/
-//            mainApplication.map.put("username",username);
+            intent = new Intent(this, MainActivity.class);
             flag=true;
-            if (bRemember) {
-                SharedPreferences.Editor editor = mShared.edit();
-                editor.putString("phone", et_phone.getText().toString());
-                editor.putString("password", et_password.getText().toString());
-                editor.commit();
-            }else {
-                SharedPreferences.Editor editor = mShared.edit();
-                editor.putString("phone","");
-                editor.putString("password", "");
-                editor.commit();
+            try {
+                if(userDao.checkUserPassword(username,password).equals(username)){
+                if (bRemember) {
+                    SharedPreferences.Editor editor = mShared.edit();
+                    editor.putString("phone", et_phone.getText().toString());
+                    editor.putString("password", et_password.getText().toString());
+                    editor.apply();
+                    userLocalDao.addOrUpdateUser(userDao.getUserInformation(username));
+                    startActivity(intent);
+                }else {
+                    SharedPreferences.Editor editor = mShared.edit();
+                    editor.putString("phone","");
+                    editor.putString("password", "");
+                    editor.apply();
+                    userLocalDao.addOrUpdateUser(userDao.getUserInformation(username));
+                    startActivity(intent);
+                }
+                }else Toast.makeText(this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
+            } catch (TimeoutException e) {
+                throw new RuntimeException(e);
             }
 
         }
