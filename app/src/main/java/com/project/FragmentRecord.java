@@ -48,18 +48,17 @@ public class FragmentRecord extends Fragment {
 
             // Get history list
             HistoryDao historyDao = new HistoryDao();
-            ArrayList<History> histories = null;
+            ArrayList<History> histories;
             try {
                 histories=historyDao.getHistoryList(username);
+                Log.i("test","从服务器获取就诊记录");
             }
             catch (TimeoutException e)
             {
-                Log.i("test","超时");
-                userLocalDao.getReportList(username);
+                Log.i("test","超时，从本地获取就诊记录");
+                histories = userLocalDao.getHistoryList(username);
             }
-            finally {
-                Log.i("test","test");
-            }
+
             // Set history list to recycler view
             List<String[]> data = new ArrayList<>();
             data.add(new String[]{"时间", "医院", "类型"});
