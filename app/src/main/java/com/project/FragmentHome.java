@@ -15,7 +15,11 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.project.JDBC.UserDao;
+import com.project.Sqlite.UserLocalDao;
+
 import java.util.List;
+import java.util.Objects;
 
 public class FragmentHome extends Fragment {
     private  ImageButton imageButton;
@@ -32,8 +36,11 @@ public class FragmentHome extends Fragment {
     private  TextView tv_kefu;
     private  TextView tv_setting;
     private static String username;
+    private UserDao userDao;
+    private UserLocalDao userLocalDao;
 
     public FragmentHome() {
+
     }
 
     void init(View view){
@@ -50,7 +57,7 @@ public class FragmentHome extends Fragment {
         imageButton3 = view.findViewById(R.id.imageButton3);
         bt_disease = view.findViewById(R.id.bt_disease);
         bt_kefu = view.findViewById(R.id.bt_kefu);
-//        username=fun() 加载用户身份
+        username=userLocalDao.getUser();
     }
 
 
@@ -58,6 +65,9 @@ public class FragmentHome extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        userDao = new UserDao();
+        userLocalDao=new UserLocalDao(getActivity().getApplicationContext());
+        userLocalDao.open();
         init(view);
         /*若用户已登录则让按钮失效*/
         if(username!=null){
@@ -107,6 +117,7 @@ public class FragmentHome extends Fragment {
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(getActivity(), Login_1.class);
+                        userLocalDao.userLoginOut(username);
                         startActivity(intent);
                     }
                 });
