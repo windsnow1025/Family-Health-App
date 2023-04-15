@@ -51,11 +51,9 @@ public class FragmentReport extends Fragment {
             ReportDao reportDao = new ReportDao();
             ArrayList<Report> reports = null;
             try {
-                reports=reportDao.getReportList(username);
-            }
-            catch (TimeoutException e)
-            {
-                reports=userLocalDao.getReportList(username);                                       //异常处理 如果超时调用本地数据库中的资料
+                reports = reportDao.getReportList(username);
+            } catch (TimeoutException e) {
+                reports = userLocalDao.getReportList(username);                                       //异常处理 如果超时调用本地数据库中的资料
             }
 
             // Set report list to recycler view
