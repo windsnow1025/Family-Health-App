@@ -70,9 +70,9 @@ public class ReportDao extends JDBCHelper{
             getConnection();
             Boolean value=updateReportImpl(account,report_update);
             closeConnection();
-            UserLocalDao userLocalDao=new UserLocalDao();
-            userLocalDao.open();
-            userLocalDao.updateReport(account, report_update);
+//            UserLocalDao userLocalDao=new UserLocalDao();
+//            userLocalDao.open();
+//            userLocalDao.updateReport(account, report_update);
             return value;
         });
         new Thread(futureTask).start();
@@ -116,9 +116,9 @@ public class ReportDao extends JDBCHelper{
             getConnection();
             Boolean value=deleteReportImpl(account,report_No);
             closeConnection();
-            UserLocalDao userLocalDao=new UserLocalDao();
-            userLocalDao.open();
-            userLocalDao.deleteReport(account, report_No);
+//            UserLocalDao userLocalDao=new UserLocalDao();
+//            userLocalDao.open();
+//            userLocalDao.deleteReport(account, report_No);
             return value;
         });
         new Thread(futureTask).start();
@@ -160,9 +160,9 @@ public class ReportDao extends JDBCHelper{
             report_insert.setReport_No(reportCount(account));
             Boolean value=insertReportImpl(account,report_insert);
             closeConnection();
-            UserLocalDao userLocalDao=new UserLocalDao();
-            userLocalDao.open();
-            userLocalDao.insertReport(account, report_insert);
+//            UserLocalDao userLocalDao=new UserLocalDao();
+//            userLocalDao.open();
+//            userLocalDao.insertReport(account, report_insert);
             return value;
         });
         new Thread(futureTask).start();

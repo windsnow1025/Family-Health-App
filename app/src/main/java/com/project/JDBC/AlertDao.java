@@ -69,9 +69,9 @@ public class AlertDao extends JDBCHelper{
             getConnection();
             Boolean value=updateAlertImpl(account,alert_update);
             closeConnection();
-            UserLocalDao userLocalDao=new UserLocalDao();
-            userLocalDao.open();
-            userLocalDao.updateAlert(account, alert_update);
+//            UserLocalDao userLocalDao=new UserLocalDao();
+//            userLocalDao.open();
+//            userLocalDao.updateAlert(account, alert_update);
             return value;
         });
         new Thread(futureTask).start();
@@ -115,9 +115,9 @@ public class AlertDao extends JDBCHelper{
             getConnection();
             Boolean value=deleteAlertImpl(account,alert_No);
             closeConnection();
-            UserLocalDao userLocalDao=new UserLocalDao();
-            userLocalDao.open();
-            userLocalDao.deleteAlert(account, alert_No);
+//            UserLocalDao userLocalDao=new UserLocalDao();
+//            userLocalDao.open();
+//            userLocalDao.deleteAlert(account, alert_No);
             return value;
         });
         new Thread(futureTask).start();
@@ -156,9 +156,9 @@ public class AlertDao extends JDBCHelper{
             alert_insert.setAlert_No(alertCount(account));
             Boolean value=insertAlertImpl(account,alert_insert);
             closeConnection();
-            UserLocalDao userLocalDao=new UserLocalDao();
-            userLocalDao.open();
-            userLocalDao.insertAlert(account, alert_insert);
+//            UserLocalDao userLocalDao=new UserLocalDao();
+//            userLocalDao.open();
+//            userLocalDao.insertAlert(account, alert_insert);
             return value;
         });
         new Thread(futureTask).start();

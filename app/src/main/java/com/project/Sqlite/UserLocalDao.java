@@ -82,7 +82,7 @@ public class UserLocalDao {
         return  returnValue;
     }
     @SuppressLint("Range")
-    private UserInfo gerUserInfo(String account){
+    public UserInfo getUserInfo(String account){
         UserInfo userInfo=new UserInfo();
         Cursor cursor= db.query("user", null, "phone_number = ?", new String[]{account}, null, null, null);
         if(cursor.moveToFirst()){

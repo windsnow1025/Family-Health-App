@@ -14,11 +14,11 @@ import java.util.List;
 public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> {
 
     private List<String[]> data;
-    private OnItemClickListener mOnItemClickListener;
+    private OnItemClickListener onItemClickListener;
 
-    public TableAdapter(List<String[]> data,OnItemClickListener onItemClickListener) {
+    public TableAdapter(List<String[]> data, OnItemClickListener onItemClickListener) {
         this.data = data;
-        this.mOnItemClickListener=onItemClickListener;
+        this.onItemClickListener = onItemClickListener;
     }
 
     @NonNull
@@ -37,7 +37,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> 
             @Override
             public void onClick(View v) {
 
-                mOnItemClickListener.onClick(position);
+                onItemClickListener.onClick(position);
             }
         });
         if (rowData.length > 2) {
@@ -64,13 +64,10 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> 
     }
 
 
-
-    public interface OnItemClickListener{
+    public interface OnItemClickListener {
 
         void onClick(int pos);
     }
-
-
 
 
 }

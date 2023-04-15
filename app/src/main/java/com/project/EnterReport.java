@@ -1,5 +1,6 @@
 package com.project;
 
+import android.app.DatePickerDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -23,6 +25,7 @@ import com.project.Sqlite.UserLocalDao;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeoutException;
@@ -60,7 +63,7 @@ public class EnterReport extends Fragment {
 
         // Get username
         try {
-            UserLocalDao userLocalDao = new UserLocalDao(getContext());
+            UserLocalDao userLocalDao = new UserLocalDao(this.getActivity().getApplicationContext());
             userLocalDao.open();
             username = userLocalDao.getUser();                                                      //关于这里的getUser()是获取当前登录的账号 理论上应该需要从登录入口进入才能获取到 我测试的时候是事先写了数据到本地进行测试
         } catch (Exception e) {
@@ -75,6 +78,32 @@ public class EnterReport extends Fragment {
         editTextDate = view.findViewById(R.id.editTextDate);
         editTextHospital = view.findViewById(R.id.editTextHospital);
         editTextType = view.findViewById(R.id.editTextType);
+
+        // Set to open date picker when click on date EditText
+        editTextDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get current date
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                // Create DatePickerDialog
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        // Set date
+                        String date = year + "-" + (month + 1) + "-" + dayOfMonth;
+                        // Set date to EditText
+                        editTextDate.setText(date);
+                    }
+                }, year, month, day);
+
+                // Show DatePickerDialog
+                datePickerDialog.show();
+            }
+        });
 
         // Confirm button
         Button buttonConfirm = view.findViewById(R.id.buttonConfirm);
@@ -98,11 +127,11 @@ public class EnterReport extends Fragment {
                 // Upload to database
                 Boolean insertStatus = false;
                 Log.i("主线程", "数据库测试开始");
-                String finalBitmapString = bitmapString;
                 ReportDao reportDao = new ReportDao();
                 Report report = new Report();
                 report.setPhone_number(username);
-                report.setReport_content(finalBitmapString);                           //获取序号封装进插入中
+                report.setPhone_number(username);
+                report.setReport_content(bitmapString);                           //获取序号封装进插入中
                 report.setReport_type(type);
                 report.setReport_place(hospital);
                 if (date.equals("")) {
@@ -117,6 +146,11 @@ public class EnterReport extends Fragment {
                 } catch (TimeoutException e) {
                     Log.i("Test", "网络有问题");
                 }
+                finally {
+                    Log.i("Log", "插入结束");
+                }
+
+
                 Log.i("主线程", "报告插入情况" + insertStatus);
                 Log.i("主线程", "数据库测试结束");
 
