@@ -94,7 +94,7 @@ public class UserLocalDao {
         }
         return userInfo;
     }
-    public void addOrUpdateUser(UserInfo userInfo){
+    public  void addOrUpdateUser(UserInfo userInfo){
         ContentValues values = new ContentValues();
         values.put("phone_number", userInfo.getPhone_number());
         values.put("username", userInfo.getUsername());
