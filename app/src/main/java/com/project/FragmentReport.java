@@ -1,6 +1,7 @@
 package com.project;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,18 +50,20 @@ public class FragmentReport extends Fragment {
 
             // Get report list
             ReportDao reportDao = new ReportDao();
-            ArrayList<Report> reports = null;
+            ArrayList<Report> reports;
             try {
                 reports = reportDao.getReportList(username);
+                Log.i("test", "从服务器获取体检报告");
             } catch (TimeoutException e) {
-                reports = userLocalDao.getReportList(username);                                       //异常处理 如果超时调用本地数据库中的资料
+                Log.i("test", "超时，从本地获取体检报告");
+                reports = userLocalDao.getReportList(username);
             }
 
             // Set report list to recycler view
             List<String[]> data = new ArrayList<>();
-            data.add(new String[]{"时间", "部位", "症状"});
+            data.add(new String[]{"时间", "部位", "类型"});
             for (Report report : reports) {
-                data.add(new String[]{report.getReport_date(), report.getReport_place(), report.getReport_content()});
+                data.add(new String[]{report.getReport_date(), report.getReport_place(), report.getReport_type()});
             }
 
             RecyclerView recyclerView = view.findViewById(R.id.recycler_view);

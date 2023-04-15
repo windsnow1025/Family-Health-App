@@ -15,6 +15,9 @@ import com.project.JDBC.UserDao;
 import com.project.Pojo.UserInfo;
 import com.project.Sqlite.UserLocalDao;
 
+// Logcat Filter:
+// package:com.project -tag:chromium -tag:OpenGLRenderer -tag:EGL_emulation
+
 public class FragmentMain extends Fragment {
     View view;
     private LeftNavigation leftNavigation;
@@ -53,9 +56,9 @@ public class FragmentMain extends Fragment {
         try {
             userInfo = new UserDao().getUserInformation(username);
             gender = userInfo.getSex();
-            Log.i("test", "获取网络用户");
+            Log.i("test", "从服务器获取用户数据");
         } catch (Exception e) {
-            Log.i("test", "超时，获取本地用户");
+            Log.i("test", "超时，从本地获取用户数据");
             userInfo = userLocalDao.getUserInfo(username);
             gender = userInfo.getSex();
         }
