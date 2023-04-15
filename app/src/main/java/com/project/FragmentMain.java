@@ -23,17 +23,40 @@ public class FragmentMain extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main, container, false);
 
+
+        UserInfo userInfo = new UserInfo();
+        UserLocalDao userLocalDao = new UserLocalDao(getActivity().getApplicationContext());
+        userLocalDao.open();
+
+        // Test: if local user does not exist, add user
+//        if (userLocalDao.checkUser("1111") == false) {
+//            userInfo.setPhone_number("1111");
+//            userInfo.setUsername("test1111");
+//            userInfo.setEmail("test@test.com");
+//            userInfo.setSex("female");
+//            userInfo.setBirthday("2022-07-01");
+//
+//            userLocalDao.addOrUpdateUser(userInfo);
+//        }
+
+//        userLocalDao.deleteMulti("1111");
+
+//        userInfo.setPhone_number("1111");
+//        userInfo.setUsername("test1111");
+//        userInfo.setEmail("test@test.com");
+//        userInfo.setSex("female");
+//        userInfo.setBirthday("2022-07-01");
+
+//        userLocalDao.addOrUpdateUser(userInfo);
+
         // Get Sex
         String gender = "male";
         try {
-            UserLocalDao userLocalDao = new UserLocalDao(getActivity().getApplicationContext());
-            userLocalDao.open();
             String username = userLocalDao.getUser();
-            UserInfo userInfo = new UserDao().getUserInformation(username);
+            userInfo = new UserDao().getUserInformation(username);
             gender = userInfo.getSex();
-            // To be fixed
         } catch (Exception e) {
-            e.printStackTrace();
+            
         }
 
         // Set Image
