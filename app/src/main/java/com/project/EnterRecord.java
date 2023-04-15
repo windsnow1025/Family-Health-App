@@ -102,12 +102,11 @@ public class EnterRecord extends Fragment {
 
         // Confirm button
         Button buttonConfirm = view.findViewById(R.id.buttonConfirm);
-        EditText finalEditTextDate1 = editTextDate;
         buttonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Get data
-                date = finalEditTextDate1.getText().toString();
+                date = editTextDate.getText().toString();
                 hospital = editTextHospital.getText().toString();
                 type = editTextType.getText().toString();
                 organ = editTextOrgan.getText().toString();

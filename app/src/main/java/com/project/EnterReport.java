@@ -127,12 +127,11 @@ public class EnterReport extends Fragment {
                 // Upload to database
                 Boolean insertStatus = false;
                 Log.i("主线程", "数据库测试开始");
-                String finalBitmapString = bitmapString;
                 ReportDao reportDao = new ReportDao();
                 Report report = new Report();
                 report.setPhone_number(username);
                 report.setPhone_number(username);
-                report.setReport_content(finalBitmapString);                           //获取序号封装进插入中
+                report.setReport_content(bitmapString);                           //获取序号封装进插入中
                 report.setReport_type(type);
                 report.setReport_place(hospital);
                 if (date.equals("")) {
