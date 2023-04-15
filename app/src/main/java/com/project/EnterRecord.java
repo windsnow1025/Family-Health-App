@@ -1,11 +1,13 @@
 package com.project;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 
 import androidx.fragment.app.Fragment;
@@ -14,6 +16,8 @@ import androidx.fragment.app.FragmentTransaction;
 import com.project.JDBC.HistoryDao;
 import com.project.Pojo.History;
 import com.project.Sqlite.UserLocalDao;
+
+import java.util.Calendar;
 
 public class EnterRecord extends Fragment {
 
@@ -70,13 +74,40 @@ public class EnterRecord extends Fragment {
         // Set default values
         editTextOrgan.setText(organ);
 
+        // Set to open date picker when click on date EditText
+        editTextDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get current date
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                // Create DatePickerDialog
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        // Set date
+                        String date = year + "-" + (month + 1) + "-" + dayOfMonth;
+                        // Set date to EditText
+                        editTextDate.setText(date);
+                    }
+                }, year, month, day);
+
+                // Show DatePickerDialog
+                datePickerDialog.show();
+            }
+        });
+
         // Confirm button
         Button buttonConfirm = view.findViewById(R.id.buttonConfirm);
+        EditText finalEditTextDate1 = editTextDate;
         buttonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Get data
-                date = editTextDate.getText().toString();
+                date = finalEditTextDate1.getText().toString();
                 hospital = editTextHospital.getText().toString();
                 type = editTextType.getText().toString();
                 organ = editTextOrgan.getText().toString();

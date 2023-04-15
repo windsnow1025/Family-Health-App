@@ -1,5 +1,6 @@
 package com.project;
 
+import android.app.DatePickerDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -23,6 +25,7 @@ import com.project.Sqlite.UserLocalDao;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeoutException;
@@ -75,6 +78,32 @@ public class EnterReport extends Fragment {
         editTextDate = view.findViewById(R.id.editTextDate);
         editTextHospital = view.findViewById(R.id.editTextHospital);
         editTextType = view.findViewById(R.id.editTextType);
+
+        // Set to open date picker when click on date EditText
+        editTextDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get current date
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                // Create DatePickerDialog
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        // Set date
+                        String date = year + "-" + (month + 1) + "-" + dayOfMonth;
+                        // Set date to EditText
+                        editTextDate.setText(date);
+                    }
+                }, year, month, day);
+
+                // Show DatePickerDialog
+                datePickerDialog.show();
+            }
+        });
 
         // Confirm button
         Button buttonConfirm = view.findViewById(R.id.buttonConfirm);
