@@ -29,34 +29,35 @@ public class FragmentMain extends Fragment {
         userLocalDao.open();
 
         // Test: if local user does not exist, add user
-//        if (userLocalDao.checkUser("1111") == false) {
-//            userInfo.setPhone_number("1111");
-//            userInfo.setUsername("test1111");
-//            userInfo.setEmail("test@test.com");
-//            userInfo.setSex("female");
-//            userInfo.setBirthday("2022-07-01");
-//
-//            userLocalDao.addOrUpdateUser(userInfo);
-//        }
+        if (userLocalDao.checkUser("1111") == false) {
+            userInfo.setPhone_number("1111");
+            userInfo.setUsername("test1111");
+            userInfo.setEmail("test@test.com");
+            userInfo.setSex("female");
+            userInfo.setBirthday("2022-07-01");
 
-//        userLocalDao.deleteMulti("1111");
+            userLocalDao.addOrUpdateUser(userInfo);
+        }
 
 //        userInfo.setPhone_number("1111");
 //        userInfo.setUsername("test1111");
 //        userInfo.setEmail("test@test.com");
 //        userInfo.setSex("female");
 //        userInfo.setBirthday("2022-07-01");
-
 //        userLocalDao.addOrUpdateUser(userInfo);
 
         // Get Sex
         String gender = "male";
+        String username;
+        username = userLocalDao.getUser();
         try {
-            String username = userLocalDao.getUser();
             userInfo = new UserDao().getUserInformation(username);
             gender = userInfo.getSex();
+            Log.i("test", "获取网络用户");
         } catch (Exception e) {
-            
+            Log.i("test", "超时，获取本地用户");
+            userInfo = userLocalDao.getUserInfo(username);
+            gender = userInfo.getSex();
         }
 
         // Set Image
