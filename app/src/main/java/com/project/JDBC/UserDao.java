@@ -131,7 +131,7 @@ public class UserDao extends JDBCHelper{
     private String insertUserImpl(String account,String password,String sex,String birthday) throws TimeoutException {
         String accountReturn=null;
         String sql="INSERT INTO user (phone_number,password,sex,birthday) VALUES (?,?,?,?)";
-        if((!checkUserUnique(account))&&(account!=null)&&(password!=null)&&(!password.equals(""))) {
+        if((!checkUserUniqueImpl(account))&&(account!=null)&&(password!=null)&&(!password.equals(""))) {
             try {
                 PreparedStatement preparedStatement=connection.prepareStatement(sql);
                 preparedStatement.setString(1, account);

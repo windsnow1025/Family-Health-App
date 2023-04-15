@@ -82,7 +82,7 @@ public class UserLocalDao {
         return  returnValue;
     }
     @SuppressLint("Range")
-    private UserInfo gerUserInfo(String account){
+    public UserInfo gerUserInfo(String account){
         UserInfo userInfo=new UserInfo();
         Cursor cursor= db.query("user", null, "phone_number = ?", new String[]{account}, null, null, null);
         if(cursor.moveToFirst()){
@@ -155,10 +155,8 @@ public class UserLocalDao {
         db.update("user",values,"phone_number = ?",new String[]{newAccount});
     }
     public void sync() throws TimeoutException {
-        userDao.getConnection();
         sync_Download();
         //sync_Upload();
-        userDao.closeConnection();
     }
     public void sync_Download() throws TimeoutException {
         ArrayList<History> historyArrayList=new ArrayList<>();

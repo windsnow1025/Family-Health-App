@@ -15,6 +15,8 @@ import com.project.JDBC.UserDao;
 import com.project.Pojo.UserInfo;
 import com.project.Sqlite.UserLocalDao;
 
+import java.util.concurrent.TimeoutException;
+
 public class FragmentMain extends Fragment {
     View view;
     private LeftNavigation leftNavigation;
@@ -22,18 +24,18 @@ public class FragmentMain extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main, container, false);
-
+        UserLocalDao userLocalDao = new UserLocalDao(getActivity().getApplicationContext());
+        userLocalDao.open();
+        String username = userLocalDao.getUser();
         // Get Sex
         String gender = "male";
         try {
-            UserLocalDao userLocalDao = new UserLocalDao(getActivity().getApplicationContext());
-            userLocalDao.open();
-            String username = userLocalDao.getUser();
             UserInfo userInfo = new UserDao().getUserInformation(username);
             gender = userInfo.getSex();
             // To be fixed
-        } catch (Exception e) {
-            e.printStackTrace();
+        }catch (TimeoutException e){
+            gender=userLocalDao.gerUserInfo(username).getSex();
+            Log.i("网络错误","超时");
         }
 
         // Set Image
