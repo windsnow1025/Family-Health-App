@@ -60,7 +60,7 @@ public class EnterReport extends Fragment {
 
         // Get username
         try {
-            UserLocalDao userLocalDao = new UserLocalDao(getContext());
+            UserLocalDao userLocalDao = new UserLocalDao(this.getActivity().getApplicationContext());
             userLocalDao.open();
             username = userLocalDao.getUser();                                                      //关于这里的getUser()是获取当前登录的账号 理论上应该需要从登录入口进入才能获取到 我测试的时候是事先写了数据到本地进行测试
         } catch (Exception e) {
@@ -102,6 +102,7 @@ public class EnterReport extends Fragment {
                 ReportDao reportDao = new ReportDao();
                 Report report = new Report();
                 report.setPhone_number(username);
+                report.setPhone_number(username);
                 report.setReport_content(finalBitmapString);                           //获取序号封装进插入中
                 report.setReport_type(type);
                 report.setReport_place(hospital);
@@ -117,6 +118,11 @@ public class EnterReport extends Fragment {
                 } catch (TimeoutException e) {
                     Log.i("Test", "网络有问题");
                 }
+                finally {
+                    Log.i("Log", "插入结束");
+                }
+
+
                 Log.i("主线程", "报告插入情况" + insertStatus);
                 Log.i("主线程", "数据库测试结束");
 

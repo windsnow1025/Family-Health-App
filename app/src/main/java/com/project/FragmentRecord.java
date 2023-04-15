@@ -1,6 +1,7 @@
 package com.project;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.project.Sqlite.UserLocalDao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 // 就诊记录显示
 public class FragmentRecord extends Fragment {
@@ -46,8 +48,18 @@ public class FragmentRecord extends Fragment {
 
             // Get history list
             HistoryDao historyDao = new HistoryDao();
-            ArrayList<History> histories = historyDao.getHistoryList(username);
-
+            ArrayList<History> histories = null;
+            try {
+                histories=historyDao.getHistoryList(username);
+            }
+            catch (TimeoutException e)
+            {
+                Log.i("test","超时");
+                userLocalDao.getReportList(username);
+            }
+            finally {
+                Log.i("test","test");
+            }
             // Set history list to recycler view
             List<String[]> data = new ArrayList<>();
             data.add(new String[]{"时间", "医院", "类型"});

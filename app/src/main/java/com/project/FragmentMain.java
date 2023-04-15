@@ -1,6 +1,7 @@
 package com.project;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +26,7 @@ public class FragmentMain extends Fragment {
         // Get Sex
         String gender = "male";
         try {
-            UserLocalDao userLocalDao = new UserLocalDao();
+            UserLocalDao userLocalDao = new UserLocalDao(getActivity().getApplicationContext());
             userLocalDao.open();
             String username = userLocalDao.getUser();
             UserInfo userInfo = new UserDao().getUserInformation(username);

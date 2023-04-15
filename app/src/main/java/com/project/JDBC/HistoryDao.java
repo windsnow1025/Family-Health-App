@@ -76,9 +76,9 @@ public class HistoryDao extends JDBCHelper{
             getConnection();
             Boolean value=updateHistoryImpl(account,history_update);
             closeConnection();
-            UserLocalDao userLocalDao=new UserLocalDao();
-            userLocalDao.open();
-            userLocalDao.updateHistory(account, history_update);
+//            UserLocalDao userLocalDao=new UserLocalDao();
+//            userLocalDao.open();
+//            userLocalDao.updateHistory(account, history_update);
             return value;
         });
         new Thread(futureTask).start();
@@ -123,9 +123,9 @@ public class HistoryDao extends JDBCHelper{
             getConnection();
             Boolean value=deleteHistoryImpl(account,history_No);
             closeConnection();
-            UserLocalDao userLocalDao=new UserLocalDao();
-            userLocalDao.open();
-            userLocalDao.deleteHistory(account, history_No);
+//            UserLocalDao userLocalDao=new UserLocalDao();
+//            userLocalDao.open();
+//            userLocalDao.deleteHistory(account, history_No);
             return value;
         });
         new Thread(futureTask).start();
@@ -166,9 +166,9 @@ public class HistoryDao extends JDBCHelper{
             history_insert.setHistory_No(historyCount(account));
             Boolean value=insertHistoryImpl(account,history_insert);
             closeConnection();
-            UserLocalDao userLocalDao=new UserLocalDao();
-            userLocalDao.open();
-            userLocalDao.insertHistory(account, history_insert);
+//            UserLocalDao userLocalDao=new UserLocalDao();
+//            userLocalDao.open();
+//            userLocalDao.insertHistory(account, history_insert);
             return value;
         });
         new Thread(futureTask).start();

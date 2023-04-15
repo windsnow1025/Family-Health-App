@@ -96,6 +96,7 @@ public class EnterRecord extends Fragment {
                 history.setSymptom(symptom);
                 history.setConclusion(conclusion);
                 history.setSuggestion(suggestion);
+                history.setIs_deleted("false");
                 try {
                     insertStatus = historyDao.insertHistory(username, history);
                 } catch (Exception e) {
