@@ -23,6 +23,12 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.project.JDBC.HistoryDao;
+import com.project.JDBC.ReportDao;
+import com.project.Pojo.Alert;
+import com.project.Pojo.History;
+import com.project.Pojo.Report;
+import com.project.Sqlite.UserLocalDao;
 import com.project.utils.Info;
 import com.project.utils.InfoAdapter;
 
@@ -30,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 public class FragmentDetails_Record extends Fragment implements DatePickerDialog.OnDateSetListener {
     private int i;
@@ -41,24 +48,39 @@ public class FragmentDetails_Record extends Fragment implements DatePickerDialog
     private TextView ret_time;
     private TextView rtv_time;
     private TextView rtv_date;
+    private TextView rtv_hospital;
     private TextView rtv_part;
     private TextView rtv_advice;
-    private String[] details;
     InfoAdapter adapter;
     private boolean flag;
+    private ArrayList<Report> reportArrayList;
+    private ArrayList<History> historyArrayList;
+    private ArrayList<Alert> alertArrayList;
+    private UserLocalDao userLocalDao;
+    private ReportDao reportDao;
+    private HistoryDao historyDao;
+    private History history;
+    private Report report;
+    private Alert alert;
+    private String userID;
+    private int num,num_alerk;
+    private boolean isreport;
 
     /*用于新建*/
-    public FragmentDetails_Record(String[] strings, InfoAdapter infoAdapter) {
-        this.details = strings;
+    public FragmentDetails_Record(int n, boolean b, InfoAdapter infoAdapter) {
+        this.num = n;
         this.adapter = infoAdapter;
+        this.isreport = b;//是否为报告
     }
 
     /*用于修改*/
-    public FragmentDetails_Record(InfoAdapter infoAdapter, List<Info> Infolist, int I, boolean Flag) {
+    public FragmentDetails_Record(int n,InfoAdapter infoAdapter, List<Info> Infolist, int I,boolean isreport, boolean Flag) {
         this.adapter = infoAdapter;
-        this.flag = Flag;
+        this.num = n;//num为捆绑的编号
+        this.isreport = isreport;//是否为报告
+        this.flag = Flag;//是否为修改
         this.infoList = Infolist;
-        this.i = I;
+        this.i = I;//i为闹钟编号
     }
 
     private void init(View view) {
@@ -73,19 +95,31 @@ public class FragmentDetails_Record extends Fragment implements DatePickerDialog
         ret_title = view.findViewById(R.id.ret_title);
         ret_time = view.findViewById(R.id.ret_time);
         bt_rcancel=view.findViewById(R.id.bt_cancel);
-    }
+        rtv_hospital=view.findViewById(R.id.rtv_hospital);
+        if (isreport) report = UserLocalDao.gerReport(reportArrayList, num);
+        else history = UserLocalDao.getHistory(historyArrayList, num);
+        num_alerk=userLocalDao.getAlertList(userID).size();
+   }
 
     /*获取数据*/
     private void infoSet(boolean flag) {
-        rtv_time.setText("details[0]");
-        rtv_part.setText("details[1]");
-        rtv_advice.setText("details[2]");
-        rtv_advice.setText("");
+        if(isreport){
+            rtv_time.setText(report.getReport_date());
+            rtv_part.setText(report.getReport_type());
+            rtv_advice.setText(report.getReport_content());
+            rtv_hospital.setText(report.getReport_place());
+        }else {
+            rtv_time.setText(history.getHistory_date());
+            rtv_part.setText(history.getHistory_organ());
+            rtv_advice.setText(history.getSuggestion());
+            rtv_hospital.setText(history.getHistory_place());
+        }
         /*表修改状态，非新增时*/
         if (flag) {
-            ret_title.setText("test复诊");
-            ret_time.setText("1-1");
-            rtv_date.setText("1-1");
+            Alert alert1=userLocalDao.getAlert(alertArrayList,i);
+            ret_title.setText(alert1.getContent());
+            ret_time.setText(alert1.getDate());
+            rtv_date.setText(alert1.getCycle());
                 }
             }
 
@@ -95,6 +129,23 @@ public class FragmentDetails_Record extends Fragment implements DatePickerDialog
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_details__record, container, false);
+        userLocalDao = new UserLocalDao(getActivity().getApplicationContext());
+        userLocalDao.open();
+        userID = userLocalDao.getUser();
+        alertArrayList=userLocalDao.getAlertList(userID);
+        reportDao = new ReportDao();
+        historyDao = new HistoryDao();
+        System.out.println(userID);
+        try {
+            reportArrayList = reportDao.getReportList(userID);
+        } catch (TimeoutException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            historyArrayList = historyDao.getHistoryList(userID);
+        } catch (TimeoutException e) {
+            throw new RuntimeException(e);
+        }
         init(view);
         infoSet(flag);
 
@@ -126,11 +177,17 @@ public class FragmentDetails_Record extends Fragment implements DatePickerDialog
             @Override
             public void onClick(View v) {
                 if (!ret_title.getText().toString().equals("") && !rtv_date.getText().toString().equals("") && !ret_time.getText().toString().equals("")) {
-                    Info info = new Info(ret_title.getText().toString(), rtv_date.getText().toString(), ret_time.getText().toString(), false);
-                    adapter.add(info);
+                    Info info = new Info(ret_title.getText().toString(), rtv_date.getText().toString(), ret_time.getText().toString(), true, num,num_alerk);
+                    alert=new Alert(num_alerk,userID,ret_time.getText().toString(),rtv_date.getText().toString(),ret_title.getText().toString(),String.valueOf(isreport),num,"false");
+//                   是否为修改
                     if (flag) {
-                        infoList.remove(i);
+                        alert=new Alert(i,userID,ret_time.getText().toString(),rtv_date.getText().toString(),ret_title.getText().toString(),String.valueOf(isreport),num,"false");
+                        userLocalDao.updateAlert(userID,alert);
+//
+                    }else {
+                        userLocalDao.insertAlert(userID, alert);
                     }
+                    adapter.add(info);
                     if (!flag) {
                         Toast.makeText(getContext(), "提醒添加成功", Toast.LENGTH_SHORT).show();
                     } else Toast.makeText(getContext(), "提醒修改成功", Toast.LENGTH_SHORT).show();

@@ -67,6 +67,7 @@ public class LoginForgetActivity extends AppCompatActivity implements DatePicker
                     Calendar calendar = Calendar.getInstance();
                     DatePickerDialog dialog = new DatePickerDialog(LoginForgetActivity.this, LoginForgetActivity.this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
                     dialog.show();
+                    System.out.println(dialog);
                 }
             });
 

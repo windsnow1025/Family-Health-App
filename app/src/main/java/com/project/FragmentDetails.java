@@ -21,6 +21,14 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.project.JDBC.AlertDao;
+import com.project.JDBC.HistoryDao;
+import com.project.JDBC.ReportDao;
+import com.project.JDBC.UserDao;
+import com.project.Pojo.Alert;
+import com.project.Pojo.History;
+import com.project.Pojo.Report;
+import com.project.Sqlite.UserLocalDao;
 import com.project.utils.Info;
 import com.project.utils.InfoAdapter;
 
@@ -29,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 
 public class FragmentDetails extends Fragment {
@@ -52,23 +61,38 @@ public class FragmentDetails extends Fragment {
     private TextView tv_hospital;
     private TextView tv_part;
     private TextView tv_advice;
-    private String[] details;
-    private int H, M, i;
+    private int H, M,i;
     InfoAdapter adapter;
-    private boolean flag=false;
+    private boolean flag = false;
+    private ArrayList<Report> reportArrayList;
+    private ArrayList<History> historyArrayList;
+    private ArrayList<Alert> alertArrayList;
+    private UserLocalDao userLocalDao;
+    private ReportDao reportDao;
+    private HistoryDao historyDao;
+    private History history;
+    private Report report;
+    private Alert alert;
+    private String userID;
+    private int num,num_alerk;
+    private boolean isreport;
+
 
     /*用于新建*/
-    public FragmentDetails(String[] strings, InfoAdapter infoAdapter) {
-        this.details = strings;
+    public FragmentDetails(int n, boolean isreport, InfoAdapter infoAdapter) {
+        this.num = n;//num为捆绑的编号
         this.adapter = infoAdapter;
+        this.isreport = isreport;//是否为报告
     }
 
     /*用于修改*/
-    public FragmentDetails(InfoAdapter infoAdapter, List<Info> Infolist, int I, boolean Flag) {
+    public FragmentDetails(int n,InfoAdapter infoAdapter, List<Info> Infolist, int I,boolean isreport, boolean Flag) {
         this.adapter = infoAdapter;
-        this.flag = Flag;
+        this.num = n;//num为捆绑的编号
+        this.isreport = isreport;//是否为报告
+        this.flag = Flag;//是否为修改
         this.infoList = Infolist;
-        this.i = I;
+        this.i = I;//i为闹钟编号
     }
 
     private void init(View view) {
@@ -90,40 +114,53 @@ public class FragmentDetails extends Fragment {
         et_title = view.findViewById(R.id.et_title);
         et_time = view.findViewById(R.id.et_time);
         bt_cancel = view.findViewById(R.id.bt_cancel);
+        if (isreport) report = UserLocalDao.gerReport(reportArrayList, num);
+        else{
+            history = UserLocalDao.getHistory(historyArrayList, num);}
+        num_alerk=userLocalDao.getAlertList(userID).size();
     }
 
     /*数据导入*/
-    private void infoSet(boolean flag) {
-        tv_time.setText("details[0]");
-        tv_part.setText("details[1]");
-        tv_advice.setText("details[2]");
-        tv_hospital.setText("");
+    private  void infoSet(boolean flag) {
+        if(isreport){
+            tv_time.setText(report.getReport_date());
+            tv_part.setText(report.getReport_type());
+            tv_advice.setText(report.getReport_content());
+            tv_hospital.setText(report.getReport_place());
+        }else {
+            tv_time.setText(history.getHistory_date());
+            tv_part.setText(history.getHistory_organ());
+            tv_advice.setText(history.getSuggestion());
+            tv_hospital.setText(history.getHistory_place());
+        }
+
         /*表修改状态，非新增时*/
         if (flag) {
-            et_title.setText("test吃药");
-            et_time.setText("");
-            List<Integer> Time1 = Arrays.asList(1, 2, 3);
-            for (int i : Time1) {
-                switch (i) {
-                    case 1:
+            Alert alert1=userLocalDao.getAlert(alertArrayList,i);
+            et_title.setText(alert1.getType());
+            et_time.setText(alert1.getDate());
+          String[] newArray = alert1.getCycle().split("\\s");
+            for (String str : newArray) {
+                switch (str) {
+                    case "周日":
                         Sunday.setChecked(true);
                         break;
-                    case 2:
+                    case "周一":
                         Monday.setChecked(true);
                         break;
-                    case 3:
+                    case "周二":
                         Tuesday.setChecked(true);
                         break;
-                    case 4:
+                    case "周三":
                         Wednesday.setChecked(true);
                         break;
-                    case 5:
+                    case "周四":
                         Thursday.setChecked(true);
                         break;
-                    case 6:
+                    case "周五":
                         Friday.setChecked(true);
                         break;
-                    case 7:
+                    case "周六":
                         Saturday.setChecked(true);
                         break;
                 }
@@ -136,6 +173,23 @@ public class FragmentDetails extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_details, container, false);
+        userLocalDao = new UserLocalDao(getActivity().getApplicationContext());
+        userLocalDao.open();
+        userID = userLocalDao.getUser();
+        alertArrayList=userLocalDao.getAlertList(userID);
+        reportDao = new ReportDao();
+        historyDao = new HistoryDao();
+        System.out.println(userID);
+        try {
+            reportArrayList = reportDao.getReportList(userID);
+        } catch (TimeoutException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            historyArrayList = historyDao.getHistoryList(userID);
+        } catch (TimeoutException e) {
+            throw new RuntimeException(e);
+        }
         init(view);
         infoSet(flag);
         et_time.setOnClickListener(new View.OnClickListener() {
@@ -161,11 +215,19 @@ public class FragmentDetails extends Fragment {
             public void onClick(View v) {
                 setAlarmTime(H, M);
                 if (!et_title.getText().toString().equals("") && !Time.isEmpty() && !et_time.getText().toString().equals("")) {
-                    Info info = new Info(et_title.getText().toString(), getDate(Time), et_time.getText().toString(), true);
+                    Info info = new Info(et_title.getText().toString(), getDate(Time), et_time.getText().toString(), true, num,num_alerk);
+                   alert=new Alert(num_alerk,userID,et_time.getText().toString(),getDate(Time),et_title.getText().toString(),String.valueOf(isreport),num,"false");
+//                   是否为修改
                     if (flag) {
-                        infoList.remove(i);
-                    }
+                        alert=new Alert(i,userID,et_time.getText().toString(),getDate(Time),et_title.getText().toString(),String.valueOf(isreport),num,"false");
+                        userLocalDao.updateAlert(userID,alert);
+
+                    }else {
+                        userLocalDao.insertAlert(userID, alert);
+                        System.out.println(alert.getContent());
+                        }
                     adapter.add(info);
+                    System.out.println(userLocalDao.getAlertList(userID).size());
                     if (!flag) {
                         Toast.makeText(getContext(), "提醒添加成功", Toast.LENGTH_SHORT).show();
                     } else Toast.makeText(getContext(), "提醒修改成功", Toast.LENGTH_SHORT).show();

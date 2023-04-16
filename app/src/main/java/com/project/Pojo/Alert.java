@@ -6,6 +6,21 @@ public class Alert {
     private String date;
     private String cycle;
     private String content;
+
+    public Alert() {
+    }
+
+    public Alert(Integer alert_No, String phone_number, String date, String cycle, String content, String type, Integer type_No, String is_deleted) {
+        Alert_No = alert_No;
+        this.phone_number = phone_number;
+        this.date = date;
+        this.cycle = cycle;
+        this.content = content;
+        this.type = type;
+        this.type_No = type_No;
+        this.is_deleted = is_deleted;
+    }
+
     private String type;
     private Integer type_No;
     private String is_deleted;

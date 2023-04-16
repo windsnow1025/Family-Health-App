@@ -16,6 +16,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.project.JDBC.UserDao;
+import com.project.Sqlite.UserLocalDao;
+
+import java.util.HashMap;
+import java.util.concurrent.TimeoutException;
+
 public class st_emailFragment extends Fragment {
 
 
@@ -26,8 +32,21 @@ public class st_emailFragment extends Fragment {
     private TextView tv_email;
     private String format = "\\w{2,15}[@][a-z0-9]{3,}[.]\\p{Lower}{2,}";
     private String email;
+    private UserDao userDao;
+    private UserLocalDao userLocalDao;
+    private String username;
     public st_emailFragment() {
         // Required empty public constructor
+    }
+
+    private void init(View view){
+        tv_email=view.findViewById(R.id.tv_email);
+        tv_email.setText(userLocalDao.getUserInfo(username).getEmail());
+        et_email=view.findViewById(R.id.et_email);
+        bt_back=view.findViewById(R.id.bt_back);
+        bt_back.setOnClickListener(new BTlistener());
+        bt_set=view.findViewById(R.id.bt_set);
+        bt_set.setOnClickListener(new BTlistener());
     }
     @SuppressLint("MissingInflatedId")
     @Override
@@ -35,12 +54,11 @@ public class st_emailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_st_email, container, false);
-        tv_email=view.findViewById(R.id.tv_email);
-        et_email=view.findViewById(R.id.et_email);
-        bt_back=view.findViewById(R.id.bt_back);
-        bt_back.setOnClickListener(new BTlistener());
-        bt_set=view.findViewById(R.id.bt_set);
-        bt_set.setOnClickListener(new BTlistener());
+        userDao = new UserDao();
+        userLocalDao = new UserLocalDao(getActivity().getApplicationContext());
+        userLocalDao.open();
+        username=userLocalDao.getUser();
+        init(view);
 
         return view;
     }
@@ -72,6 +90,14 @@ public class st_emailFragment extends Fragment {
                                     tv_email.setText(email);
                                     et_email.setText("");
                                     et_email.clearFocus();
+                                    HashMap<String, String> hashMap = new HashMap<>();
+                                    hashMap.put("email", email);
+                                    try {
+                                        userDao.updateUserInformation(username, hashMap);
+                                        userLocalDao.addOrUpdateUser(userDao.getUserInformation(username));
+                                    } catch (TimeoutException e) {
+                                        throw new RuntimeException(e);
+                                    }
                                     Toast.makeText(getContext(), "验证码修改成功", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(getContext(), "验证码为空", Toast.LENGTH_SHORT).show();

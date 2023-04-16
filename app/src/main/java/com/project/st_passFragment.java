@@ -16,6 +16,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.project.JDBC.UserDao;
+import com.project.Sqlite.UserLocalDao;
+
+import java.util.HashMap;
+import java.util.concurrent.TimeoutException;
+
 
 public class st_passFragment extends Fragment {
 
@@ -26,17 +32,15 @@ public class st_passFragment extends Fragment {
     private EditText et_password1;
     private EditText et_password2;
     private TextView tv_password;
+    private UserDao userDao;
+    private UserLocalDao userLocalDao;
+    private String username;
 
     public st_passFragment() {
         // Required empty public constructor
     }
 
-    @SuppressLint("MissingInflatedId")
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_st_pass, container, false);
+    private void init(View view){
         tv_password = view.findViewById(R.id.tv_password);
         et_password1 = view.findViewById(R.id.et_password1);
         et_password2 = view.findViewById(R.id.et_password2);
@@ -44,9 +48,19 @@ public class st_passFragment extends Fragment {
         bt_back.setOnClickListener(new BTlistener());
         bt_set = view.findViewById(R.id.bt_set);
         bt_set.setOnClickListener(new BTlistener());
-
         /*眼睛图标使用明密文*/
         bt_eye = view.findViewById(R.id.bt_eye);
+    }
+    @SuppressLint("MissingInflatedId")
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_st_pass, container, false);
+        userDao = new UserDao();
+        userLocalDao = new UserLocalDao(getActivity().getApplicationContext());
+        userLocalDao.open();
+        username=userLocalDao.getUser();
+        init(view);
         bt_eye.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,6 +101,13 @@ public class st_passFragment extends Fragment {
                         et_password1.setText("");
                         et_password2.setText("");
                         et_password2.clearFocus();
+                        HashMap<String, String> hashMap = new HashMap<>();
+                        hashMap.put("password", password1);
+                        try {
+                            userDao.updateUserInformation(username, hashMap);
+                        } catch (TimeoutException e) {
+                            throw new RuntimeException(e);
+                        }
                     } else {
                         Toast.makeText(getContext(), "密码不正确，请再次确认", Toast.LENGTH_SHORT).show();
                     }

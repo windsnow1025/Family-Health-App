@@ -14,10 +14,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.project.JDBC.HistoryDao;
+import com.project.JDBC.ReportDao;
+import com.project.Pojo.History;
+import com.project.Pojo.Report;
+import com.project.Sqlite.UserLocalDao;
 import com.project.utils.InfoAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 
 public class FragmentAlert_set extends Fragment {
@@ -25,6 +31,12 @@ public class FragmentAlert_set extends Fragment {
     private View view;
     private TableAdapter tableAdapter1;
     private TableAdapter tableAdapter2;
+    private  ArrayList<Report> reportArrayList;
+    private  ArrayList<History> historyArrayList;
+    private UserLocalDao userLocalDao;
+    private ReportDao reportDao;
+    private HistoryDao historyDao;
+    private String userID;
     InfoAdapter adapter;
     ListView listView;
     public FragmentAlert_set(InfoAdapter madapter,ListView mlistView) {
@@ -37,10 +49,40 @@ public class FragmentAlert_set extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
          view = inflater.inflate(R.layout.fragment_alert_set, container, false);
+        userLocalDao = new UserLocalDao(getActivity().getApplicationContext());
+        userLocalDao.open();
+        userID=userLocalDao.getUser();
+        reportDao=new ReportDao();
+        historyDao=new HistoryDao();
+        System.out.println(userID);
+        try {
+            reportArrayList=reportDao.getReportList(userID);
+        } catch (TimeoutException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            historyArrayList=historyDao.getHistoryList(userID);
+        } catch (TimeoutException e) {
+            throw new RuntimeException(e);
+        }
+
         List<String[]> data = new ArrayList<>();
         data.add(new String[]{"时间", "医院", "类型"});
-        data.add(new String[]{"2021-2", "1.2", "体检6"});
-        data.add(new String[]{"2", "2", "体检7"});
+        System.out.println(reportArrayList.size());
+        System.out.println(historyArrayList.size());
+        for (Report report:reportArrayList
+             ) {//时间、地点、类型、编号
+            data.add(new String[]{report.getReport_date(), report.getReport_place(), report.getReport_type(),report.getReport_No().toString()});
+        }
+
+        List<String[]> data1 = new ArrayList<>();
+        data1.add(new String[]{"时间", "部位", "症状"});
+        for (History history :
+                historyArrayList) {
+            data1.add(new String[]{history.getHistory_date(),history.getHistory_organ(),history.getSymptom(), String.valueOf(history.getHistory_No())});
+        }
+
+
 
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -54,7 +96,8 @@ public class FragmentAlert_set extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                        transaction.replace(R.id.fragment_container, new FragmentDetails(data.get(pos),adapter));
+                        int i= Integer.parseInt(data.get(pos)[3]);
+                        transaction.replace(R.id.fragment_container, new FragmentDetails(i,true,adapter));
                         transaction.addToBackStack(null);
                         transaction.commit();
                     }
@@ -62,7 +105,8 @@ public class FragmentAlert_set extends Fragment {
                 builder.setPositiveButton("复诊提醒", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                        transaction.replace(R.id.fragment_container, new FragmentDetails_Record(data.get(pos),adapter));
+                        int i= Integer.parseInt(data.get(pos)[3]);
+                        transaction.replace(R.id.fragment_container, new FragmentDetails_Record(i,true,adapter));
                         transaction.addToBackStack(null);
                         transaction.commit();
                     }
@@ -73,10 +117,7 @@ public class FragmentAlert_set extends Fragment {
 
         recyclerView.setAdapter(tableAdapter1);
 
-        List<String[]> data1 = new ArrayList<>();
-        data1.add(new String[]{"时间", "部位", "症状"});
-        data1.add(new String[]{"2021-2-2", "大腿", "好好休息一下"});
-        data1.add(new String[]{"R", "C", "3"});
+
 
         RecyclerView recyclerView1 = view.findViewById(R.id.recycler_view1);
         recyclerView1.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -91,7 +132,8 @@ public class FragmentAlert_set extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                        transaction.replace(R.id.fragment_container, new FragmentDetails(data1.get(pos),adapter));
+                        int i= Integer.parseInt(data1.get(pos)[3]);
+                        transaction.replace(R.id.fragment_container, new FragmentDetails(i,false,adapter));
                         transaction.addToBackStack(null);
                         transaction.commit();
                     }
@@ -99,7 +141,8 @@ public class FragmentAlert_set extends Fragment {
                 builder.setPositiveButton("复诊提醒", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                        transaction.replace(R.id.fragment_container, new FragmentDetails_Record(data.get(pos),adapter));
+                        int i= Integer.parseInt(data1.get(pos)[3]);
+                        transaction.replace(R.id.fragment_container, new FragmentDetails_Record(i,false,adapter));
                         transaction.addToBackStack(null);
                         transaction.commit();
                     }

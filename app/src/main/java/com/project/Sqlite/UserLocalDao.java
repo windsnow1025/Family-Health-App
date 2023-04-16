@@ -450,7 +450,7 @@ public class UserLocalDao {
         }
         return valueReturn;
     }
-    public static Alert getAlert(ArrayList<Alert> alertArrayList,Integer alert_No){
+    public  Alert getAlert(ArrayList<Alert> alertArrayList,Integer alert_No){
         Alert alertReturn=null;
         Stream<Alert> alertStream=alertArrayList.stream();
         alertReturn=alertStream.filter(e->e.getAlert_No()==alert_No).collect(Collectors.toList()).get(0);

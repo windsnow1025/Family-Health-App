@@ -16,10 +16,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.project.JDBC.UserDao;
+import com.project.Pojo.UserInfo;
 import com.project.Sqlite.UserLocalDao;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeoutException;
 
 public class FragmentHome extends Fragment {
     private  ImageButton imageButton;
@@ -38,12 +40,13 @@ public class FragmentHome extends Fragment {
     private static String username;
     private UserDao userDao;
     private UserLocalDao userLocalDao;
+    public static UserInfo userInfo;
 
     public FragmentHome() {
 
     }
 
-    void init(View view){
+    void init(View view) throws TimeoutException {
         tv_user=view.findViewById(R.id.textViewLoginSignup);
         tv_pensonal=view.findViewById(R.id.tv_persnal);
         tv_disease=view.findViewById(R.id.tv_disease);
@@ -58,6 +61,8 @@ public class FragmentHome extends Fragment {
         bt_disease = view.findViewById(R.id.bt_disease);
         bt_kefu = view.findViewById(R.id.bt_kefu);
         username=userLocalDao.getUser();
+        String ID=userLocalDao.getUserInfo(username).getPhone_number();
+       userLocalDao.addOrUpdateUser(userDao.getUserInformation(ID));
     }
 
 
@@ -68,7 +73,11 @@ public class FragmentHome extends Fragment {
         userDao = new UserDao();
         userLocalDao=new UserLocalDao(getActivity().getApplicationContext());
         userLocalDao.open();
-        init(view);
+        try {
+            init(view);
+        } catch (TimeoutException e) {
+            throw new RuntimeException(e);
+        }
         /*若用户已登录则让按钮失效*/
         if(username!=null){
             tv_user.setEnabled(false);
