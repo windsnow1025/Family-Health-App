@@ -385,6 +385,7 @@ public class UserLocalDao {
                 alert.setPhone_number(cursor.getString(cursor.getColumnIndex("phone_number")));
                 alert.setAlert_No(cursor.getInt(cursor.getColumnIndex("alert_No")));
                 alert.setDate(cursor.getString(cursor.getColumnIndex("date")));
+                alert.setContent(cursor.getString(cursor.getColumnIndex("content")));
                 alert.setCycle(cursor.getString(cursor.getColumnIndex("cycle")));
                 alert.setType(cursor.getString(cursor.getColumnIndex("type")));
                 alert.setType_No(cursor.getInt(cursor.getColumnIndex("type_No")));
