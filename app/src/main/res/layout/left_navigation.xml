@@ -27,8 +27,6 @@
                 android:layout_height="wrap_content"
                 android:text="第一页"
                 android:textSize="18sp"
-                android:textColor="@android:color/black"
-                android:background="@drawable/button_background"
                 android:padding="12dp"
                 android:gravity="center"
                 android:textStyle="bold" />
@@ -48,8 +46,6 @@
                 android:layout_height="wrap_content"
                 android:text="大脑"
                 android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:background="@drawable/button_background"
                 android:padding="8dp"
                 android:gravity="center" />
 
@@ -68,8 +64,6 @@
                 android:layout_height="wrap_content"
                 android:text="呼吸系统"
                 android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:background="@drawable/button_background"
                 android:padding="8dp"
                 android:gravity="center" />
 
@@ -88,8 +82,6 @@
                 android:layout_height="wrap_content"
                 android:text="肾脏"
                 android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:background="@drawable/button_background"
                 android:padding="8dp"
                 android:gravity="center" />
 
@@ -108,8 +100,6 @@
                 android:layout_height="wrap_content"
                 android:text="第二页"
                 android:textSize="18sp"
-                android:textColor="@android:color/black"
-                android:background="@drawable/button_background"
                 android:padding="12dp"
                 android:gravity="center"
                 android:textStyle="bold" />
@@ -129,8 +119,6 @@
                 android:layout_height="wrap_content"
                 android:text="肝脏"
                 android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:background="@drawable/button_background"
                 android:padding="8dp"
                 android:gravity="center" />
 
@@ -149,8 +137,6 @@
                 android:layout_height="wrap_content"
                 android:text="消化系统"
                 android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:background="@drawable/button_background"
                 android:padding="8dp"
                 android:gravity="center" />
 
@@ -169,8 +155,6 @@
                 android:layout_height="wrap_content"
                 android:text="第三页"
                 android:textSize="18sp"
-                android:textColor="@android:color/black"
-                android:background="@drawable/button_background"
                 android:padding="12dp"
                 android:gravity="center"
                 android:textStyle="bold" />
@@ -190,8 +174,6 @@
                 android:layout_height="wrap_content"
                 android:text="肌肉骨骼"
                 android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:background="@drawable/button_background"
                 android:padding="8dp"
                 android:gravity="center" />
 
@@ -210,8 +192,6 @@
                 android:layout_height="wrap_content"
                 android:text="心血系统"
                 android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:background="@drawable/button_background"
                 android:padding="8dp"
                 android:gravity="center" />
 
