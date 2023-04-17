@@ -155,7 +155,7 @@ public class AlertDao extends JDBCHelper{
         Boolean valueReturn=null;
         FutureTask<Boolean> futureTask=new FutureTask<>(()->{
             getConnection();
-            alert_insert.setAlert_No(alertCount(account));
+            //alert_insert.setAlert_No(alertCount(account));
             Boolean value=insertAlertImpl(account,alert_insert);
             closeConnection();
 //            UserLocalDao userLocalDao=new UserLocalDao();
