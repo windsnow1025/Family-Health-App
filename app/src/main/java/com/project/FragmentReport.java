@@ -72,21 +72,19 @@ public class FragmentReport extends Fragment {
             recyclerView.setAdapter(new TableAdapterEnter(data, new TableAdapterEnter.OnItemClickListener() {
                 @Override
                 public void onClick(int position) {
-                    // Delete report from database
+                    // Get report id
+                    Integer report_id = finalReports.get(position - 1).getReport_No();
+
+                    // Delete report
                     try {
-                        // Get report id
-                        Integer report_id = finalReports.get(position - 1).getReport_No();
-
-                        // Delete report
-                        ReportDao reportDao = new ReportDao();
                         reportDao.deleteReport(username, report_id);
-
                         Log.i("test", "从服务器删除体检报告");
                     } catch (Exception e) {
                         Log.i("test", "从本地删除体检报告");
-                        userLocalDao.deleteReport(username, finalReports.get(position - 1).getReport_No());
+                        userLocalDao.deleteReport(username, report_id);
                     }
-                    // Refresh fragment
+
+                    // Reload fragment
                     FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
                     transaction.replace(R.id.fragment_container, new Organ(organ));
                     transaction.addToBackStack(null);

@@ -68,10 +68,29 @@ public class FragmentRecord extends Fragment {
 
             RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            ArrayList<History> finalHistories = histories;
             recyclerView.setAdapter(new TableAdapterEnter(data, new TableAdapterEnter.OnItemClickListener() {
                 @Override
-                public void onClick(int pos) {
-                    // TODO
+                public void onClick(int position) {
+                    // Get record id
+                    Integer record_id = finalHistories.get(position - 1).getHistory_No();
+
+                    // Delete record
+                    try {
+                        historyDao.deleteHistory(username, record_id);
+                        Log.i("test","从服务器删除就诊记录");
+                    }
+                    catch (TimeoutException e)
+                    {
+                        Log.i("test","超时，从本地删除就诊记录");
+                        userLocalDao.deleteHistory(username, record_id);
+                    }
+
+                    // Reload fragment
+                    FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragment_container, new Organ(organ));
+                    transaction.addToBackStack(null);
+                    transaction.commit();
                 }
             }));
 
