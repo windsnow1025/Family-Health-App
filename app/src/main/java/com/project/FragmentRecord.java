@@ -68,7 +68,7 @@ public class FragmentRecord extends Fragment {
 
             RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            recyclerView.setAdapter(new TableAdapter(data, new TableAdapter.OnItemClickListener() {
+            recyclerView.setAdapter(new TableAdapterEnter(data, new TableAdapterEnter.OnItemClickListener() {
                 @Override
                 public void onClick(int pos) {
                     // TODO

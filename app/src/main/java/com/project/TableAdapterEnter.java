@@ -11,12 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> {
+public class TableAdapterEnter extends RecyclerView.Adapter<TableAdapterEnter.ViewHolder> {
 
     private List<String[]> data;
     private OnItemClickListener onItemClickListener;
 
-    public TableAdapter(List<String[]> data, OnItemClickListener onItemClickListener) {
+    public TableAdapterEnter(List<String[]> data, OnItemClickListener onItemClickListener) {
         this.data = data;
         this.onItemClickListener = onItemClickListener;
     }
@@ -24,7 +24,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.table_row, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.table_row_enter, parent, false);
         return new ViewHolder(view);
     }
 
@@ -33,13 +33,6 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> 
         String[] rowData = data.get(position);
         holder.column1.setText(rowData[0]);
         holder.column2.setText(rowData[1]);
-        holder.column2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                onItemClickListener.onClick(position);
-            }
-        });
         holder.column3.setText(rowData[2]);
     }
 
