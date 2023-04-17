@@ -138,8 +138,8 @@ public class AlertDao extends JDBCHelper{
         String sql="UPDATE alert SET is_deleted='true' WHERE alert_No=? and phone_number=?";
         try {
             PreparedStatement preparedStatement=connection.prepareStatement(sql);
-            preparedStatement.setString(1,account);
-            preparedStatement.setInt(2,alert_No);
+            preparedStatement.setInt(1,alert_No);
+            preparedStatement.setString(2,account);
             if(preparedStatement.executeUpdate()>0){
                 valueReturn=true;
             }
