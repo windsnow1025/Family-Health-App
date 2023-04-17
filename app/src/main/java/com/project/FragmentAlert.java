@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.project.JDBC.AlertDao;
 import com.project.Pojo.Alert;
 import com.project.Sqlite.UserLocalDao;
 import com.project.utils.Info;
@@ -25,6 +26,7 @@ import com.project.utils.InfoAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 public class FragmentAlert extends Fragment {
     private static List<Info> infoList=new ArrayList<>();
@@ -34,6 +36,7 @@ public class FragmentAlert extends Fragment {
     private Button button;
     private boolean report,flag;
     private UserLocalDao userLocalDao;
+    private AlertDao alertDao;
     private ArrayList<Alert> alertArrayList;
     private String userID,s;
 
@@ -50,9 +53,8 @@ public class FragmentAlert extends Fragment {
         for (Alert alert:alertArrayList
              ) {
             s=alert.getType();
-            flag= s.equals("true");
-            System.out.println(alert.getContent());
-            infoList.add(new Info(alert.getAlert_No().toString(),alert.getDate(),alert.getCycle(),flag,alert.getType_No(),alert.getAlert_No()));
+            flag= s.equals("true");//true为体检报告
+            infoList.add(new Info(alert.getContent(),alert.getDate(),alert.getCycle(),flag,alert.getType_No(),alert.getAlert_No()));
         }
 
         return  infoList;
@@ -63,6 +65,7 @@ public class FragmentAlert extends Fragment {
         userLocalDao = new UserLocalDao(getActivity().getApplicationContext());
         userLocalDao.open();
         userID=userLocalDao.getUser();
+        alertDao=new AlertDao();
         infoList=getInfoList();
         View view = inflater.inflate(R.layout.fragment_alert, container, false);
         init(view);
@@ -84,7 +87,6 @@ public class FragmentAlert extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 report=infoList.get(position).getFlag();//true为体检报告,吃药
                 int num=infoList.get(position).getN();
-                System.out.println(report+String.valueOf(num));
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
 
                 if(report){
@@ -108,7 +110,12 @@ public class FragmentAlert extends Fragment {
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         infoList.remove(position);
-                       userLocalDao.deleteAlert(userID,position);
+                        try {
+                            alertDao.deleteAlert(userID,position);
+                        } catch (TimeoutException e) {
+                            throw new RuntimeException(e);
+                        }
+                        userLocalDao.deleteAlert(userID,position);
                         Fragment fragment = new FragmentAlert();
                         FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
                         transaction.replace(R.id.fragment_container, fragment);

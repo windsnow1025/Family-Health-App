@@ -122,7 +122,7 @@ public class AlertDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get(2, TimeUnit.SECONDS);
+            valueReturn=futureTask.get(20, TimeUnit.SECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {

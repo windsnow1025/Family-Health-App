@@ -15,54 +15,78 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.project.JDBC.AlertDao;
 import com.project.JDBC.UserDao;
+import com.project.Pojo.Alert;
 import com.project.Pojo.UserInfo;
 import com.project.Sqlite.UserLocalDao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeoutException;
 
 public class FragmentHome extends Fragment {
-    private  ImageButton imageButton;
-    private  ImageButton imageButton1;
-    private  ImageButton imageButton2;
-    private  ImageButton imageButton3;
-    private  ImageButton bt_disease;
-    private  ImageButton bt_kefu;
-    private  TextView tv_user;
-    private  TextView tv_pensonal;
-    private  TextView tv_disease;
-    private  TextView tv_syn;
-    private  TextView tv_exchange;
-    private  TextView tv_kefu;
-    private  TextView tv_setting;
+    private ImageButton imageButton;
+    private ImageButton imageButton1;
+    private ImageButton imageButton2;
+    private ImageButton imageButton3;
+    private ImageButton bt_disease;
+    private ImageButton bt_kefu;
+    private TextView tv_user;
+    private TextView tv_pensonal;
+    private TextView tv_disease;
+    private TextView tv_syn;
+    private TextView tv_exchange;
+    private TextView tv_kefu;
+    private TextView tv_setting;
     private static String username;
     private UserDao userDao;
+    private AlertDao alertDao;
+
     private UserLocalDao userLocalDao;
     public static UserInfo userInfo;
+    private String userID;
+    private ArrayList<Alert> alertArrayList;
 
     public FragmentHome() {
 
     }
 
     void init(View view) throws TimeoutException {
-        tv_user=view.findViewById(R.id.textViewLoginSignup);
-        tv_pensonal=view.findViewById(R.id.tv_persnal);
-        tv_disease=view.findViewById(R.id.tv_disease);
-        tv_syn=view.findViewById(R.id.tv_syn);
-        tv_exchange=view.findViewById(R.id.tv_exchange);
-        tv_kefu=view.findViewById(R.id.tv_kefu);
-        tv_setting=view.findViewById(R.id.tv_setting);
+        tv_user = view.findViewById(R.id.textViewLoginSignup);
+        tv_pensonal = view.findViewById(R.id.tv_persnal);
+        tv_disease = view.findViewById(R.id.tv_disease);
+        tv_syn = view.findViewById(R.id.tv_syn);
+        tv_exchange = view.findViewById(R.id.tv_exchange);
+        tv_kefu = view.findViewById(R.id.tv_kefu);
+        tv_setting = view.findViewById(R.id.tv_setting);
         imageButton = view.findViewById(R.id.imageButton);
         imageButton1 = view.findViewById(R.id.imageButton1);
         imageButton2 = view.findViewById(R.id.imageButton2);
         imageButton3 = view.findViewById(R.id.imageButton3);
         bt_disease = view.findViewById(R.id.bt_disease);
         bt_kefu = view.findViewById(R.id.bt_kefu);
-        username=userLocalDao.getUser();
-        String ID=userLocalDao.getUserInfo(username).getPhone_number();
-       userLocalDao.addOrUpdateUser(userDao.getUserInformation(ID));
+        username = userLocalDao.getUser();
+        String ID = userLocalDao.getUserInfo(username).getPhone_number();
+        userLocalDao.addOrUpdateUser(userDao.getUserInformation(ID));
+    }
+
+    void load() {
+        try {
+            alertArrayList = alertDao.getAlertList(userID);
+        } catch (TimeoutException e) {
+            throw new RuntimeException(e);
+        }
+        int x = userLocalDao.getAlertList(userID).size();
+        if (x > 0) {
+            for (int i = x; i >= 0; i--) {
+                userLocalDao.deleteAlert(userID, i);
+            }
+        }
+        for (Alert alert : alertArrayList) {
+            userLocalDao.insertAlert(userID, alert);
+        }
     }
 
 
@@ -71,18 +95,20 @@ public class FragmentHome extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         userDao = new UserDao();
-        userLocalDao=new UserLocalDao(getActivity().getApplicationContext());
+        userLocalDao = new UserLocalDao(getActivity().getApplicationContext());
         userLocalDao.open();
+        alertDao = new AlertDao();
+        userID = userLocalDao.getUser();
         try {
             init(view);
         } catch (TimeoutException e) {
             throw new RuntimeException(e);
         }
         /*若用户已登录则让按钮失效*/
-        if(username!=null){
+        if (username != null) {
             tv_user.setEnabled(false);
             tv_user.setText(username);
-        }else tv_user.setText("请先登录!");
+        } else tv_user.setText("请先登录!");
         tv_user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,25 +119,26 @@ public class FragmentHome extends Fragment {
 
 
         /*个人中心*/
-            imageButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                    transaction.replace(R.id.fragment_container, new personalCenter());
-                    transaction.addToBackStack(null);
-                    transaction.commit();
-                }
-            });
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, new personalCenter());
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
 
 
         /*数据同步*/
-            imageButton1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                        Toast.makeText(getContext(), "数据已实时同步成功", Toast.LENGTH_SHORT).show();
+        imageButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                load();
+                Toast.makeText(getContext(), "数据已实时同步成功", Toast.LENGTH_SHORT).show();
 
-                }
-            });
+            }
+        });
 
 
         /*切换账号*/

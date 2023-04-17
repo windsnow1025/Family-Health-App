@@ -54,7 +54,6 @@ public class FragmentAlert_set extends Fragment {
         userID=userLocalDao.getUser();
         reportDao=new ReportDao();
         historyDao=new HistoryDao();
-        System.out.println(userID);
         try {
             reportArrayList=reportDao.getReportList(userID);
         } catch (TimeoutException e) {
@@ -68,18 +67,16 @@ public class FragmentAlert_set extends Fragment {
 
         List<String[]> data = new ArrayList<>();
         data.add(new String[]{"时间", "医院", "类型"});
-        System.out.println(reportArrayList.size());
-        System.out.println(historyArrayList.size());
         for (Report report:reportArrayList
              ) {//时间、地点、类型、编号
             data.add(new String[]{report.getReport_date(), report.getReport_place(), report.getReport_type(),report.getReport_No().toString()});
         }
 
         List<String[]> data1 = new ArrayList<>();
-        data1.add(new String[]{"时间", "部位", "症状"});
+        data1.add(new String[]{"时间", "医院", "部位"});
         for (History history :
                 historyArrayList) {
-            data1.add(new String[]{history.getHistory_date(),history.getHistory_organ(),history.getSymptom(), String.valueOf(history.getHistory_No())});
+            data1.add(new String[]{history.getHistory_date(),history.getHistory_place(),history.getHistory_organ(), String.valueOf(history.getHistory_No())});
         }
 
 
@@ -104,11 +101,11 @@ public class FragmentAlert_set extends Fragment {
                 });
                 builder.setPositiveButton("复诊提醒", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                        /*FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
                         int i= Integer.parseInt(data.get(pos)[3]);
                         transaction.replace(R.id.fragment_container, new FragmentDetails_Record(i,true,adapter));
                         transaction.addToBackStack(null);
-                        transaction.commit();
+                        transaction.commit();*/
                     }
                 });
                 builder.show();
@@ -116,7 +113,6 @@ public class FragmentAlert_set extends Fragment {
         });
 
         recyclerView.setAdapter(tableAdapter1);
-
 
 
         RecyclerView recyclerView1 = view.findViewById(R.id.recycler_view1);
@@ -131,11 +127,11 @@ public class FragmentAlert_set extends Fragment {
                 builder.setNegativeButton("吃药提醒", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                        /*FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
                         int i= Integer.parseInt(data1.get(pos)[3]);
                         transaction.replace(R.id.fragment_container, new FragmentDetails(i,false,adapter));
                         transaction.addToBackStack(null);
-                        transaction.commit();
+                        transaction.commit();*/
                     }
                 });
                 builder.setPositiveButton("复诊提醒", new DialogInterface.OnClickListener() {

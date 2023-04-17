@@ -70,6 +70,7 @@ public class FragmentDetails extends Fragment {
     private UserLocalDao userLocalDao;
     private ReportDao reportDao;
     private HistoryDao historyDao;
+    private AlertDao alertDao;
     private History history;
     private Report report;
     private Alert alert;
@@ -137,7 +138,7 @@ public class FragmentDetails extends Fragment {
         /*表修改状态，非新增时*/
         if (flag) {
             Alert alert1=userLocalDao.getAlert(alertArrayList,i);
-            et_title.setText(alert1.getType());
+            et_title.setText(alert1.getContent());
             et_time.setText(alert1.getDate());
           String[] newArray = alert1.getCycle().split("\\s");
             for (String str : newArray) {
@@ -179,7 +180,7 @@ public class FragmentDetails extends Fragment {
         alertArrayList=userLocalDao.getAlertList(userID);
         reportDao = new ReportDao();
         historyDao = new HistoryDao();
-        System.out.println(userID);
+        alertDao=new AlertDao();
         try {
             reportArrayList = reportDao.getReportList(userID);
         } catch (TimeoutException e) {
@@ -217,17 +218,28 @@ public class FragmentDetails extends Fragment {
                 if (!et_title.getText().toString().equals("") && !Time.isEmpty() && !et_time.getText().toString().equals("")) {
                     Info info = new Info(et_title.getText().toString(), getDate(Time), et_time.getText().toString(), true, num,num_alerk);
                    alert=new Alert(num_alerk,userID,et_time.getText().toString(),getDate(Time),et_title.getText().toString(),String.valueOf(isreport),num,"false");
+                    System.out.println("编号"+num_alerk);
+
 //                   是否为修改
                     if (flag) {
                         alert=new Alert(i,userID,et_time.getText().toString(),getDate(Time),et_title.getText().toString(),String.valueOf(isreport),num,"false");
+                        System.out.println("编号"+i);
                         userLocalDao.updateAlert(userID,alert);
+                        try {
+                            alertDao.updateAlert(userID,alert);
+                        } catch (TimeoutException e) {
+                            throw new RuntimeException(e);
+                        }
 
                     }else {
                         userLocalDao.insertAlert(userID, alert);
-                        System.out.println(alert.getContent());
+                        try {
+                            alertDao.insertAlert(userID,alert);
+                        } catch (TimeoutException e) {
+                            throw new RuntimeException(e);
                         }
+                    }
                     adapter.add(info);
-                    System.out.println(userLocalDao.getAlertList(userID).size());
                     if (!flag) {
                         Toast.makeText(getContext(), "提醒添加成功", Toast.LENGTH_SHORT).show();
                     } else Toast.makeText(getContext(), "提醒修改成功", Toast.LENGTH_SHORT).show();

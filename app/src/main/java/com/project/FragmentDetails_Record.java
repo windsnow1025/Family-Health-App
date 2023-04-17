@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.project.JDBC.AlertDao;
 import com.project.JDBC.HistoryDao;
 import com.project.JDBC.ReportDao;
 import com.project.Pojo.Alert;
@@ -59,6 +60,7 @@ public class FragmentDetails_Record extends Fragment implements DatePickerDialog
     private UserLocalDao userLocalDao;
     private ReportDao reportDao;
     private HistoryDao historyDao;
+    private AlertDao alertDao;
     private History history;
     private Report report;
     private Alert alert;
@@ -135,7 +137,7 @@ public class FragmentDetails_Record extends Fragment implements DatePickerDialog
         alertArrayList=userLocalDao.getAlertList(userID);
         reportDao = new ReportDao();
         historyDao = new HistoryDao();
-        System.out.println(userID);
+        alertDao=new AlertDao();
         try {
             reportArrayList = reportDao.getReportList(userID);
         } catch (TimeoutException e) {
@@ -183,9 +185,19 @@ public class FragmentDetails_Record extends Fragment implements DatePickerDialog
                     if (flag) {
                         alert=new Alert(i,userID,ret_time.getText().toString(),rtv_date.getText().toString(),ret_title.getText().toString(),String.valueOf(isreport),num,"false");
                         userLocalDao.updateAlert(userID,alert);
+                        try {
+                            alertDao.updateAlert(userID,alert);
+                        } catch (TimeoutException e) {
+                            throw new RuntimeException(e);
+                        }
 //
                     }else {
                         userLocalDao.insertAlert(userID, alert);
+                        try {
+                            alertDao.insertAlert(userID,alert);
+                        } catch (TimeoutException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                     adapter.add(info);
                     if (!flag) {
