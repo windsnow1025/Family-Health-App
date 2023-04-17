@@ -389,6 +389,7 @@ public class UserLocalDao {
                 alert.setCycle(cursor.getString(cursor.getColumnIndex("cycle")));
                 alert.setType(cursor.getString(cursor.getColumnIndex("type")));
                 alert.setType_No(cursor.getInt(cursor.getColumnIndex("type_No")));
+                alert.setIs_medicine(cursor.getString(cursor.getColumnIndex("is_medicine")));
                 alert.setIs_deleted(cursor.getString(cursor.getColumnIndex("is_deleted")));
                 alertArrayList.add(alert);
             }while(cursor.moveToNext());
@@ -410,6 +411,7 @@ public class UserLocalDao {
         values.put("content",alert.getContent());
         values.put("type",alert.getType());
         values.put("type_No",alert.getType_No());
+        values.put("is_medicine",alert.getIs_medicine());
         values.put("is_deleted","false");
         long flag=db.insert("alert",null,values);
         if(flag>0)
@@ -433,6 +435,7 @@ public class UserLocalDao {
         values.put("content",alert.getContent());
         values.put("type",alert.getType());
         values.put("type_No",alert.getType_No());
+        values.put("is_medicine",alert.getIs_medicine());
         int flag=db.update("alert",values,"Alert_No=? AND phone_number=?",new String[]{String.valueOf(alert.getAlert_No()),account});
         if(flag>0)
         {

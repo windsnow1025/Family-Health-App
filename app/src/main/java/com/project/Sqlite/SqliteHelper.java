@@ -61,6 +61,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
             + "title text,"
             + "date text,"
             + "cycle text,"
+            + "is_medicine text,"
             + "is_deleted text)";
 
 

@@ -6,6 +6,7 @@ public class Alert {
     private String date;
     private String cycle;
     private String content;
+    private String is_medicine;
 
     public Alert() {
     }
@@ -27,6 +28,14 @@ public class Alert {
 
     public String getIs_deleted() {
         return is_deleted;
+    }
+
+    public String getIs_medicine() {
+        return is_medicine;
+    }
+
+    public void setIs_medicine(String is_medicine) {
+        this.is_medicine = is_medicine;
     }
 
     public void setIs_deleted(String is_deleted) {

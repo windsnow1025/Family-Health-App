@@ -54,6 +54,7 @@ public class AlertDao extends JDBCHelper{
                 alert_temp.setType(resultSet.getString("type"));
                 alert_temp.setType_No(resultSet.getInt("type_no"));
                 alert_temp.setPhone_number(account);
+                alert_temp.setIs_medicine(resultSet.getString("is_medicine"));
                 alert_temp.setIs_deleted(resultSet.getString("is_deleted"));
                 alertArrayList.add(alert_temp);
             }
@@ -89,7 +90,7 @@ public class AlertDao extends JDBCHelper{
     }
     private Boolean updateAlertImpl(String account, Alert alert_update){
         Boolean valueReturn=false;
-        String sql="UPDATE alert SET date=?,cycle=?,content=?,type=?,type_no=?,is_deleted=? WHERE alert_No=? and phone_number=?";
+        String sql="UPDATE alert SET date=?,cycle=?,content=?,type=?,type_no=?,is_medicine=?,is_deleted=? WHERE alert_No=? and phone_number=?";
         try {
             PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1,alert_update.getDate());
@@ -97,9 +98,10 @@ public class AlertDao extends JDBCHelper{
             preparedStatement.setString(3,alert_update.getContent());
             preparedStatement.setString(4,alert_update.getType());
             preparedStatement.setInt(5,alert_update.getType_No());
-            preparedStatement.setString(6,alert_update.getIs_deleted());
-            preparedStatement.setInt(7,alert_update.getAlert_No());
-            preparedStatement.setString(8,account);
+            preparedStatement.setString(6,alert_update.getIs_medicine());
+            preparedStatement.setString(7,alert_update.getIs_deleted());
+            preparedStatement.setInt(8,alert_update.getAlert_No());
+            preparedStatement.setString(9,account);
             if(preparedStatement.executeUpdate()>0){
                 valueReturn=true;
             }
@@ -176,7 +178,7 @@ public class AlertDao extends JDBCHelper{
     }
     private Boolean insertAlertImpl(String account, Alert alert_insert){
         Boolean valueReturn=false;
-        String sql="INSERT INTO alert (alert_No,phone_number,date,cycle,content,type,type_no,is_deleted) VALUES (?,?,?,?,?,?,?,?)";
+        String sql="INSERT INTO alert (alert_No,phone_number,date,cycle,content,type,type_no,is_medicine,is_deleted) VALUES (?,?,?,?,?,?,?,?,?)";
         try {
             PreparedStatement preparedStatement= connection.prepareStatement(sql);
             preparedStatement.setInt(1,alert_insert.getAlert_No());
@@ -186,7 +188,8 @@ public class AlertDao extends JDBCHelper{
             preparedStatement.setString(5, alert_insert.getContent());
             preparedStatement.setString(6,alert_insert.getType());
             preparedStatement.setInt(7,alert_insert.getType_No());
-            preparedStatement.setString(8,"false");
+            preparedStatement.setString(8,alert_insert.getIs_medicine());
+            preparedStatement.setString(9,"false");
             if(preparedStatement.executeUpdate()>0)
             {
                 valueReturn=true;
