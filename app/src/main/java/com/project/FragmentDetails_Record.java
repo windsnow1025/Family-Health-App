@@ -67,18 +67,21 @@ public class FragmentDetails_Record extends Fragment implements DatePickerDialog
     private String userID;
     private int num,num_alerk;
     private boolean isreport;
+    private boolean ismedicine;
 
     /*用于新建*/
-    public FragmentDetails_Record(int n, boolean b, InfoAdapter infoAdapter) {
+    public FragmentDetails_Record(boolean ismedicine,int n, boolean isreport, InfoAdapter infoAdapter) {
         this.num = n;
+        this.ismedicine=ismedicine;
         this.adapter = infoAdapter;
-        this.isreport = b;//是否为报告
+        this.isreport = isreport;//是否为报告
     }
 
     /*用于修改*/
-    public FragmentDetails_Record(int n,InfoAdapter infoAdapter, List<Info> Infolist, int I,boolean isreport, boolean Flag) {
+    public FragmentDetails_Record(boolean ismedicine,int n,InfoAdapter infoAdapter, List<Info> Infolist, int I,boolean isreport, boolean Flag) {
         this.adapter = infoAdapter;
         this.num = n;//num为捆绑的编号
+        this.ismedicine=ismedicine;
         this.isreport = isreport;//是否为报告
         this.flag = Flag;//是否为修改
         this.infoList = Infolist;
@@ -104,17 +107,18 @@ public class FragmentDetails_Record extends Fragment implements DatePickerDialog
    }
 
     /*获取数据*/
+    @SuppressLint("SetTextI18n")
     private void infoSet(boolean flag) {
         if(isreport){
-            rtv_time.setText(report.getReport_date());
-            rtv_part.setText(report.getReport_type());
-            rtv_advice.setText(report.getReport_content());
-            rtv_hospital.setText(report.getReport_place());
+            rtv_time.setText(report.getReport_date()+"");
+            rtv_part.setText(report.getReport_type()+"");
+            rtv_advice.setText(report.getReport_content()+"");
+            rtv_hospital.setText(report.getReport_place()+"");
         }else {
-            rtv_time.setText(history.getHistory_date());
-            rtv_part.setText(history.getHistory_organ());
-            rtv_advice.setText(history.getSuggestion());
-            rtv_hospital.setText(history.getHistory_place());
+            rtv_time.setText(history.getHistory_date()+"");
+            rtv_part.setText(history.getHistory_organ()+"");
+            rtv_advice.setText(history.getSuggestion()+"");
+            rtv_hospital.setText(history.getHistory_place()+"");
         }
         /*表修改状态，非新增时*/
         if (flag) {
@@ -179,11 +183,11 @@ public class FragmentDetails_Record extends Fragment implements DatePickerDialog
             @Override
             public void onClick(View v) {
                 if (!ret_title.getText().toString().equals("") && !rtv_date.getText().toString().equals("") && !ret_time.getText().toString().equals("")) {
-                    Info info = new Info(ret_title.getText().toString(), rtv_date.getText().toString(), ret_time.getText().toString(), true, num,num_alerk);
-                    alert=new Alert(num_alerk,userID,ret_time.getText().toString(),rtv_date.getText().toString(),ret_title.getText().toString(),String.valueOf(isreport),num,"false");
+                    Info info = new Info(ismedicine,ret_title.getText().toString(), rtv_date.getText().toString(), ret_time.getText().toString(), true, num,num_alerk);
+                    alert=new Alert(num_alerk,String.valueOf(ismedicine),userID,ret_time.getText().toString(),rtv_date.getText().toString(),ret_title.getText().toString(),String.valueOf(isreport),num,"false");
 //                   是否为修改
                     if (flag) {
-                        alert=new Alert(i,userID,ret_time.getText().toString(),rtv_date.getText().toString(),ret_title.getText().toString(),String.valueOf(isreport),num,"false");
+                        alert=new Alert(i,String.valueOf(ismedicine),userID,ret_time.getText().toString(),rtv_date.getText().toString(),ret_title.getText().toString(),String.valueOf(isreport),num,"false");
                         userLocalDao.updateAlert(userID,alert);
                         try {
                             alertDao.updateAlert(userID,alert);

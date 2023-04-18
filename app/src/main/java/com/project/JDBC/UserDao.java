@@ -28,7 +28,7 @@ public class UserDao extends JDBCHelper{
         });
         new Thread(futureTask).start();
         try {
-            valueReturn=futureTask.get(2, TimeUnit.SECONDS);
+            valueReturn=futureTask.get(20, TimeUnit.SECONDS);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
@@ -216,7 +216,7 @@ public class UserDao extends JDBCHelper{
         String sql_sex="UPDATE user set sex=? WHERE phone_number=?";
         String sql_email="UPDATE user set email=? WHERE phone_number=?";
         String sql_password="UPDATE user set password=? WHERE phone_number=?";
-        //String sql_birthday="UPDATE user set birthday=? WHERE phone_number=?";
+//        String sql_birthday="UPDATE user set birthday=? WHERE phone_number=?";
         String sex_update=userInfo_update.get("sex");
         String username_update=userInfo_update.get("username");
         String email_update=userInfo_update.get("email");

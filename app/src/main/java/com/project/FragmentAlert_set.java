@@ -94,18 +94,18 @@ public class FragmentAlert_set extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
                         int i= Integer.parseInt(data.get(pos)[3]);
-                        transaction.replace(R.id.fragment_container, new FragmentDetails(i,true,adapter));
+                        transaction.replace(R.id.fragment_container, new FragmentDetails(true,i,true,adapter));
                         transaction.addToBackStack(null);
                         transaction.commit();
                     }
                 });
                 builder.setPositiveButton("复诊提醒", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        /*FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
                         int i= Integer.parseInt(data.get(pos)[3]);
-                        transaction.replace(R.id.fragment_container, new FragmentDetails_Record(i,true,adapter));
+                        transaction.replace(R.id.fragment_container, new FragmentDetails_Record(false,i,true,adapter));
                         transaction.addToBackStack(null);
-                        transaction.commit();*/
+                        transaction.commit();
                     }
                 });
                 builder.show();
@@ -127,18 +127,18 @@ public class FragmentAlert_set extends Fragment {
                 builder.setNegativeButton("吃药提醒", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        /*FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
                         int i= Integer.parseInt(data1.get(pos)[3]);
-                        transaction.replace(R.id.fragment_container, new FragmentDetails(i,false,adapter));
+                        transaction.replace(R.id.fragment_container, new FragmentDetails(true,i,false,adapter));
                         transaction.addToBackStack(null);
-                        transaction.commit();*/
+                        transaction.commit();
                     }
                 });
                 builder.setPositiveButton("复诊提醒", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
                         int i= Integer.parseInt(data1.get(pos)[3]);
-                        transaction.replace(R.id.fragment_container, new FragmentDetails_Record(i,false,adapter));
+                        transaction.replace(R.id.fragment_container, new FragmentDetails_Record(false,i,false,adapter));
                         transaction.addToBackStack(null);
                         transaction.commit();
                     }

@@ -14,9 +14,10 @@ public class Alert {
     public Alert() {
     }
 
-    public Alert(Integer alert_No, String phone_number, String date, String cycle, String content, String type, Integer type_No, String is_deleted) {
+    public Alert(Integer alert_No, String is_medicine, String phone_number, String date, String cycle, String content, String type, Integer type_No, String is_deleted) {
         Alert_No = alert_No;
         this.phone_number = phone_number;
+        this.is_medicine=is_medicine;
         this.date = date;
         this.cycle = cycle;
         this.content = content;

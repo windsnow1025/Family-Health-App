@@ -77,18 +77,21 @@ public class FragmentDetails extends Fragment {
     private String userID;
     private int num,num_alerk;
     private boolean isreport;
+    private boolean ismedicine;
 
 
     /*用于新建*/
-    public FragmentDetails(int n, boolean isreport, InfoAdapter infoAdapter) {
+    public FragmentDetails(boolean ismedicine,int n, boolean isreport, InfoAdapter infoAdapter) {
         this.num = n;//num为捆绑的编号
         this.adapter = infoAdapter;
+        this.ismedicine=ismedicine;
         this.isreport = isreport;//是否为报告
     }
 
     /*用于修改*/
-    public FragmentDetails(int n,InfoAdapter infoAdapter, List<Info> Infolist, int I,boolean isreport, boolean Flag) {
+    public FragmentDetails(boolean ismedicine,int n,InfoAdapter infoAdapter, List<Info> Infolist, int I,boolean isreport, boolean Flag) {
         this.adapter = infoAdapter;
+        this.ismedicine=ismedicine;
         this.num = n;//num为捆绑的编号
         this.isreport = isreport;//是否为报告
         this.flag = Flag;//是否为修改
@@ -115,6 +118,7 @@ public class FragmentDetails extends Fragment {
         et_title = view.findViewById(R.id.et_title);
         et_time = view.findViewById(R.id.et_time);
         bt_cancel = view.findViewById(R.id.bt_cancel);
+
         if (isreport) report = UserLocalDao.gerReport(reportArrayList, num);
         else{
             history = UserLocalDao.getHistory(historyArrayList, num);}
@@ -122,17 +126,18 @@ public class FragmentDetails extends Fragment {
     }
 
     /*数据导入*/
+    @SuppressLint("SetTextI18n")
     private  void infoSet(boolean flag) {
         if(isreport){
-            tv_time.setText(report.getReport_date());
-            tv_part.setText(report.getReport_type());
-            tv_advice.setText(report.getReport_content());
-            tv_hospital.setText(report.getReport_place());
+            tv_time.setText(report.getReport_date()+"");
+            tv_part.setText(report.getReport_type()+"");
+            tv_advice.setText(report.getReport_content()+"");
+            tv_hospital.setText(report.getReport_place()+"");
         }else {
-            tv_time.setText(history.getHistory_date());
-            tv_part.setText(history.getHistory_organ());
-            tv_advice.setText(history.getSuggestion());
-            tv_hospital.setText(history.getHistory_place());
+            tv_time.setText(history.getHistory_date()+"");
+            tv_part.setText(history.getHistory_organ()+"");
+            tv_advice.setText(history.getSuggestion()+"");
+            tv_hospital.setText(history.getHistory_place()+"");
         }
 
         /*表修改状态，非新增时*/
@@ -216,13 +221,13 @@ public class FragmentDetails extends Fragment {
             public void onClick(View v) {
                 setAlarmTime(H, M);
                 if (!et_title.getText().toString().equals("") && !Time.isEmpty() && !et_time.getText().toString().equals("")) {
-                    Info info = new Info(et_title.getText().toString(), getDate(Time), et_time.getText().toString(), true, num,num_alerk);
-                   alert=new Alert(num_alerk,userID,et_time.getText().toString(),getDate(Time),et_title.getText().toString(),String.valueOf(isreport),num,"false");
+                    Info info = new Info(ismedicine,et_title.getText().toString(), getDate(Time), et_time.getText().toString(), true, num,num_alerk);
+                   alert=new Alert(num_alerk,String.valueOf(ismedicine),userID,et_time.getText().toString(),getDate(Time),et_title.getText().toString(),String.valueOf(isreport),num,"false");
                     System.out.println("编号"+num_alerk);
 
 //                   是否为修改
                     if (flag) {
-                        alert=new Alert(i,userID,et_time.getText().toString(),getDate(Time),et_title.getText().toString(),String.valueOf(isreport),num,"false");
+                        alert=new Alert(i,String.valueOf(ismedicine),userID,et_time.getText().toString(),getDate(Time),et_title.getText().toString(),String.valueOf(isreport),num,"false");
                         System.out.println("编号"+i);
                         userLocalDao.updateAlert(userID,alert);
                         try {

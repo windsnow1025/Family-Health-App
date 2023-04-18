@@ -173,7 +173,7 @@ public class personalCenter extends Fragment implements DatePickerDialog.OnDateS
     }
 
     public static Date parse(String strDate) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         return sdf.parse(strDate);
     }
 

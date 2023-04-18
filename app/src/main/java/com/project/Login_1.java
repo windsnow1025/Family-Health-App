@@ -39,13 +39,13 @@ public class Login_1 extends AppCompatActivity implements View.OnClickListener, 
     private Button btn_login;
     private ImageButton bt_eye;
     private boolean bRemember = false;
-    private boolean flag=false;
-     private String username;
-     private String password;
-     private Intent intent;
+    private boolean flag = false;
+    private String username;
+    private String password;
+    private Intent intent;
     private SharedPreferences mShared;
     private MainApplication mainApplication;
-    private Boolean flag_eye=false;
+    private Boolean flag_eye = false;
     private UserDao userDao;
     private UserLocalDao userLocalDao;
 
@@ -54,7 +54,7 @@ public class Login_1 extends AppCompatActivity implements View.OnClickListener, 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userDao = new UserDao();
-        userLocalDao=new UserLocalDao(getApplicationContext());
+        userLocalDao = new UserLocalDao(getApplicationContext());
         userLocalDao.open();
         setContentView(R.layout.activity_login);
         et_phone = (EditText) findViewById(R.id.et_phone);
@@ -69,19 +69,20 @@ public class Login_1 extends AppCompatActivity implements View.OnClickListener, 
         btn_login.setOnClickListener(this);
         btn_forget.setOnClickListener(this);
         et_password.setOnFocusChangeListener(this);
-        et_phone.addTextChangedListener(new HideText(et_phone,et_password));
-        bt_eye=findViewById(R.id.bt_eye1);
+        et_phone.addTextChangedListener(new HideText(et_phone, et_password));
+        bt_eye = findViewById(R.id.bt_eye1);
         bt_eye.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("UseCompatLoadingForDrawables")
             @Override
             public void onClick(View v) {
-                flag_eye=!flag_eye;
+                flag_eye = !flag_eye;
                 if (flag_eye) {
                     /*明文*/
-                    ((ImageButton)v).setImageDrawable(getResources().getDrawable(R.drawable.open_eye1));
+                    ((ImageButton) v).setImageDrawable(getResources().getDrawable(R.drawable.open_eye1));
                     et_password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                 } else {
                     /*密文*/
-                    ((ImageButton)v).setImageDrawable(getResources().getDrawable(R.drawable.eye));
+                    ((ImageButton) v).setImageDrawable(getResources().getDrawable(R.drawable.eye));
                     et_password.setTransformationMethod(PasswordTransformationMethod.getInstance());
                 }
             }
@@ -89,32 +90,29 @@ public class Login_1 extends AppCompatActivity implements View.OnClickListener, 
 
 
         /*保留手机号码*/
-        intent=getIntent();
-        username=intent.getStringExtra("username");
-        if(username!=null){
+        intent = getIntent();
+        username = intent.getStringExtra("username");
+        if (username != null) {
             et_phone.setText(username);
         }
         /*记住密码功能*/
         mShared = getSharedPreferences("share_login", MODE_PRIVATE);
         String phone = mShared.getString("phone", "");
         String password = mShared.getString("password", "");
-       if(!phone.equals("")) {et_phone.setText(phone);}
-        if(!password.equals("")){et_password.setText(password);}
-
-        /*全局传参*/
-        mainApplication=MainApplication.getInstance();
-//        reload();
-
-    }
-
-    private  void reload(){
-
-        if(mainApplication.map.get("username")!=null){
-            username=mainApplication.map.get("username");
-            et_phone.setText(username);
+        if (!phone.equals("")) {
+            et_phone.setText(phone);
+        }
+        if (!password.equals("")) {
+            et_password.setText(password);
         }
 
+        /*全局传参*/
+        mainApplication = MainApplication.getInstance();
+
+
     }
+
+
     @Override
     public void onClick(View v) {
 
@@ -123,42 +121,50 @@ public class Login_1 extends AppCompatActivity implements View.OnClickListener, 
         /*注册*/
         if (v.getId() == R.id.btn_register) {
             intent = new Intent(this, LoginForgetActivity.class);
-            intent.putExtra("username",username);
-            intent.putExtra("flag",true);
+            intent.putExtra("username", username);
+            intent.putExtra("flag", true);
             startActivity(intent);
         }
         /*登录*/
         else if (v.getId() == R.id.btn_login) {
             intent = new Intent(this, MainActivity.class);
-            flag=true;
+            flag = true;
+            boolean is= false;
             try {
-                if(userDao.checkUserPassword(username,password).equals(username)){
+                is = username.equals(userDao.checkUserPassword(username, password));
+            } catch (RuntimeException | TimeoutException e) {
+            }
+            if (is) {
                 if (bRemember) {
                     SharedPreferences.Editor editor = mShared.edit();
                     editor.putString("phone", et_phone.getText().toString());
                     editor.putString("password", et_password.getText().toString());
                     editor.apply();
-                    userLocalDao.addOrUpdateUser(userDao.getUserInformation(username));
+                    try {
+                        userLocalDao.addOrUpdateUser(userDao.getUserInformation(username));
+                    } catch (TimeoutException e) {
+                        throw new RuntimeException(e);
+                    }
                     startActivity(intent);
-                }else {
+                } else {
                     SharedPreferences.Editor editor = mShared.edit();
-                    editor.putString("phone","");
+                    editor.putString("phone", "");
                     editor.putString("password", "");
                     editor.apply();
-                    userLocalDao.addOrUpdateUser(userDao.getUserInformation(username));
+                    try {
+                        userLocalDao.addOrUpdateUser(userDao.getUserInformation(username));
+                    } catch (TimeoutException e) {
+                        throw new RuntimeException(e);
+                    }
                     startActivity(intent);
                 }
-                }else Toast.makeText(this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
-            } catch (TimeoutException e) {
-                throw new RuntimeException(e);
-            }
-
+            } else Toast.makeText(this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
         }
         /*忘记密码*/
         else if (v.getId() == R.id.btn_forget) {
             intent = new Intent(this, LoginForgetActivity.class);
-            intent.putExtra("username",username);
-            intent.putExtra("flag",false);
+            intent.putExtra("username", username);
+            intent.putExtra("flag", false);
             startActivity(intent);
         }
     }
@@ -199,11 +205,12 @@ public class Login_1 extends AppCompatActivity implements View.OnClickListener, 
         private View nextview;
         private CharSequence str;
         private int maxlength;
-        public HideText(EditText editText,View vnext){
+
+        public HideText(EditText editText, View vnext) {
             super();
-            v=editText;
-            nextview=vnext;
-            maxlength= ViewUtil.getMaxLength(editText);
+            v = editText;
+            nextview = vnext;
+            maxlength = ViewUtil.getMaxLength(editText);
         }
 
 
@@ -227,12 +234,12 @@ public class Login_1 extends AppCompatActivity implements View.OnClickListener, 
             if (str == null || str.length() == 0) {
                 return;
             }
-            if (str.length() == 11 && maxlength==11) {
-                ViewUtil.hideMethod(Login_1.this,v);
+            if (str.length() == 11 && maxlength == 11) {
+                ViewUtil.hideMethod(Login_1.this, v);
                 nextview.requestFocus();
             }
-            if (str.length() == 6 && maxlength==6) {
-                ViewUtil.hideMethod(Login_1.this,v);
+            if (str.length() == 6 && maxlength == 6) {
+                ViewUtil.hideMethod(Login_1.this, v);
                 nextview.requestFocus();
             }
         }

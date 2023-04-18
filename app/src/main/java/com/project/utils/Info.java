@@ -7,16 +7,26 @@ public class Info {
     private int n,num_alert;
 
     private Boolean report;//用于标记提醒类型，true为体检,需要吃药，false为就诊，需要复检
+    private Boolean medicine;//用于标记提醒类型，true为体检,需要吃药，false为就诊，需要复检
 
 
 
-    public Info(String mtitle, String mdate,String mtime,Boolean mflag ,int n,int num_alert) {
+    public Info(boolean medicine,String mtitle, String mdate,String mtime,Boolean mflag ,int n,int num_alert) {
+       this.medicine=medicine;
         this.title = mtitle;
         this.time = mtime;
         this.report = mflag;
         this.date = mdate;
         this.num_alert=num_alert;
         this.n=n;
+    }
+
+    public Boolean getReport() {
+        return report;
+    }
+
+    public Boolean getMedicine() {
+        return medicine;
     }
 
     public String getTitle() {

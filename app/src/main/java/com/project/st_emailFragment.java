@@ -64,6 +64,7 @@ public class st_emailFragment extends Fragment {
     }
     private class BTlistener implements View.OnClickListener{
 
+        @SuppressLint("NonConstantResourceId")
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
@@ -76,7 +77,7 @@ public class st_emailFragment extends Fragment {
                         Toast.makeText(getContext(), "邮箱格式不正确", Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        String mVerifyCode = String.format("%06d", (int) (Math.random() * 1000000 % 1000000));
+                        @SuppressLint("DefaultLocale") String mVerifyCode = String.format("%06d", (int) (Math.random() * 1000000 % 1000000));
                         Toast.makeText(getContext(), "验证码为："+mVerifyCode, Toast.LENGTH_LONG).show();
                         final EditText inputServer = new EditText(getContext());
                         inputServer.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});

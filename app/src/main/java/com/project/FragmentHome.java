@@ -45,7 +45,6 @@ public class FragmentHome extends Fragment {
     private AlertDao alertDao;
 
     private UserLocalDao userLocalDao;
-    public static UserInfo userInfo;
     private String userID;
     private ArrayList<Alert> alertArrayList;
 
@@ -134,7 +133,7 @@ public class FragmentHome extends Fragment {
         imageButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                load();
+                load();
                 Toast.makeText(getContext(), "数据已实时同步成功", Toast.LENGTH_SHORT).show();
 
             }
