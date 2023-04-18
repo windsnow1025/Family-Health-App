@@ -390,15 +390,15 @@ public class UserLocalDao {
                 alert.setType(cursor.getString(cursor.getColumnIndex("type")));
                 alert.setType_No(cursor.getInt(cursor.getColumnIndex("type_No")));
                 alert.setIs_medicine(cursor.getString(cursor.getColumnIndex("is_medicine")));
-                alert.setIs_deleted(cursor.getString(cursor.getColumnIndex("is_deleted")));
+//                alert.setIs_deleted(cursor.getString(cursor.getColumnIndex("is_deleted")));
                 alertArrayList.add(alert);
             }while(cursor.moveToNext());
         }
-        if(args.length==0)
-        {
-            Stream<Alert> alertStream=alertArrayList.stream();
-            alertArrayList= (ArrayList<Alert>) alertStream.filter(alert -> alert.getIs_deleted().equals("false")).collect(Collectors.toList());
-        }
+//        if(args.length==0)
+//        {
+//            Stream<Alert> alertStream=alertArrayList.stream();
+//            alertArrayList= (ArrayList<Alert>) alertStream.filter(alert -> alert.getIs_deleted().equals("false")).collect(Collectors.toList());
+//        }
         return alertArrayList;
     }
     public Boolean insertAlert(String account,Alert alert){
@@ -443,11 +443,20 @@ public class UserLocalDao {
         }
         return valueReturn;
     }
+//    public Boolean deleteAlert(String account,Integer alert_No){
+//        Boolean valueReturn=false;
+//        ContentValues values=new ContentValues();
+//        values.put("is_deleted","true");
+//        int flag=db.update("alert",values,"Alert_No=? AND phone_number=?",new String[]{String.valueOf(alert_No),account});
+//        if(flag>0)
+//        {
+//            valueReturn=true;
+//        }
+//        return valueReturn;
+//    }
     public Boolean deleteAlert(String account,Integer alert_No){
         Boolean valueReturn=false;
-        ContentValues values=new ContentValues();
-        values.put("is_deleted","true");
-        int flag=db.update("alert",values,"Alert_No=? AND phone_number=?",new String[]{String.valueOf(alert_No),account});
+        int flag=db.delete("alert","Alert_No=? AND phone_number=?",new String[]{String.valueOf(alert_No),account});
         if(flag>0)
         {
             valueReturn=true;
