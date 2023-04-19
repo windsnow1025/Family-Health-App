@@ -155,7 +155,7 @@ public class EnterReport extends Fragment {
                 Report report = new Report();
                 report.setPhone_number(username);
                 report.setPhone_number(username);
-                report.setReport_content(bitmapString);                           //获取序号封装进插入中
+                report.setReport_content(bitmapString);
                 report.setReport_type(type);
                 report.setReport_place(hospital);
                 if (date.equals("")) {
