@@ -197,16 +197,31 @@ public class EnterReport extends Fragment {
             e.printStackTrace();
         }
 
-        // Set
+        // Set datapath
         String datapath = this.getActivity().getExternalFilesDir(null) + "/tesseract/";
-        String language = "eng";
+        String datapath2 = this.getActivity().getExternalFilesDir(null) + "/tesseract/tessdata/";
 
         // Create directory
-        File dir = new File(this.getActivity().getExternalFilesDir(null), "tesseract");
+        File dir = new File(datapath);
         if (!dir.exists()) {
-            Log.e("test", "数据路径不存在");
+            Log.e("test", "数据路径1不存在");
             return;
         }
+
+        // Create directory
+        File dir2 = new File(datapath2);
+        if (!dir2.exists()) {
+            if (!dir2.mkdirs()) {
+                Log.e("test", "创建路径2失败");
+                return;
+            }
+        }
+
+        // Path exists
+        Log.i("test", "路径2存在");
+
+        // Set language
+        String language = "eng";
 
         // New thread
         new Thread(new Runnable() {
@@ -214,7 +229,7 @@ public class EnterReport extends Fragment {
             public void run() {
                 // Download trained data
                 String filename = language + ".traineddata";
-                File file = new File(dir, filename);
+                File file = new File(dir2, filename);
                 if (!file.exists()) {
                     try {
                         URL url = new URL("https://github.com/tesseract-ocr/tessdata/blob/main/eng.traineddata");
