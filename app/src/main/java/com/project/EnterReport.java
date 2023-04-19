@@ -198,15 +198,14 @@ public class EnterReport extends Fragment {
         }
 
         // Set
-        String datapath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tesseract";
+        String datapath = this.getActivity().getExternalFilesDir(null) + "/tesseract/";
         String language = "eng";
 
         // Create directory
-        File dir = new File(getActivity().getExternalFilesDir(null), "tesseract");
+        File dir = new File(this.getActivity().getExternalFilesDir(null), "tesseract");
         if (!dir.exists()) {
-            if (!dir.mkdirs()) {
-                Log.i("test", "创建文件夹失败");
-            }
+            Log.e("test", "数据路径不存在");
+            return;
         }
 
         // New thread
@@ -239,6 +238,13 @@ public class EnterReport extends Fragment {
                 try {
                     // Initialize Tesseract
                     TessBaseAPI tessBaseAPI = new TessBaseAPI();
+
+                    // Check if datapath exists
+                    if (!dir.exists()) {
+                        Log.e("test", "数据路径不存在");
+                        return;
+                    }
+
                     tessBaseAPI.init(datapath, language);
                     tessBaseAPI.setImage(bitmap);
                     String ocrtxt = tessBaseAPI.getUTF8Text();
@@ -247,7 +253,7 @@ public class EnterReport extends Fragment {
                     // Set OCR result to EditText
                     editTextOCRTxt.setText(ocrtxt);
                 } catch (Exception e) {
-                    Log.i("test", "OCR出错");
+                    Log.e("test", "OCR出错");
                     e.printStackTrace();
                 }
             }
