@@ -1,8 +1,10 @@
 package com.project;
 
 import android.app.DatePickerDialog;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
@@ -15,6 +17,8 @@ import android.widget.EditText;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -23,12 +27,24 @@ import com.project.Pojo.Report;
 import com.project.Sqlite.UserLocalDao;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeoutException;
+
+import com.googlecode.tesseract.android.TessBaseAPI;
+
+// import storage permission
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 // 体检报告录入
 public class EnterReport extends Fragment {
@@ -36,7 +52,6 @@ public class EnterReport extends Fragment {
     String organ;
 
     String username;
-    String phone_number;
 
     String date;
     String hospital;
@@ -45,8 +60,11 @@ public class EnterReport extends Fragment {
     EditText editTextDate;
     EditText editTextHospital;
     EditText editTextType;
+    EditText editTextOCRTxt;
 
     Bitmap bitmap;
+
+    String ocrtxt;
 
     public EnterReport(String organ) {
         this.organ = organ;
@@ -60,6 +78,11 @@ public class EnterReport extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.enter_report, container, false);
+
+        // Require storage permission
+        if (ContextCompat.checkSelfPermission(getActivity(), READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE}, 1);
+        }
 
         // Get username
         try {
@@ -78,6 +101,7 @@ public class EnterReport extends Fragment {
         editTextDate = view.findViewById(R.id.editTextDate);
         editTextHospital = view.findViewById(R.id.editTextHospital);
         editTextType = view.findViewById(R.id.editTextType);
+        editTextOCRTxt = view.findViewById(R.id.editTextOCRTxt);
 
         // Set to open date picker when click on date EditText
         editTextDate.setOnClickListener(new View.OnClickListener() {
@@ -145,8 +169,7 @@ public class EnterReport extends Fragment {
                     insertStatus = reportDao.insertReport(username, report);
                 } catch (TimeoutException e) {
                     Log.i("Test", "网络有问题");
-                }
-                finally {
+                } finally {
                     Log.i("Log", "插入结束");
                 }
 
@@ -171,5 +194,52 @@ public class EnterReport extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        String datapath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tesseract";
+        String language = "eng";
+
+        // 创建tesseract文件夹
+        File dir = new File(datapath);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // Download trained data
+                String filename = language + ".traineddata";
+                File file = new File(dir, filename);
+                if (!file.exists()) {
+                    try {
+                        URL url = new URL("https://github.com/tesseract-ocr/tessdata/raw/master/" + filename);
+                        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                        connection.connect();
+                        InputStream input = connection.getInputStream();
+                        OutputStream output = new FileOutputStream(file);
+                        byte[] buffer = new byte[1024];
+                        int length;
+                        while ((length = input.read(buffer)) > 0) {
+                            output.write(buffer, 0, length);
+                        }
+                        output.flush();
+                        output.close();
+                        input.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                // Initialize Tesseract
+                TessBaseAPI tessBaseAPI = new TessBaseAPI();
+                tessBaseAPI.init(datapath, language);
+                tessBaseAPI.setImage(bitmap);
+                String ocrtxt = tessBaseAPI.getUTF8Text();
+                tessBaseAPI.end();
+
+                // Set OCR result to EditText
+                editTextOCRTxt.setText(ocrtxt);
+            }
+        }).start();
     });
 }
