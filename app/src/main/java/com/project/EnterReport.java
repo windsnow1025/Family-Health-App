@@ -45,6 +45,7 @@ import com.googlecode.tesseract.android.TessBaseAPI;
 // import storage permission
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static androidx.fragment.app.FragmentManager.TAG;
 
 // 体检报告录入
 public class EnterReport extends Fragment {
@@ -188,6 +189,7 @@ public class EnterReport extends Fragment {
     }
 
     private final ActivityResultLauncher<String> galleryLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+        // Get bitmap from uri
         bitmap = null;
         try {
             bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
@@ -195,15 +197,19 @@ public class EnterReport extends Fragment {
             e.printStackTrace();
         }
 
+        // Set
         String datapath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tesseract";
         String language = "eng";
 
-        // 创建tesseract文件夹
-        File dir = new File(datapath);
+        // Create directory
+        File dir = new File(getActivity().getExternalFilesDir(null), "tesseract");
         if (!dir.exists()) {
-            dir.mkdirs();
+            if (!dir.mkdirs()) {
+                Log.i("test", "创建文件夹失败");
+            }
         }
 
+        // New thread
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -212,7 +218,7 @@ public class EnterReport extends Fragment {
                 File file = new File(dir, filename);
                 if (!file.exists()) {
                     try {
-                        URL url = new URL("https://github.com/tesseract-ocr/tessdata/raw/master/" + filename);
+                        URL url = new URL("https://github.com/tesseract-ocr/tessdata/blob/main/eng.traineddata");
                         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                         connection.connect();
                         InputStream input = connection.getInputStream();
@@ -230,15 +236,20 @@ public class EnterReport extends Fragment {
                     }
                 }
 
-                // Initialize Tesseract
-                TessBaseAPI tessBaseAPI = new TessBaseAPI();
-                tessBaseAPI.init(datapath, language);
-                tessBaseAPI.setImage(bitmap);
-                String ocrtxt = tessBaseAPI.getUTF8Text();
-                tessBaseAPI.end();
+                try {
+                    // Initialize Tesseract
+                    TessBaseAPI tessBaseAPI = new TessBaseAPI();
+                    tessBaseAPI.init(datapath, language);
+                    tessBaseAPI.setImage(bitmap);
+                    String ocrtxt = tessBaseAPI.getUTF8Text();
+                    tessBaseAPI.end();
 
-                // Set OCR result to EditText
-                editTextOCRTxt.setText(ocrtxt);
+                    // Set OCR result to EditText
+                    editTextOCRTxt.setText(ocrtxt);
+                } catch (Exception e) {
+                    Log.i("test", "OCR出错");
+                    e.printStackTrace();
+                }
             }
         }).start();
     });
