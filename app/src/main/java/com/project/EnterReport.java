@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
@@ -34,18 +33,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeoutException;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
 
-// import storage permission
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-import static androidx.fragment.app.FragmentManager.TAG;
 
 // 体检报告录入
 public class EnterReport extends Fragment {
@@ -65,8 +59,6 @@ public class EnterReport extends Fragment {
 
     Bitmap bitmap;
 
-    String ocrtxt;
-
     public EnterReport(String organ) {
         this.organ = organ;
     }
@@ -79,11 +71,6 @@ public class EnterReport extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.enter_report, container, false);
-
-        // Require storage permission
-        if (ContextCompat.checkSelfPermission(getActivity(), READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE}, 1);
-        }
 
         // Get username
         try {
