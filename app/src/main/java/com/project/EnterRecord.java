@@ -59,7 +59,7 @@ public class EnterRecord extends Fragment {
             userLocalDao.open();
             username = userLocalDao.getUser();
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
 
         // Get views

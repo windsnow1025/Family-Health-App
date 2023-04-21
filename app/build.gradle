@@ -44,5 +44,5 @@ dependencies {
     // https://mvnrepository.com/artifact/mysql/mysql-connector-java
 //    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.32'
     implementation group: 'mysql', name: 'mysql-connector-java', version: '5.1.6'
-    implementation 'com.rmtheis:tess-two:9.0.0'
+    implementation 'com.rmtheis:tess-two:9.1.0'
 }
