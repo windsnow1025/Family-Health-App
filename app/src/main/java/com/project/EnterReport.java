@@ -219,11 +219,11 @@ public class EnterReport extends Fragment {
             @Override
             public void run() {
                 // Download trained data
-                String filename = "eng.traineddata";
+                String filename = "chi_sim.traineddata";
                 File file = new File(dir2, filename);
                 if (!file.exists()) {
                     try {
-                        URL url = new URL("https://github.com/tesseract-ocr/tessdata/raw/main/eng.traineddata");
+                        URL url = new URL("https://github.com/tesseract-ocr/tessdata/raw/main/chi_sim.traineddata");
                         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                         connection.connect();
                         InputStream input = connection.getInputStream();
@@ -260,7 +260,7 @@ public class EnterReport extends Fragment {
     private String extractText(Bitmap bitmap) throws Exception{
         TessBaseAPI tessBaseApi = new TessBaseAPI();
         Log.i("test", "测试");
-        tessBaseApi.init(this.getActivity().getExternalFilesDir(null) + "/tesseract/", "eng");
+        tessBaseApi.init(this.getActivity().getExternalFilesDir(null) + "/tesseract/", "chi_sim");
         Log.i("test", "测试");
         tessBaseApi.setImage(bitmap);
         String extractedText = tessBaseApi.getUTF8Text();
