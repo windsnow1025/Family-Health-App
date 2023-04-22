@@ -153,22 +153,18 @@ public class EnterReport extends Fragment {
                 report.setReport_place(hospital);
                 report.setReport_picture(bitmapString);
                 report.setReport_content(OCRTxt);
+                report.setIs_deleted("false");
                 if (date.equals("")) {
                     //判定日期是否填写 未填写则设置为null
                     report.setReport_date(null);
                 } else {
                     report.setReport_date(date);
                 }
-                report.setIs_deleted("false");
                 try {
                     insertStatus = reportDao.insertReport(username, report);
                 } catch (TimeoutException e) {
                     Log.i("Test", "网络有问题");
-                } finally {
-                    Log.i("Log", "插入结束");
                 }
-
-
                 Log.i("主线程", "报告插入情况" + insertStatus);
                 Log.i("主线程", "数据库测试结束");
 

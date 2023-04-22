@@ -3,7 +3,7 @@ package com.project.Pojo;
 import java.io.Serializable;
 
 public class Report implements Serializable {
-    private Integer report_No;
+    private int report_No;
     private String phone_number;
     private String report_content;
     private String report_picture;

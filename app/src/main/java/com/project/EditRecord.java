@@ -72,7 +72,6 @@ public class EditRecord extends Fragment {
             UserLocalDao userLocalDao = new UserLocalDao(getContext());
             userLocalDao.open();
             username = userLocalDao.getUser();
-            Log.i("test", "username: " + username);
 
             // Get record
             HistoryDao historyDao = new HistoryDao();
