@@ -9,7 +9,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
     // 数据库名称
     public static final String DATABASE = "Android.db";
     // 数据库版本号
-    public static final int VERSION = 3;
+    public static final int VERSION = 6;
     // 创建DB对象时的构造函数
 
     private Context context;
@@ -47,6 +47,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
             + "phone_number text,"
             + "report_No integer,"
             + "report_content blob,"
+            + "report_picture blob,"
             + "report_type text,"
             + "report_date text,"
             + "report_place text,"

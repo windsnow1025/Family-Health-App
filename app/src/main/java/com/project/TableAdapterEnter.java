@@ -36,6 +36,7 @@ public class TableAdapterEnter extends RecyclerView.Adapter<TableAdapterEnter.Vi
         holder.column2.setText(rowData[1]);
         holder.column3.setText(rowData[2]);
         if (position == 0) {
+            holder.editButton.setVisibility(View.INVISIBLE);
             holder.deleteButton.setVisibility(View.INVISIBLE);
         }
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
@@ -56,6 +57,7 @@ public class TableAdapterEnter extends RecyclerView.Adapter<TableAdapterEnter.Vi
         TextView column2;
         TextView column3;
         Button deleteButton;
+        Button editButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -63,6 +65,7 @@ public class TableAdapterEnter extends RecyclerView.Adapter<TableAdapterEnter.Vi
             column2 = itemView.findViewById(R.id.column2);
             column3 = itemView.findViewById(R.id.column3);
             deleteButton = itemView.findViewById(R.id.delete_button);
+            editButton = itemView.findViewById(R.id.edit_button);
         }
     }
 

@@ -72,13 +72,18 @@ public class EnterReport extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.enter_report, container, false);
 
+        // Require storage permission
+        if (ContextCompat.checkSelfPermission(getActivity(), READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE}, 1);
+        }
+
         // Get username
         try {
             UserLocalDao userLocalDao = new UserLocalDao(this.getActivity().getApplicationContext());
             userLocalDao.open();
-            username = userLocalDao.getUser();                                                      //关于这里的getUser()是获取当前登录的账号 理论上应该需要从登录入口进入才能获取到 我测试的时候是事先写了数据到本地进行测试
+            username = userLocalDao.getUser();
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
 
         // Set an OnClickListener on the button to launch the gallery
@@ -191,8 +196,10 @@ public class EnterReport extends Fragment {
         // Create directory
         File dir = new File(datapath);
         if (!dir.exists()) {
-            Log.e("test", "数据路径1不存在");
-            return;
+            if (!dir.mkdirs()) {
+                Log.e("test", "创建路径1失败");
+                return;
+            }
         }
 
         // Create directory
@@ -207,19 +214,16 @@ public class EnterReport extends Fragment {
         // Path exists
         Log.i("test", "路径2存在");
 
-        // Set language
-        String language = "eng";
-
         // New thread
         new Thread(new Runnable() {
             @Override
             public void run() {
                 // Download trained data
-                String filename = language + ".traineddata";
+                String filename = "chi_sim.traineddata";
                 File file = new File(dir2, filename);
                 if (!file.exists()) {
                     try {
-                        URL url = new URL("https://github.com/tesseract-ocr/tessdata/blob/main/eng.traineddata");
+                        URL url = new URL("https://github.com/tesseract-ocr/tessdata/raw/main/chi_sim.traineddata");
                         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                         connection.connect();
                         InputStream input = connection.getInputStream();
@@ -238,19 +242,8 @@ public class EnterReport extends Fragment {
                 }
 
                 try {
-                    // Initialize Tesseract
-                    TessBaseAPI tessBaseAPI = new TessBaseAPI();
-
-                    // Check if datapath exists
-                    if (!dir.exists()) {
-                        Log.e("test", "数据路径不存在");
-                        return;
-                    }
-
-                    tessBaseAPI.init(datapath, language);
-                    tessBaseAPI.setImage(bitmap);
-                    String ocrtxt = tessBaseAPI.getUTF8Text();
-                    tessBaseAPI.end();
+                    // Extract text
+                    String ocrtxt = extractText(bitmap);
 
                     // Set OCR result to EditText
                     editTextOCRTxt.setText(ocrtxt);
@@ -260,5 +253,18 @@ public class EnterReport extends Fragment {
                 }
             }
         }).start();
+
+
     });
+
+    private String extractText(Bitmap bitmap) throws Exception{
+        TessBaseAPI tessBaseApi = new TessBaseAPI();
+        Log.i("test", "测试");
+        tessBaseApi.init(this.getActivity().getExternalFilesDir(null) + "/tesseract/", "chi_sim");
+        Log.i("test", "测试");
+        tessBaseApi.setImage(bitmap);
+        String extractedText = tessBaseApi.getUTF8Text();
+        tessBaseApi.end();
+        return extractedText;
+    }
 }

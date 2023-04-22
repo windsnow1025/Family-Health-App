@@ -311,6 +311,7 @@ public class UserLocalDao {
                 report.setPhone_number(cursor.getString(cursor.getColumnIndex("phone_number")));
                 report.setReport_No(cursor.getInt(cursor.getColumnIndex("report_No")));
                 report.setReport_content(cursor.getString(cursor.getColumnIndex("report_content")));
+                report.setReport_picture(cursor.getString(cursor.getColumnIndex("report_picture")));
                 report.setReport_type(cursor.getString(cursor.getColumnIndex("report_type")));
                 report.setReport_place(cursor.getString(cursor.getColumnIndex("report_place")));
                 report.setReport_date(cursor.getString(cursor.getColumnIndex("report_date")));
@@ -331,6 +332,7 @@ public class UserLocalDao {
         values.put("phone_number",account);
         values.put("report_No",report.getReport_No());
         values.put("report_content",report.getReport_content());
+        values.put("report_picture",report.getReport_picture());
         values.put("report_type",report.getReport_type());
         values.put("report_place",report.getReport_place());
         values.put("report_date",report.getReport_date());
@@ -353,6 +355,7 @@ public class UserLocalDao {
         values.put("phone_number",account);
         values.put("report_No",report.getReport_No());
         values.put("report_content",report.getReport_content());
+        values.put("report_picture",report.getReport_picture());
         values.put("report_type",report.getReport_type());
         values.put("report_place",report.getReport_place());
         values.put("report_date",report.getReport_date());
