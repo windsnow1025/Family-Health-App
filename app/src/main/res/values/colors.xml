@@ -9,7 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="grey">#888281</color>
     <color name="dark">#B5B0AF</color>
-    <color name="first">#9E9C9C</color>
-    <color name="ori">#8C8989</color>
+    <color name="first">#FF0000</color>
+    <color name="ori">#676565</color>
 
 </resources>

@@ -66,14 +66,12 @@ public class FragmentAlert_set extends Fragment {
         }
 
         List<String[]> data = new ArrayList<>();
-        data.add(new String[]{"时间", "医院", "类型"});
         for (Report report:reportArrayList
              ) {//时间、地点、类型、编号
             data.add(new String[]{report.getReport_date(), report.getReport_place(), report.getReport_type(),report.getReport_No().toString()});
         }
 
         List<String[]> data1 = new ArrayList<>();
-        data1.add(new String[]{"时间", "医院", "部位"});
         for (History history :
                 historyArrayList) {
             data1.add(new String[]{history.getHistory_date(),history.getHistory_place(),history.getHistory_organ(), String.valueOf(history.getHistory_No())});
