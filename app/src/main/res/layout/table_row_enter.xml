@@ -44,18 +44,20 @@
                 android:id="@+id/edit_button"
                 android:layout_width="64dp"
                 android:layout_height="18dp"
-                android:background="@drawable/button_bg"
                 android:layout_margin="1dp"
+                android:background="@drawable/button_bg"
                 android:text="修改"
+                android:textColor="@color/white"
                 android:textSize="12dp" />
 
             <Button
                 android:id="@+id/delete_button"
                 android:layout_width="64dp"
                 android:layout_height="18dp"
-                android:background="@drawable/button_bg"
                 android:layout_margin="1dp"
+                android:background="@drawable/button_bg"
                 android:text="删除"
+                android:textColor="@color/white"
                 android:textSize="12dp" />
 
         </LinearLayout>
