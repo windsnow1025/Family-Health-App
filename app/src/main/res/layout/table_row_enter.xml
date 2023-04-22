@@ -43,18 +43,18 @@
             <Button
                 android:id="@+id/edit_button"
                 android:layout_width="64dp"
-                android:layout_height="32dp"
-                android:layout_margin="0dp"
-                android:padding="0dp"
+                android:layout_height="18dp"
+                android:background="@drawable/button_bg"
+                android:layout_margin="1dp"
                 android:text="修改"
                 android:textSize="12dp" />
 
             <Button
                 android:id="@+id/delete_button"
                 android:layout_width="64dp"
-                android:layout_height="32dp"
-                android:layout_margin="0dp"
-                android:padding="0dp"
+                android:layout_height="18dp"
+                android:background="@drawable/button_bg"
+                android:layout_margin="1dp"
                 android:text="删除"
                 android:textSize="12dp" />
 
