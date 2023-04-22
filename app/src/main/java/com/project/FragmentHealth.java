@@ -52,7 +52,7 @@ public class FragmentHealth extends Fragment implements ExpandableListView.OnGro
 
                 ChildEntity child = new ChildEntity(); //子类对象
                 child.setGroupName(split[j]);//假数据 ，二级列表数据
-                child.setGroupColor(Color.parseColor("#424040"));//紫色   二级列表颜色
+                child.setGroupColor(Color.parseColor("#676565"));//紫色   二级列表颜色
 //
                 ArrayList<String> childNames = new ArrayList<String>();
                 ArrayList<Integer> childColors = new ArrayList<Integer>();
