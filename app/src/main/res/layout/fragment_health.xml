@@ -25,7 +25,6 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:hint="搜索其他疾病"
-                android:textColorHint="@color/grey"
                 android:layout_height="wrap_content"/>
             <Button
                 android:id="@+id/bt_search"

@@ -12,7 +12,6 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:textSize="23dp"
-            android:textColor="#372828"
             android:paddingLeft="@dimen/child_expandable_list_group_padding_left" />
     </RelativeLayout>
 

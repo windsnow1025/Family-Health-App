@@ -12,7 +12,6 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:textSize="21dp"
-            android:textColor="@color/grey"
             android:paddingLeft="@dimen/child_expandable_list_child_padding_left" />
     </RelativeLayout>
 
