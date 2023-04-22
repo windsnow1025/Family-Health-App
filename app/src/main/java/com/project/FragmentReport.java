@@ -114,7 +114,7 @@ public class FragmentReport extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new EnterRecord(organ));
+                transaction.replace(R.id.fragment_container, new EnterReport(organ));
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
