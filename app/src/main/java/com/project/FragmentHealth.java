@@ -44,7 +44,7 @@ public class FragmentHealth extends Fragment implements ExpandableListView.OnGro
         for (int i = 0; i < list1.size(); i++) {
             ParentEntity parent = new ParentEntity(); //父类对象
             parent.setGroupName(list1.get(i));//假数据 ，设置一级列表数据
-//            parent.setGroupColor(getResources().getColor(android.R.color.black));//红色 ，一级列表颜色
+            parent.setGroupColor(Color.parseColor("#636161"));//红色 ，一级列表颜色
 
             ArrayList<ChildEntity> childs = new ArrayList<ChildEntity>();
             String[] split=list2.get(i).split("、");
@@ -52,14 +52,14 @@ public class FragmentHealth extends Fragment implements ExpandableListView.OnGro
 
                 ChildEntity child = new ChildEntity(); //子类对象
                 child.setGroupName(split[j]);//假数据 ，二级列表数据
-//                child.setGroupColor(Color.parseColor("#000000"));//紫色   二级列表颜色
-
+                child.setGroupColor(Color.parseColor("#636161"));//紫色   二级列表颜色
+//
                 ArrayList<String> childNames = new ArrayList<String>();
                 ArrayList<Integer> childColors = new ArrayList<Integer>();
 
                 for (int k = 0; k < 3; k++) {
                     childNames.add(list3.get(k));//假数据 三级列表数据
-//                    childColors.add(Color.parseColor("#000000"));//紫色
+                    childColors.add(Color.parseColor("#9E9C9C"));//紫色
                 }
                 child.setChildNames(childNames);
                 childs.add(child);
