@@ -32,6 +32,14 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         String[] rowData = data.get(position);
         holder.column1.setText(rowData[0]);
+        holder.column1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                onItemClickListener.onClick(position);
+            }
+        });
+
         holder.column2.setText(rowData[1]);
         holder.column2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,6 +49,13 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> 
             }
         });
         holder.column3.setText(rowData[2]);
+        holder.column3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                onItemClickListener.onClick(position);
+            }
+        });
     }
 
     @Override
