@@ -43,7 +43,7 @@ public class ReportDao extends JDBCHelper{
     }
     private ArrayList<Report> getReportListImpl(String account) {
         ArrayList<Report> reportArrayList=new ArrayList<>();
-        String sql="SELECT report_No,report_content,report_type,report_place,report_date,is_deleted FROM report WHERE phone_number=? AND is_deleted='false' ORDER BY report_No";
+        String sql="SELECT report_No,report_content,report_picture,report_type,report_place,report_date,is_deleted FROM report WHERE phone_number=? AND is_deleted='false' ORDER BY report_No";
         try {
             PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1,account);
@@ -53,6 +53,7 @@ public class ReportDao extends JDBCHelper{
                 report_temp.setPhone_number(account);
                 report_temp.setReport_No(resultSet.getInt("report_No"));
                 report_temp.setReport_content(resultSet.getString("report_content"));
+                report_temp.setReport_picture(resultSet.getString("report_picture"));
                 report_temp.setReport_type(resultSet.getString("report_type"));
                 report_temp.setReport_place(resultSet.getString("report_place"));
                 report_temp.setReport_date(resultSet.getString("report_date"));
@@ -90,16 +91,17 @@ public class ReportDao extends JDBCHelper{
     }
     private Boolean updateReportImpl(String account, Report report_update){
         Boolean valueReturn=false;
-        String sql="UPDATE report SET report_content=?,report_type=?,report_place=?,report_date=?,is_deleted=? where phone_number=? and report_No=?";
+        String sql="UPDATE report SET report_content=?,report_picture=?,report_type=?,report_place=?,report_date=?,is_deleted=? where phone_number=? and report_No=?";
         try {
             PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1,report_update.getReport_content());
-            preparedStatement.setString(2,report_update.getReport_type());
-            preparedStatement.setString(3,report_update.getReport_place());
-            preparedStatement.setString(4,report_update.getReport_date());
-            preparedStatement.setString(5,report_update.getIs_deleted());
-            preparedStatement.setString(6,account);
-            preparedStatement.setInt(7,report_update.getReport_No());
+            preparedStatement.setString(2,report_update.getReport_picture());
+            preparedStatement.setString(3,report_update.getReport_type());
+            preparedStatement.setString(4,report_update.getReport_place());
+            preparedStatement.setString(5,report_update.getReport_date());
+            preparedStatement.setString(6,report_update.getIs_deleted());
+            preparedStatement.setString(7,account);
+            preparedStatement.setInt(8,report_update.getReport_No());
 
             if(preparedStatement.executeUpdate()>0)
             {
@@ -180,16 +182,17 @@ public class ReportDao extends JDBCHelper{
     }
     private  Boolean insertReportImpl(String account, Report report_insert){
         Boolean valueReturn=false;
-        String sql="INSERT INTO report (phone_number,report_content,report_No,report_type,report_place,report_date,is_deleted) VALUES (?,?,?,?,?,?,?)";
+        String sql="INSERT INTO report (phone_number,report_content,report_picture,report_No,report_type,report_place,report_date,is_deleted) VALUES (?,?,?,?,?,?,?,?)";
         try {
             PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1,account);
             preparedStatement.setString(2,report_insert.getReport_content());
-            preparedStatement.setInt(3,report_insert.getReport_No());
-            preparedStatement.setString(4,report_insert.getReport_type());
-            preparedStatement.setString(5,report_insert.getReport_place());
-            preparedStatement.setString(6,report_insert.getReport_date());
-            preparedStatement.setString(7,"false");
+            preparedStatement.setString(3,report_insert.getReport_picture());
+            preparedStatement.setInt(4,report_insert.getReport_No());
+            preparedStatement.setString(5,report_insert.getReport_type());
+            preparedStatement.setString(6,report_insert.getReport_place());
+            preparedStatement.setString(7,report_insert.getReport_date());
+            preparedStatement.setString(8,"false");
             if(preparedStatement.executeUpdate()>0){
                 valueReturn=true;
             }
