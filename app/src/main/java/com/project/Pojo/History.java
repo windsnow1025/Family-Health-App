@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 
 public class History implements Serializable {
-    private Integer history_No;
+    private int history_No;
     private String phone_number;
     private String history_place;
     private String history_date;
@@ -15,19 +15,11 @@ public class History implements Serializable {
     private String suggestion;
     private String is_deleted;
 
-    public String getIs_deleted() {
-        return is_deleted;
-    }
-
-    public void setIs_deleted(String is_deleted) {
-        this.is_deleted = is_deleted;
-    }
-
-    public Integer getHistory_No() {
+    public int getHistory_No() {
         return history_No;
     }
 
-    public void setHistory_No(Integer history_No) {
+    public void setHistory_No(int history_No) {
         this.history_No = history_No;
     }
 
@@ -93,5 +85,13 @@ public class History implements Serializable {
 
     public void setSuggestion(String suggestion) {
         this.suggestion = suggestion;
+    }
+
+    public String getIs_deleted() {
+        return is_deleted;
+    }
+
+    public void setIs_deleted(String is_deleted) {
+        this.is_deleted = is_deleted;
     }
 }

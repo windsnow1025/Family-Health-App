@@ -70,6 +70,19 @@ public class FragmentRecord extends Fragment {
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             ArrayList<History> finalHistories = histories;
             recyclerView.setAdapter(new TableAdapterEnter(data, new TableAdapterEnter.OnItemClickListener() {
+                // Edit Button
+                @Override
+                public void onClick(int position) {
+                    // Get record id
+                    Integer record_id = finalHistories.get(position - 1).getHistory_No();
+
+                    FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragment_container, new EditRecord(record_id));
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+            }, new TableAdapterEnter.OnItemClickListener() {
+                // Delete Button
                 @Override
                 public void onClick(int position) {
                     // Get record id
@@ -111,4 +124,5 @@ public class FragmentRecord extends Fragment {
 
         return view;
     }
+
 }

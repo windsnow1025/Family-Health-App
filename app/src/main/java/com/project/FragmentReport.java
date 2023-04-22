@@ -70,6 +70,19 @@ public class FragmentReport extends Fragment {
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             ArrayList<Report> finalReports = reports;
             recyclerView.setAdapter(new TableAdapterEnter(data, new TableAdapterEnter.OnItemClickListener() {
+                // Edit Button
+                @Override
+                public void onClick(int position) {
+                    // Get report id
+                    Integer report_id = finalReports.get(position - 1).getReport_No();
+
+                    FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragment_container, new EditReport(report_id));
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+            }, new TableAdapterEnter.OnItemClickListener() {
+                // Delete Button
                 @Override
                 public void onClick(int position) {
                     // Get report id
@@ -101,7 +114,7 @@ public class FragmentReport extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new EnterReport(organ));
+                transaction.replace(R.id.fragment_container, new EnterRecord(organ));
                 transaction.addToBackStack(null);
                 transaction.commit();
             }

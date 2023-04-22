@@ -1,5 +1,8 @@
 package com.project;
 
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
 import android.app.DatePickerDialog;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -21,6 +24,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.googlecode.tesseract.android.TessBaseAPI;
 import com.project.JDBC.ReportDao;
 import com.project.Pojo.Report;
 import com.project.Sqlite.UserLocalDao;
@@ -36,13 +40,10 @@ import java.net.URL;
 import java.util.Calendar;
 import java.util.concurrent.TimeoutException;
 
-import com.googlecode.tesseract.android.TessBaseAPI;
+// 体检报告修改
+public class EditReport extends Fragment {
 
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-
-// 体检报告录入
-public class EnterReport extends Fragment {
+    Integer reportId;
 
     String organ;
 
@@ -60,8 +61,8 @@ public class EnterReport extends Fragment {
 
     Bitmap bitmap;
 
-    public EnterReport(String organ) {
-        this.organ = organ;
+    public EditReport(Integer reportId) {
+        this.reportId = reportId;
     }
 
     @Override

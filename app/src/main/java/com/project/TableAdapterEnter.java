@@ -15,11 +15,13 @@ import java.util.List;
 public class TableAdapterEnter extends RecyclerView.Adapter<TableAdapterEnter.ViewHolder> {
 
     private List<String[]> data;
-    private OnItemClickListener onItemClickListener;
+    private OnItemClickListener editButtonClickListener;
+    private OnItemClickListener deleteButtonClickListener;
 
-    public TableAdapterEnter(List<String[]> data, OnItemClickListener onItemClickListener) {
+    public TableAdapterEnter(List<String[]> data, OnItemClickListener editButtonClickListener, OnItemClickListener deleteButtonClickListener) {
         this.data = data;
-        this.onItemClickListener = onItemClickListener;
+        this.editButtonClickListener = editButtonClickListener;
+        this.deleteButtonClickListener = deleteButtonClickListener;
     }
 
     @NonNull
@@ -39,12 +41,19 @@ public class TableAdapterEnter extends RecyclerView.Adapter<TableAdapterEnter.Vi
             holder.editButton.setVisibility(View.INVISIBLE);
             holder.deleteButton.setVisibility(View.INVISIBLE);
         }
+        holder.editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editButtonClickListener.onClick(position);
+            }
+        });
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onItemClickListener.onClick(position);
+                deleteButtonClickListener.onClick(position);
             }
         });
+
     }
 
     @Override
