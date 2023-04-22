@@ -69,10 +69,10 @@ public class settingFragment extends Fragment {
             FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
             switch (v.getId()) {
                 case R.id.bt_darkcolor:
-                    Toast.makeText(getContext(), "4", Toast.LENGTH_SHORT).show();
+                    LL.setBackgroundColor(getResources().getColor(R.color.dark));
                     break;
                 case R.id.bt_lightcolor:
-                    LL.setBackgroundColor(0);
+                    LL.setBackgroundColor(getResources().getColor(R.color.white));
                     break;
                 case R.id.bt_back:
                     getParentFragmentManager().popBackStack();

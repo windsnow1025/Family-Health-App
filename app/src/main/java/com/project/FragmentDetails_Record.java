@@ -33,9 +33,13 @@ import com.project.Sqlite.UserLocalDao;
 import com.project.utils.Info;
 import com.project.utils.InfoAdapter;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
@@ -256,7 +260,24 @@ public class FragmentDetails_Record extends Fragment implements DatePickerDialog
     @SuppressLint("SetTextI18n")
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        month += 1;
-        rtv_date.setText(year + "-" + month + "-" + dayOfMonth);
+
+        Date date = new Date();
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dateString = year + "-" + (month + 1) + "-" + dayOfMonth;
+        System.out.println(dateString);
+        Date date2 = null;
+        try {
+            date2 = sdf.parse(dateString);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        if (date.getTime() > date2.getTime()) {
+            month += 1;
+            rtv_date.setText(year + "-" + month + "-" + dayOfMonth);
+        } else {
+            Toast.makeText(getContext(), "提醒日期不能早于当前日期", Toast.LENGTH_SHORT).show();
+        }
+
+
     }
 }

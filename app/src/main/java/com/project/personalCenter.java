@@ -21,6 +21,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.project.JDBC.UserDao;
 import com.project.Pojo.UserInfo;
@@ -75,8 +76,8 @@ public class personalCenter extends Fragment implements DatePickerDialog.OnDateS
         bt_exit.setOnClickListener(new btListener());
         tv_age = view.findViewById(R.id.tv_age);
         bt_age = view.findViewById(R.id.bt_age);
-        userID=userLocalDao.getUser();
-        userInfo=userLocalDao.getUserInfo(userID);
+        userID = userLocalDao.getUser();
+        userInfo = userLocalDao.getUserInfo(userID);
         tv_age.setText(getAge(parse(userLocalDao.getUserInfo(userID).getBirthday())));
     }
 
@@ -106,25 +107,40 @@ public class personalCenter extends Fragment implements DatePickerDialog.OnDateS
     }
 
 
-
-
     /*设置年龄信息*/
     @SuppressLint("SetTextI18n")
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
+        Date date = new Date();
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dateString = year + "-" + (month + 1) + "-" + dayOfMonth;
+        System.out.println(dateString);
+        Date date2 = null;
         try {
-            tv_age.setText(getAge(parse(year + "-" + (month + 1) + "-" + dayOfMonth)));
-        } catch (Exception e) {
+            date2 = sdf.parse(dateString);
+        } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("birthday", year + "-" + (month + 1) + "-" + dayOfMonth);
-        try {
-            userDao.updateUserInformation(userID, hashMap);
-            userLocalDao.addOrUpdateUser(userDao.getUserInformation(userID));
-        } catch (TimeoutException e) {
-            throw new RuntimeException(e);
+        if (date.getTime() > date2.getTime()) {
+            try {
+                tv_age.setText(getAge(parse(year + "-" + (month + 1) + "-" + dayOfMonth)));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("birthday", year + "-" + (month + 1) + "-" + dayOfMonth);
+            try {
+                userDao.updateUserInformation(userID, hashMap);
+                userLocalDao.addOrUpdateUser(userDao.getUserInformation(userID));
+            } catch (TimeoutException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            Toast.makeText(getContext(), "出生日期不能小于当前日期", Toast.LENGTH_SHORT).show();
         }
+
+
     }
 
     private class btListener implements View.OnClickListener {

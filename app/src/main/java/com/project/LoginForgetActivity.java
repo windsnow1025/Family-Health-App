@@ -23,7 +23,10 @@ import com.project.Pojo.UserInfo;
 import com.project.Sqlite.UserLocalDao;
 import com.project.utils.ViewUtil;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
@@ -67,7 +70,6 @@ public class LoginForgetActivity extends AppCompatActivity implements DatePicker
                     Calendar calendar = Calendar.getInstance();
                     DatePickerDialog dialog = new DatePickerDialog(LoginForgetActivity.this, LoginForgetActivity.this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
                     dialog.show();
-                    System.out.println(dialog);
                 }
             });
 
@@ -193,7 +195,25 @@ public class LoginForgetActivity extends AppCompatActivity implements DatePicker
     @SuppressLint("SetTextI18n")
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        et_birth.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
+
+        Date date = new Date();
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dateString = year + "-" + (month + 1) + "-" + dayOfMonth;
+        System.out.println(dateString);
+        Date date2 = null;
+        try {
+            date2 = sdf.parse(dateString);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        if (date.getTime() > date2.getTime()) {
+            et_birth.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
+        } else {
+            Toast.makeText(this, "出生日期不能小于当前日期", Toast.LENGTH_SHORT).show();
+        }
+
+
+
     }
 
     /*监听、隐藏软键盘*/
