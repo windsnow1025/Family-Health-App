@@ -61,7 +61,7 @@ public class FragmentRecord extends Fragment {
 
             // Set history list to recycler view
             List<String[]> data = new ArrayList<>();
-            data.add(new String[]{"时间", "医院", "类型"});
+            data.add(new String[]{"时间", "医院", "部位"});
             for (History history : histories) {
                 data.add(new String[]{history.getHistory_date(), history.getHistory_place(), history.getHistory_organ()});
             }
