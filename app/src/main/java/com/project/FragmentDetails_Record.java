@@ -271,7 +271,7 @@ public class FragmentDetails_Record extends Fragment implements DatePickerDialog
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        if (date.getTime() > date2.getTime()) {
+        if (date.getTime() < date2.getTime()) {
             month += 1;
             rtv_date.setText(year + "-" + month + "-" + dayOfMonth);
         } else {

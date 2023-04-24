@@ -30,6 +30,7 @@ import java.util.concurrent.TimeoutException;
 
 public class FragmentAlert extends Fragment {
     private static List<Info> infoList = new ArrayList<>();
+    private static List<Integer> numList = new ArrayList<>();
     private InfoAdapter adapter;
     private ListView listView;
     private TableLayout tableLayout;
@@ -49,6 +50,7 @@ public class FragmentAlert extends Fragment {
     /*读取数据*/
     public List<Info> getInfoList() {
         infoList.clear();
+        numList.clear();
         alertArrayList = userLocalDao.getAlertList(userID);
         for (Alert alert : alertArrayList
         ) {
@@ -56,6 +58,7 @@ public class FragmentAlert extends Fragment {
             ismedicine=alert.getIs_medicine();
             medicine=ismedicine.equals("true");//吃药否
             flag = s.equals("true");//true为体检报告
+            numList.add(alert.getAlert_No());
             infoList.add(new Info(medicine,alert.getContent(), alert.getDate(), alert.getCycle(), flag, alert.getType_No(), alert.getAlert_No()));
         }
 
@@ -94,16 +97,16 @@ public class FragmentAlert extends Fragment {
 
                 if (is_drug) {
                     if (report) {
-                        transaction.replace(R.id.fragment_container, new FragmentDetails(is_drug, num, adapter, infoList, position, report, true));
+                        transaction.replace(R.id.fragment_container, new FragmentDetails(is_drug, num, adapter, infoList, numList.get(position), report, true));
                     } else {
-                        transaction.replace(R.id.fragment_container, new FragmentDetails(is_drug, num, adapter, infoList, position, report, true));
+                        transaction.replace(R.id.fragment_container, new FragmentDetails(is_drug, num, adapter, infoList, numList.get(position), report, true));
 
                     }
                 } else {
                     if (report) {
-                        transaction.replace(R.id.fragment_container, new FragmentDetails_Record(is_drug, num, adapter, infoList, position, report, true));
+                        transaction.replace(R.id.fragment_container, new FragmentDetails_Record(is_drug, num, adapter, infoList, numList.get(position), report, true));
                     } else {
-                        transaction.replace(R.id.fragment_container, new FragmentDetails_Record(is_drug, num, adapter, infoList, position, report, true));
+                        transaction.replace(R.id.fragment_container, new FragmentDetails_Record(is_drug, num, adapter, infoList, numList.get(position), report, true));
 
                     }
 
@@ -124,11 +127,11 @@ public class FragmentAlert extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         infoList.remove(position);
                         try {
-                            alertDao.deleteAlert(userID, position);
+                            alertDao.deleteAlert(userID, numList.get(position));
                         } catch (TimeoutException e) {
                             throw new RuntimeException(e);
                         }
-                        userLocalDao.deleteAlert(userID, position);
+                        userLocalDao.deleteAlert(userID, numList.get(position));
                         Fragment fragment = new FragmentAlert();
                         FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
                         transaction.replace(R.id.fragment_container, fragment);
