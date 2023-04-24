@@ -1,0 +1,15 @@
+body {
+    margin: 0;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.horizontalCenter {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}

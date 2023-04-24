@@ -1,0 +1,11 @@
+Model Information:
+* title:	Renal System
+* source:	https://sketchfab.com/3d-models/renal-system-7a0c4c6bd5d84f7daf5fcfc5d20516c9
+* author:	Ruth Lilly Medical Library, IU School of Medicine (https://sketchfab.com/iusmlib)
+
+Model License:
+* license type:	CC-BY-NC-SA-4.0 (http://creativecommons.org/licenses/by-nc-sa/4.0/)
+* requirements:	Author must be credited. No commercial use. Modified versions must have the same license.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Renal System" (https://sketchfab.com/3d-models/renal-system-7a0c4c6bd5d84f7daf5fcfc5d20516c9) by Ruth Lilly Medical Library, IU School of Medicine (https://sketchfab.com/iusmlib) licensed under CC-BY-NC-SA-4.0 (http://creativecommons.org/licenses/by-nc-sa/4.0/)

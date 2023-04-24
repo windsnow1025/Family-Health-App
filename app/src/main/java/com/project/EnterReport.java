@@ -235,7 +235,8 @@ public class EnterReport extends Fragment {
                         output.close();
                         input.close();
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Log.e("test", "下载失败");
+                        return;
                     }
                 }
 

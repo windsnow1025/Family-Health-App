@@ -1,0 +1,3 @@
+2023/04/24 02:37:57 [error] 17296#25036: *1 CreateFile() "C:\windsnow1024\webview\nginx-1.24.0/../wwwroot/favicon.ico" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost", referrer: "http://localhost/"
+2023/04/24 02:46:38 [error] 17296#25036: *7 directory index of "C:\windsnow1024\webview\nginx-1.24.0/../wwwroot/" is forbidden, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", host: "localhost"
+2023/04/24 02:49:12 [error] 17296#25036: *10 directory index of "C:\windsnow1024\webview\nginx-1.24.0/../wwwroot/" is forbidden, client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", host: "localhost"
