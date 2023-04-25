@@ -155,18 +155,16 @@ public class UserLocalDao {
         db.update("user",values,"phone_number = ?",new String[]{newAccount});
     }
     public void sync() throws TimeoutException {
-        userDao.getConnection();
         sync_Download();
         //sync_Upload();
-        userDao.closeConnection();
     }
     public void sync_Download() throws TimeoutException {
         ArrayList<History> historyArrayList=new ArrayList<>();
         ArrayList<Report> reportArrayList=new ArrayList<>();
         ArrayList<Alert> alertArrayList=new ArrayList<>();
-        historyArrayList=historyDao.getHistoryList(getUser());
-        reportArrayList=reportDao.getReportList(getUser());
-        alertArrayList=alertDao.getAlertList(getUser());
+        historyArrayList=historyDao.getHistoryList(getUser(),1);
+        reportArrayList=reportDao.getReportList(getUser(),1);
+        alertArrayList=alertDao.getAlertList(getUser(),1);
         for (History history:historyArrayList) {
             if(!isExistHistory(history.getHistory_No()))
             {
