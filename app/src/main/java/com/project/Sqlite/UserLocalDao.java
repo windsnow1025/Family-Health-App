@@ -282,6 +282,7 @@ public class UserLocalDao {
         values.put("conclusion",history.getConclusion());
         values.put("symptom",history.getSymptom());
         values.put("suggestion",history.getSuggestion());
+        values.put("is_deleted",history.getIs_deleted());
         int flag=db.update("history", values, "history_No = ? AND phone_number=?", new String[]{String.valueOf(history.getHistory_No()),account});
         if(flag>0)
         {
@@ -359,6 +360,7 @@ public class UserLocalDao {
         values.put("report_type",report.getReport_type());
         values.put("report_place",report.getReport_place());
         values.put("report_date",report.getReport_date());
+        values.put("is_deleted",report.getIs_deleted());
         int flag=db.update("report", values, "Report_No = ? AND phone_number=?", new String[]{String.valueOf(report.getReport_No()),account});
         if(flag>0)
         {
@@ -439,6 +441,7 @@ public class UserLocalDao {
         values.put("type",alert.getType());
         values.put("type_No",alert.getType_No());
         values.put("is_medicine",alert.getIs_medicine());
+        values.put("is_deleted",alert.getIs_deleted());
         int flag=db.update("alert",values,"Alert_No=? AND phone_number=?",new String[]{String.valueOf(alert.getAlert_No()),account});
         if(flag>0)
         {

@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 public class HistoryDao extends JDBCHelper{
     public HistoryDao() {
     }
-    public ArrayList<History> getHistoryList(String account) throws TimeoutException {
+    public ArrayList<History> getHistoryList(String account,Integer...args) throws TimeoutException {
         ArrayList<History> valueReturn=null;
         FutureTask<ArrayList<History>> futureTask=new FutureTask<>(()->{
             getConnection();
@@ -38,15 +38,16 @@ public class HistoryDao extends JDBCHelper{
         finally {
             futureTask.cancel(true);
         }
-        if(valueReturn==null)
+        if(args.length==0&&valueReturn!=null)
         {
-            valueReturn=new UserLocalDao().getHistoryList(account);
+            Stream<History> historyStream=valueReturn.stream();
+            valueReturn= (ArrayList<History>) historyStream.filter(history -> history.getIs_deleted().equals("false")).collect(Collectors.toList());
         }
         return valueReturn;
     }
     private ArrayList<History> getHistoryListImpl(String account) {
         ArrayList<History> historyArrayList=new ArrayList<>();
-        String sql="SELECT history_No,history_date,history_place,history_doctor,history_organ,conclusion,symptom,suggestion,is_deleted FROM history WHERE phone_number = ? AND is_deleted='false' ORDER BY history_organ,history_No";
+        String sql="SELECT history_No,history_date,history_place,history_doctor,history_organ,conclusion,symptom,suggestion,is_deleted FROM history WHERE phone_number = ? ORDER BY history_organ,history_No";
         try {
             PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1,account);

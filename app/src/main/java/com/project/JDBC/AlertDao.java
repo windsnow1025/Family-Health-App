@@ -1,6 +1,7 @@
 package com.project.JDBC;
 
 import com.project.Pojo.Alert;
+import com.project.Pojo.Report;
 import com.project.Sqlite.UserLocalDao;
 
 import java.sql.PreparedStatement;
@@ -17,7 +18,7 @@ import java.util.stream.Stream;
 public class AlertDao extends JDBCHelper{
     public AlertDao(){
     }
-    public ArrayList<Alert> getAlertList(String account) throws TimeoutException {
+    public ArrayList<Alert> getAlertList(String account,Integer...args) throws TimeoutException {
         ArrayList<Alert> valueReturn=null;
         FutureTask<ArrayList<Alert>> futureTask=new FutureTask<>(()->{
             getConnection();
@@ -36,11 +37,16 @@ public class AlertDao extends JDBCHelper{
         finally {
             futureTask.cancel(true);
         }
+        if(args.length==0&&valueReturn!=null)
+        {
+            Stream<Alert> alertStream=valueReturn.stream();
+            valueReturn= (ArrayList<Alert>) alertStream.filter(alert -> alert.getIs_deleted().equals("false")).collect(Collectors.toList());
+        }
         return valueReturn;
     }
     private ArrayList<Alert> getAlertListImpl(String account){
         ArrayList<Alert> alertArrayList=new ArrayList<>();
-        String sql="SELECT alert_No,date,cycle,content,type,type_no,is_medicine,is_deleted from alert WHERE phone_number=? AND is_deleted='false'";
+        String sql="SELECT alert_No,date,cycle,content,type,type_no,is_medicine,is_deleted from alert WHERE phone_number=? Order By alert_No";
         try {
             PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1,account);

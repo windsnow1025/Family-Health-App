@@ -2,6 +2,7 @@ package com.project.JDBC;
 
 import android.util.Log;
 
+import com.project.Pojo.History;
 import com.project.Pojo.Report;
 import com.project.Sqlite.UserLocalDao;
 
@@ -19,7 +20,7 @@ import java.util.stream.Stream;
 public class ReportDao extends JDBCHelper{
     public ReportDao(){
     }
-    public ArrayList<Report> getReportList(String account) throws TimeoutException {
+    public ArrayList<Report> getReportList(String account,Integer...args) throws TimeoutException {
         ArrayList<Report> valueReturn=null;
         FutureTask<ArrayList<Report>> futureTask=new FutureTask<>(()->{
             //Thread.sleep(3000);                                                                   //模拟网络出了问题
@@ -39,11 +40,16 @@ public class ReportDao extends JDBCHelper{
         finally {
             futureTask.cancel(true);
         }
+        if(args.length==0&&valueReturn!=null)
+        {
+            Stream<Report> reportStream=valueReturn.stream();
+            valueReturn= (ArrayList<Report>) reportStream.filter(report -> report.getIs_deleted().equals("false")).collect(Collectors.toList());
+        }
         return valueReturn;
     }
     private ArrayList<Report> getReportListImpl(String account) {
         ArrayList<Report> reportArrayList=new ArrayList<>();
-        String sql="SELECT report_No,report_content,report_picture,report_type,report_place,report_date,is_deleted FROM report WHERE phone_number=? AND is_deleted='false' ORDER BY report_No";
+        String sql="SELECT report_No,report_content,report_picture,report_type,report_place,report_date,is_deleted FROM report WHERE phone_number=? ORDER BY report_No";
         try {
             PreparedStatement preparedStatement=connection.prepareStatement(sql);
             preparedStatement.setString(1,account);
