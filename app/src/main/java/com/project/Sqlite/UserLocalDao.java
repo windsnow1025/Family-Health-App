@@ -155,18 +155,16 @@ public class UserLocalDao {
         db.update("user",values,"phone_number = ?",new String[]{newAccount});
     }
     public void sync() throws TimeoutException {
-        userDao.getConnection();
         sync_Download();
         //sync_Upload();
-        userDao.closeConnection();
     }
     public void sync_Download() throws TimeoutException {
         ArrayList<History> historyArrayList=new ArrayList<>();
         ArrayList<Report> reportArrayList=new ArrayList<>();
         ArrayList<Alert> alertArrayList=new ArrayList<>();
-        historyArrayList=historyDao.getHistoryList(getUser());
-        reportArrayList=reportDao.getReportList(getUser());
-        alertArrayList=alertDao.getAlertList(getUser());
+        historyArrayList=historyDao.getHistoryList(getUser(),1);
+        reportArrayList=reportDao.getReportList(getUser(),1);
+        alertArrayList=alertDao.getAlertList(getUser(),1);
         for (History history:historyArrayList) {
             if(!isExistHistory(history.getHistory_No()))
             {
@@ -282,6 +280,7 @@ public class UserLocalDao {
         values.put("conclusion",history.getConclusion());
         values.put("symptom",history.getSymptom());
         values.put("suggestion",history.getSuggestion());
+        values.put("is_deleted",history.getIs_deleted());
         int flag=db.update("history", values, "history_No = ? AND phone_number=?", new String[]{String.valueOf(history.getHistory_No()),account});
         if(flag>0)
         {
@@ -359,6 +358,7 @@ public class UserLocalDao {
         values.put("report_type",report.getReport_type());
         values.put("report_place",report.getReport_place());
         values.put("report_date",report.getReport_date());
+        values.put("is_deleted",report.getIs_deleted());
         int flag=db.update("report", values, "Report_No = ? AND phone_number=?", new String[]{String.valueOf(report.getReport_No()),account});
         if(flag>0)
         {
@@ -393,15 +393,15 @@ public class UserLocalDao {
                 alert.setType(cursor.getString(cursor.getColumnIndex("type")));
                 alert.setType_No(cursor.getInt(cursor.getColumnIndex("type_No")));
                 alert.setIs_medicine(cursor.getString(cursor.getColumnIndex("is_medicine")));
-//                alert.setIs_deleted(cursor.getString(cursor.getColumnIndex("is_deleted")));
+                alert.setIs_deleted(cursor.getString(cursor.getColumnIndex("is_deleted")));
                 alertArrayList.add(alert);
             }while(cursor.moveToNext());
         }
-//        if(args.length==0)
-//        {
-//            Stream<Alert> alertStream=alertArrayList.stream();
-//            alertArrayList= (ArrayList<Alert>) alertStream.filter(alert -> alert.getIs_deleted().equals("false")).collect(Collectors.toList());
-//        }
+        if(args.length==0)
+        {
+            Stream<Alert> alertStream=alertArrayList.stream();
+            alertArrayList= (ArrayList<Alert>) alertStream.filter(alert -> alert.getIs_deleted().equals("false")).collect(Collectors.toList());
+        }
         return alertArrayList;
     }
     public Boolean insertAlert(String account,Alert alert){
@@ -439,7 +439,19 @@ public class UserLocalDao {
         values.put("type",alert.getType());
         values.put("type_No",alert.getType_No());
         values.put("is_medicine",alert.getIs_medicine());
+        values.put("is_deleted",alert.getIs_deleted());
         int flag=db.update("alert",values,"Alert_No=? AND phone_number=?",new String[]{String.valueOf(alert.getAlert_No()),account});
+        if(flag>0)
+        {
+            valueReturn=true;
+        }
+        return valueReturn;
+    }
+    public Boolean deleteAlert(String account,Integer alert_No){
+        Boolean valueReturn=false;
+        ContentValues values=new ContentValues();
+        values.put("is_deleted","true");
+        int flag=db.update("alert",values,"Alert_No=? AND phone_number=?",new String[]{String.valueOf(alert_No),account});
         if(flag>0)
         {
             valueReturn=true;
@@ -448,24 +460,13 @@ public class UserLocalDao {
     }
 //    public Boolean deleteAlert(String account,Integer alert_No){
 //        Boolean valueReturn=false;
-//        ContentValues values=new ContentValues();
-//        values.put("is_deleted","true");
-//        int flag=db.update("alert",values,"Alert_No=? AND phone_number=?",new String[]{String.valueOf(alert_No),account});
+//        int flag=db.delete("alert","Alert_No=? AND phone_number=?",new String[]{String.valueOf(alert_No),account});
 //        if(flag>0)
 //        {
 //            valueReturn=true;
 //        }
 //        return valueReturn;
 //    }
-    public Boolean deleteAlert(String account,Integer alert_No){
-        Boolean valueReturn=false;
-        int flag=db.delete("alert","Alert_No=? AND phone_number=?",new String[]{String.valueOf(alert_No),account});
-        if(flag>0)
-        {
-            valueReturn=true;
-        }
-        return valueReturn;
-    }
     public static Alert getAlert(ArrayList<Alert> alertArrayList,Integer alert_No){
         Alert alertReturn=null;
         Stream<Alert> alertStream=alertArrayList.stream();

@@ -9,7 +9,7 @@ public class Alert {
     private String is_medicine;
     private String type;
     private Integer type_No;
-//    private String is_deleted;
+    private String is_deleted;
 
     public Alert() {
     }
@@ -23,11 +23,11 @@ public class Alert {
         this.content = content;
         this.type = type;
         this.type_No = type_No;
-//        this.is_deleted = is_deleted;
+        this.is_deleted = is_deleted;
     }
-//    public String getIs_deleted() {
-//        return is_deleted;
-//    }
+    public String getIs_deleted() {
+        return is_deleted;
+    }
 
     public String getIs_medicine() {
         return is_medicine;
@@ -37,9 +37,9 @@ public class Alert {
         this.is_medicine = is_medicine;
     }
 
-//    public void setIs_deleted(String is_deleted) {
-//        this.is_deleted = is_deleted;
-//    }
+    public void setIs_deleted(String is_deleted) {
+        this.is_deleted = is_deleted;
+    }
 
     public Integer getAlert_No() {
         return Alert_No;

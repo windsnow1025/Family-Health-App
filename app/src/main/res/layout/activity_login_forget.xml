@@ -18,7 +18,6 @@
             android:layout_alignParentLeft="true"
             android:gravity="center"
             android:text="输入用户名："
-            android:textColor="@color/black"
             android:textSize="17sp" />
 
         <EditText
@@ -32,10 +31,10 @@
             android:gravity="center"
             android:hint="请输入手机号"
             android:maxLength="11"
-            android:textColor="@color/black"
             android:textColorHint="@color/grey"
             android:textCursorDrawable="@drawable/text_cursor"
-            android:textSize="17sp" />
+            android:textSize="17sp"
+            android:textColor="@color/black" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -49,7 +48,6 @@
             android:layout_alignParentLeft="true"
             android:gravity="center"
             android:text="请输入密码："
-            android:textColor="@color/black"
             android:textSize="17sp" />
 
         <EditText
@@ -62,10 +60,10 @@
             android:background="@drawable/editext_selector"
             android:gravity="center"
             android:hint="请输入密码"
-            android:textColor="@color/black"
             android:textColorHint="@color/grey"
             android:textCursorDrawable="@drawable/text_cursor"
-            android:textSize="17sp" />
+            android:textSize="17sp"
+            android:textColor="@color/black"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -79,7 +77,6 @@
             android:layout_alignParentLeft="true"
             android:gravity="center"
             android:text="请选择生日："
-            android:textColor="@color/black"
             android:textSize="17sp" />
 
         <EditText
@@ -92,10 +89,10 @@
             android:background="@drawable/editext_selector"
             android:gravity="center"
             android:hint="请选择生日"
-            android:textColor="@color/black"
             android:textColorHint="@color/grey"
             android:textCursorDrawable="@drawable/text_cursor"
-            android:textSize="17sp" />
+            android:textSize="17sp"
+            android:textColor="@color/black"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -109,7 +106,6 @@
             android:layout_alignParentLeft="true"
             android:gravity="center"
             android:text="性别："
-            android:textColor="@color/black"
             android:textSize="17sp" />
 
         <RadioGroup
@@ -124,20 +120,18 @@
                 android:id="@+id/radioButtonMale"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginEnd="15dp"
                 android:checked="true"
                 android:gravity="center"
                 android:text="male"
-                android:textColor="@color/black"
-                android:layout_marginEnd="15dp"
                 android:textSize="17sp" />
 
             <RadioButton
                 android:id="@+id/radioButtonFemale"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="female"
                 android:gravity="center"
-                android:textColor="@color/black"
+                android:text="female"
                 android:textSize="17sp" />
         </RadioGroup>
 
@@ -155,7 +149,6 @@
             android:layout_alignParentLeft="true"
             android:gravity="center"
             android:text="　　验证码："
-            android:textColor="@color/black"
             android:textSize="17sp" />
 
         <FrameLayout
@@ -174,10 +167,10 @@
                 android:hint="   请输入验证码"
                 android:inputType="numberPassword"
                 android:maxLength="6"
-                android:textColor="@color/black"
                 android:textColorHint="@color/grey"
                 android:textCursorDrawable="@drawable/text_cursor"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                android:textColor="@color/black"/>
 
             <Button
                 android:id="@+id/btn_getcode"
@@ -186,7 +179,6 @@
                 android:layout_gravity="right"
                 android:gravity="center"
                 android:text="获取验证码"
-                android:textColor="@color/black"
                 android:textSize="17sp" />
         </FrameLayout>
     </RelativeLayout>
@@ -197,7 +189,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="确定"
-        android:textColor="@color/black"
         android:textSize="22sp" />
 
 </LinearLayout>

@@ -55,7 +55,7 @@ public class FragmentDetails_Record extends Fragment implements DatePickerDialog
     private TextView rtv_date;
     private TextView rtv_hospital;
     private TextView rtv_part;
-    private TextView rtv_advice;
+    private EditText rtv_advice;
     InfoAdapter adapter;
     private boolean flag;
     private ArrayList<Report> reportArrayList;

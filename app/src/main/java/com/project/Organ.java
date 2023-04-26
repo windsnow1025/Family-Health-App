@@ -47,7 +47,7 @@ public class Organ extends Fragment {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
 
-        String url = "https://www.windsnow1025.com/webview/organ.html?organ=" + organ;
+        String url = "https://webview.windsnow1025.com/index.html?organ=" + organ;
         webView.loadUrl(url);
 
         // ViewPager2

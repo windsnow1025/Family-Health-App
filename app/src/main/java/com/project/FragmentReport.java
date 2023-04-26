@@ -61,7 +61,7 @@ public class FragmentReport extends Fragment {
 
             // Set report list to recycler view
             List<String[]> data = new ArrayList<>();
-            data.add(new String[]{"时间", "部位", "类型"});
+            data.add(new String[]{"时间", "医院", "类型"});
             for (Report report : reports) {
                 data.add(new String[]{report.getReport_date(), report.getReport_place(), report.getReport_type()});
             }
