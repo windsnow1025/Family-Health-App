@@ -30,9 +30,6 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="25dp"
                 android:text="返回"
-                android:paddingRight="15dp"
-                android:paddingLeft="15dp"
-                android:background="@drawable/tbn5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -152,10 +149,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="重置"
-                    android:paddingRight="15dp"
-                    android:paddingLeft="15dp"
-
-                    android:background="@drawable/tbn5"
                     android:gravity="center"
                     android:layout_marginRight="25dp"
                     android:textSize="20sp" />
@@ -175,9 +168,6 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
                     android:text="退出登录"
-                    android:paddingRight="15dp"
-                    android:paddingLeft="15dp"
-                    android:background="@drawable/tbn5"
                     android:textSize="16sp" />
             </LinearLayout>
 
