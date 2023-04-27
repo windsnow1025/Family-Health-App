@@ -30,6 +30,9 @@
                 android:id="@+id/bt_search"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/tbn5"
                 android:text="搜索"/>
         </LinearLayout>
 

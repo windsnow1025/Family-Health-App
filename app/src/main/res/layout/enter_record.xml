@@ -180,6 +180,9 @@
         android:layout_gravity="center_horizontal|bottom"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        android:background="@drawable/tbn5"
         android:text="确认" />
 
 </LinearLayout>

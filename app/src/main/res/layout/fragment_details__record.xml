@@ -202,12 +202,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginRight="90dp"
+            android:background="@drawable/tbn5"
             android:text="取消"/>
         <Button
             android:id="@+id/rStartAlarm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="@drawable/tbn5"
             android:text="添加"/>
     </LinearLayout>
 

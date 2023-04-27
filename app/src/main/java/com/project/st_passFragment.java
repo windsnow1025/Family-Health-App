@@ -40,7 +40,7 @@ public class st_passFragment extends Fragment {
         // Required empty public constructor
     }
 
-    private void init(View view){
+    private void init(View view)  {
         tv_password = view.findViewById(R.id.tv_password);
         et_password1 = view.findViewById(R.id.et_password1);
         et_password2 = view.findViewById(R.id.et_password2);
