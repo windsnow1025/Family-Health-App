@@ -22,10 +22,9 @@
             android:id="@+id/bt_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="25dp"
             android:text="返回"
-            android:background="@drawable/tbn5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -108,16 +107,11 @@
                 android:hint="搜索其他疾病"
                 android:textColorHint="@color/grey"
                 android:layout_height="wrap_content"/>
-
             <Button
                 android:id="@+id/bt_search"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/tbn5"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:layout_marginRight="15dp"
-                android:text="搜索" />
+                android:text="搜索"/>
         </LinearLayout>
 
 

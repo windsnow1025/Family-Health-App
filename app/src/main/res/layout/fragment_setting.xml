@@ -19,17 +19,16 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.1">
 
-
             <Button
                 android:id="@+id/bt_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="13dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="25dp"
                 android:text="返回"
-                android:background="@drawable/tbn5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
 
             <TextView
                 android:id="@+id/textViewLoginSignup"
