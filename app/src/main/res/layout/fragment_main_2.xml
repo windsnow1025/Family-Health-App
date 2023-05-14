@@ -27,6 +27,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="100dp"
         android:text="进入内层"
+        android:background="@drawable/tbn5_1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -35,8 +36,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="52dp"
+        android:layout_marginBottom="46dp"
         android:text="回到外层"
+        android:background="@drawable/tbn5_1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -47,6 +49,7 @@
         android:layout_marginStart="40dp"
         android:layout_marginTop="256dp"
         android:text="肝脏"
+        android:background="@drawable/tbn5_1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -57,6 +60,7 @@
         android:layout_marginStart="300dp"
         android:layout_marginTop="440dp"
         android:text="消化系统"
+        android:background="@drawable/tbn5_1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
