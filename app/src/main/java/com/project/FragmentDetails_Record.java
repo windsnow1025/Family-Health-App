@@ -72,6 +72,9 @@ public class FragmentDetails_Record extends Fragment implements DatePickerDialog
     private int num,num_alerk;
     private boolean isreport;
     private boolean ismedicine;
+    private TimePickerDialog timePickerDialog;
+    private Calendar calendar;
+    private int H, M;
 
     /*用于新建*/
     public FragmentDetails_Record(boolean ismedicine,int n, boolean isreport, InfoAdapter infoAdapter) {
@@ -146,6 +149,7 @@ public class FragmentDetails_Record extends Fragment implements DatePickerDialog
         reportDao = new ReportDao();
         historyDao = new HistoryDao();
         alertDao=new AlertDao();
+        calendar = Calendar.getInstance();
         try {
             reportArrayList = reportDao.getReportList(userID);
         } catch (TimeoutException e) {
@@ -171,16 +175,16 @@ public class FragmentDetails_Record extends Fragment implements DatePickerDialog
             @Override
             public void onClick(View v) {
 
-                TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+                timePickerDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        setAlarmTime(hourOfDay, minute);
+                        H = hourOfDay;
+                        M = minute;
                         String str = hourOfDay + ":" + minute;
                         ret_time.setText(str);
                     }
-                };
-
-                new TimePickerDialog(getContext(), 3, onTimeSetListener, 11, 11, true).show();
+                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
+                timePickerDialog.show();
             }
         });
         rStartAlarm.setOnClickListener(new View.OnClickListener() {
@@ -211,6 +215,7 @@ public class FragmentDetails_Record extends Fragment implements DatePickerDialog
                     if (!flag) {
                         Toast.makeText(getContext(), "提醒添加成功", Toast.LENGTH_SHORT).show();
                     } else Toast.makeText(getContext(), "提醒修改成功", Toast.LENGTH_SHORT).show();
+                    setAlarm(H,M);
                     requireActivity().getSupportFragmentManager().popBackStack();
                 }else Toast.makeText(getContext(), "信息不完整", Toast.LENGTH_SHORT).show();
             }
@@ -240,21 +245,27 @@ public class FragmentDetails_Record extends Fragment implements DatePickerDialog
     }
 
 
-    @SuppressLint("QueryPermissionsNeeded")
-    private void setAlarmTime(int H, int M) {
-        Intent intent = new Intent();
-        intent.setAction("android.intent.action.SET_ALARM");
-        //获取用户输入的时间及标题
-        String Title = ret_title.getText().toString();
-
-
-        //设置闹钟时间
-
-        intent.putExtra(AlarmClock.EXTRA_HOUR, H);//设置时钟
-        intent.putExtra(AlarmClock.EXTRA_MINUTES, M);//设置分钟
-        intent.putExtra(AlarmClock.EXTRA_MESSAGE, Title);//设置闹钟标题
-        intent.putExtra(AlarmClock.EXTRA_SKIP_UI, true);//跳过UI
-
+    private void setAlarm(int hour, int minute) {
+        Intent intent = new Intent(AlarmClock.ACTION_SET_ALARM);
+        intent.putExtra(AlarmClock.EXTRA_HOUR, hour);
+        intent.putExtra(AlarmClock.EXTRA_MINUTES, minute);
+        intent.putExtra(AlarmClock.EXTRA_MESSAGE, ret_title.getText().toString());
+        intent.putExtra(AlarmClock.EXTRA_VIBRATE, true);
+        intent.putExtra(AlarmClock.EXTRA_SKIP_UI, true);
+        ArrayList<Integer> days = new ArrayList<>();
+       days.add(Calendar.SUNDAY);
+       days.add(Calendar.MONDAY);
+       days.add(Calendar.TUESDAY);
+       days.add(Calendar.WEDNESDAY);
+       days.add(Calendar.THURSDAY);
+       days.add(Calendar.FRIDAY);
+       days.add(Calendar.SATURDAY);
+        intent.putExtra(AlarmClock.EXTRA_DAYS, days);
+        try {
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @SuppressLint("SetTextI18n")

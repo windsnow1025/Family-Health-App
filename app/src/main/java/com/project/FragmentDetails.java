@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.provider.AlarmClock;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,6 +79,8 @@ public class FragmentDetails extends Fragment {
     private int num,num_alerk;
     private boolean isreport;
     private boolean ismedicine;
+    private TimePickerDialog timePickerDialog;
+    private Calendar calendar;
 
 
     /*用于新建*/
@@ -186,6 +189,7 @@ public class FragmentDetails extends Fragment {
         reportDao = new ReportDao();
         historyDao = new HistoryDao();
         alertDao=new AlertDao();
+        calendar = Calendar.getInstance();
         try {
             reportArrayList = reportDao.getReportList(userID);
         } catch (TimeoutException e) {
@@ -202,7 +206,7 @@ public class FragmentDetails extends Fragment {
             @Override
             public void onClick(View v) {
 
-                TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+                timePickerDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         H = hourOfDay;
@@ -210,16 +214,15 @@ public class FragmentDetails extends Fragment {
                         String str = hourOfDay + ":" + minute;
                         et_time.setText(str);
                     }
-                };
-
-                new TimePickerDialog(getContext(), 3, onTimeSetListener, 11, 11, true).show();
+                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
+                timePickerDialog.show();
             }
         });
         /*创建闹钟*/
         StartAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setAlarmTime(H, M);
+                setAlarmTime();
                 if (!et_title.getText().toString().equals("") && !Time.isEmpty() && !et_time.getText().toString().equals("")) {
                     Info info = new Info(ismedicine,et_title.getText().toString(), getDate(Time), et_time.getText().toString(), true, num,num_alerk);
                    alert=new Alert(num_alerk,String.valueOf(ismedicine),userID,et_time.getText().toString(),getDate(Time),et_title.getText().toString(),String.valueOf(isreport),num,"false");
@@ -248,6 +251,7 @@ public class FragmentDetails extends Fragment {
                     if (!flag) {
                         Toast.makeText(getContext(), "提醒添加成功", Toast.LENGTH_SHORT).show();
                     } else Toast.makeText(getContext(), "提醒修改成功", Toast.LENGTH_SHORT).show();
+                    setAlarm(H, M);
                     requireActivity().getSupportFragmentManager().popBackStack();
                 } else Toast.makeText(getContext(), "信息不完整", Toast.LENGTH_SHORT).show();
             }
@@ -309,36 +313,45 @@ public class FragmentDetails extends Fragment {
     }
 
 
-    @SuppressLint("QueryPermissionsNeeded")
-    private void setAlarmTime(int H, int M) {
-        Intent intent = new Intent();
-        intent.setAction("android.intent.action.SET_ALARM");
-        //获取用户输入的时间及标题
-        String Title = et_title.getText().toString();
-        Time.clear();
 
-        if (Monday.isChecked())
-            Time.add(Calendar.MONDAY);
-        if (Tuesday.isChecked())
-            Time.add(Calendar.TUESDAY);
-        if (Wednesday.isChecked())
-            Time.add(Calendar.WEDNESDAY);
-        if (Thursday.isChecked())
-            Time.add(Calendar.THURSDAY);
-        if (Friday.isChecked())
-            Time.add(Calendar.FRIDAY);
-        if (Saturday.isChecked())
-            Time.add(Calendar.SATURDAY);
-        if (Sunday.isChecked())
-            Time.add(Calendar.SUNDAY);
-
-        //设置闹钟时间
-        intent.putExtra(AlarmClock.EXTRA_DAYS, Time);//设置闹钟日子
-        intent.putExtra(AlarmClock.EXTRA_HOUR, H);//设置时钟
-        intent.putExtra(AlarmClock.EXTRA_MINUTES, M);//设置分钟
-        intent.putExtra(AlarmClock.EXTRA_MESSAGE, Title);//设置闹钟标题
-        intent.putExtra(AlarmClock.EXTRA_SKIP_UI, true);//跳过UI
-
+    private void setAlarmTime() {
+         Time.clear();
+         if (Monday.isChecked())
+             Time.add(Calendar.MONDAY);
+         if (Tuesday.isChecked())
+             Time.add(Calendar.TUESDAY);
+         if (Wednesday.isChecked())
+             Time.add(Calendar.WEDNESDAY);
+         if (Thursday.isChecked())
+             Time.add(Calendar.THURSDAY);
+         if (Friday.isChecked())
+             Time.add(Calendar.FRIDAY);
+         if (Saturday.isChecked())
+             Time.add(Calendar.SATURDAY);
+         if (Sunday.isChecked())
+             Time.add(Calendar.SUNDAY);
+     }
+    private void setAlarm(int hour, int minute) {
+        Intent intent = new Intent(AlarmClock.ACTION_SET_ALARM);
+        intent.putExtra(AlarmClock.EXTRA_HOUR, hour);
+        intent.putExtra(AlarmClock.EXTRA_MINUTES, minute);
+        intent.putExtra(AlarmClock.EXTRA_MESSAGE, et_title.getText().toString());
+        intent.putExtra(AlarmClock.EXTRA_VIBRATE, true);
+        intent.putExtra(AlarmClock.EXTRA_SKIP_UI, true);
+        ArrayList<Integer> days = new ArrayList<>();
+        if (Sunday.isChecked()) days.add(Calendar.SUNDAY);
+        if (Monday.isChecked()) days.add(Calendar.MONDAY);
+        if (Tuesday.isChecked()) days.add(Calendar.TUESDAY);
+        if (Wednesday.isChecked()) days.add(Calendar.WEDNESDAY);
+        if (Thursday.isChecked()) days.add(Calendar.THURSDAY);
+        if (Friday.isChecked())  days.add(Calendar.FRIDAY);
+        if (Saturday.isChecked())  days.add(Calendar.SATURDAY);
+        intent.putExtra(AlarmClock.EXTRA_DAYS, days);
+        try {
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
