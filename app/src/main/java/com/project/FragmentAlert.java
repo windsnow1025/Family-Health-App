@@ -64,6 +64,22 @@ public class FragmentAlert extends Fragment {
 
         return infoList;
     }
+    void load() {
+        try {
+            alertArrayList = alertDao.getAlertList(userID);
+        } catch (TimeoutException e) {
+            throw new RuntimeException(e);
+        }
+        int x = userLocalDao.getAlertList(userID).size();
+        if (x > 0) {
+            for (int i = x; i >= 0; i--) {
+                userLocalDao.deleteAlert(userID, i);
+            }
+        }
+        for (Alert alert : alertArrayList) {
+            userLocalDao.insertAlert(userID, alert);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -72,6 +88,7 @@ public class FragmentAlert extends Fragment {
         userLocalDao.open();
         userID = userLocalDao.getUser();
         alertDao = new AlertDao();
+        load();
         infoList = getInfoList();
         View view = inflater.inflate(R.layout.fragment_alert, container, false);
         init(view);

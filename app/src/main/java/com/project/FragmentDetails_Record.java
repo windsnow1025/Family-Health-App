@@ -132,6 +132,9 @@ public class FragmentDetails_Record extends Fragment implements DatePickerDialog
             Alert alert1=userLocalDao.getAlert(alertArrayList,i);
             ret_title.setText(alert1.getContent());
             ret_time.setText(alert1.getDate());
+            String[] times=alert1.getDate().split(":");
+            H= Integer.parseInt(times[0]);
+            M=Integer.parseInt(times[1]);
             rtv_date.setText(alert1.getCycle());
                 }
             }
