@@ -148,7 +148,10 @@ public class FragmentDetails extends Fragment {
             Alert alert1=userLocalDao.getAlert(alertArrayList,i);
             et_title.setText(alert1.getContent());
             et_time.setText(alert1.getDate());
-          String[] newArray = alert1.getCycle().split("\\s");
+            String[] times=alert1.getDate().split(":");
+            H= Integer.parseInt(times[0]);
+            M=Integer.parseInt(times[1]);
+            String[] newArray = alert1.getCycle().split("\\s");
             for (String str : newArray) {
                 switch (str) {
                     case "周日":
